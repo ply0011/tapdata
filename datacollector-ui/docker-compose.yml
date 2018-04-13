@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  streamset: 
+    image: streamsets/datacollector
+    volumes:
+      - ./target/dist:/opt/streamsets-datacollector-3.1.2.0/sdc-static-web
+    ports:
+      - "18630:18630"
+ 
