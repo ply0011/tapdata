@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<head>
+    <title>Designer</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta http-equiv="Cache-Control" content="no-store" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<link rel="icon" type="image/x-icon" href="<c:url value='/res/images/favicon.png' />" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" href="vendor/bootstrap-3.3.4/css/bootstrap.min.css" type="text/css"> 
+	<link rel="stylesheet" href="vendor/font-awesome-4.3.0/css/font-awesome.min.css" type="text/css">
+	<link rel="stylesheet" href="css/visor.css" type="text/css">
+	<script type="text/javaScript" src="vendor/jquery-1.10.2.min.js"></script> 
+	<script type="text/javascript" src="vendor/riot.compiler.min.js"></script>
+	<script type="text/javaScript" src="vendor/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="css/vendor.css" type="text/css">
+	<script type="text/javascript" src="js/mutouman.js"></script>
+	<script type="text/javascript" src="vendor/vendor.min.js"></script>
+     <style>
+     	.workspace{
+     	  display:flex;
+     	  display: -webkit-flex; /* Safari */
+     	}
+     	
+     	.workspace .leftside{
+     		width: 322px;
+     	}
+     	#panel_workspace{
+     		padding:0px;
+     		overflow-x:auto;overflow-y:auto;
+     		flex-shrink:2;
+     	}
+     	#panel_workspace .panel{
+     		margin-bottom:0px;
+     		border-bottom:none;
+     	}
+     	textarea,input[type=text] {
+     		border:solid 1px lightgray;
+     	}
+     	#panel_propertyEditor ul.nav.nav-tabs li{
+     	 margin-bottom: -1px;
+     	}
+     	#panel_propertyEditor ul.nav.nav-tabs li a{
+     	 padding-right:10px;
+     	 padding-left:10px;
+     	}
+     	#panel_login>a:hover
+		.menu_title > li:hover,
+		.menu_title > li > a:hover,
+		.menu_title .nav>a:hover,
+		.menu_title.nav .open>a,
+		.menu_title.nav .open > a:hover,
+		.menu_title.nav .dropdown-menu > li > a:hover
+		{
+			background-color:#ffffff;
+			color:#ffffff;
+			background-image: linear-gradient(to bottom, #563d7c 0%, #563d7c 100%);
+		}
+		
+		.leftside{
+			width:350px; padding-right: 0px; padding-left: 0px; padding-bottom: 0px; overflow: auto; margin-bottom: 0px;
+			flex-shrink:1;
+		}
+		
+		.propertyEditor{
+			width:400px;
+			padding:0px;margin:0px;overflow-x:auto;overflow-y:auto;
+			flex-shrink:1;
+		}
+     </style>
+     
+ </head>
+<body class="pace-done" oncontextmenu="return false" onselectstart="return false">	
+<div class="container-fluid">
+	<div class="row">
+		<div class="visor-header">
+		  <diagrammenu></diagrammenu>
+		</div>
+		<div class="workspace">
+			<div class="leftside"  id="navigation">
+				<div class="panel panel-default" style="border-width:0px;">
+			   		 <navigation></navigation>
+			    </div>
+		    </div>
+		    <div id="panel_workspace"  class="panel_workspace">
+				<div class="panel panel-default">
+					<div class="panel-heading" style="padding-bottom:5px;padding-top:5px;display:none">
+						   <div class="btn-group">
+								<label style="font-size:9pt;">当前文档：</label><span class="document-name" style="font-size:9pt;"></span>
+								<span class="document-description" style="font-size:9pt;"></span>
+							</div>
+							<div class="btn-group pull-right document-modified" style="display:none;">
+								<label style="font-size:9pt">更新时间：</label><span id="document-modified" style="font-size:9pt;"></span>							
+							</div>
+							
+					</div>
+					<div id="editor" class="panel-body" style="position:relative;margin-bottom:0px;padding:0px;z-index:1;overflow-x:auto;overflow-y:auto;">
+						<div id="workspace" style="min-height:300px;padding:0px;background-color:gray;border-top-width:0px">
+						</div>	
+					</div>
+				</div>
+			</div> 
+			 <div class="propertyEditor hidden-xs hidden-sm"  id="panel_propertyEditor">
+				<div class="propertyEditForm sidebar-nav" style="margin:0px;border-top:solid 5px #e5e5e5;" id="propertyEditorForm">
+					<propertyEditorWidget></propertyEditorWidget>
+				</div>
+		    </div> 
+	 </div>
+	</div>
+</div>
+
+<!--
+	<script type="text/javaScript" src="js/visor_widgets.min.js"></script>
+	<script type="text/javaScript" src="js/visor_designer.min.js"></script>
+	<script type="text/javaScript" src="js/visor.ui.min.js"></script>
+	<script type="text/javaScript" src="js/diagrammenu.js"></script>
+
+-->
+  	<script type="text/javascript"	src="js/core/widgets/visor.core.js"></script> 
+	<script type="text/javascript"	src="js/core/widgets/visor.connectors.js"></script>
+	<script type="text/javascript"	src="js/core/widgets/visor.table.js"></script>
+	<script type="text/javascript"	src="js/core/widgets/visor.widgets.js"></script>
+	<script type="text/javascript"	src="js/core/widgets/visor.tree.js"></script>
+	   
+	<script type="text/javascript"	src="js/core/designer/visor.history.js"></script>
+	<script type="text/javascript"	src="js/core/designer/visor.document.js"></script>
+	<script type="text/javascript"	src="js/core/designer/visor.designer.js"></script>
+	<script type="text/javascript"	src="js/core/designer/visor.player.js"></script>
+	 
+	<script type="riot/tag" src=js/core/tags/propertyEditorWidget.tag></script>
+	<script type="riot/tag" src=js/core/tags/propertyEditorExtension.tag></script>
+	<script type="riot/tag" src=js/core/tags/propertyEditorObjectData.tag></script>	 
+	<script type="riot/tag" src=js/core/tags/navigation.tag></script>
+	<script type="riot/tag" src=js/core/tags/widgets.tag></script>
+	<script type="riot/tag" src="js/diagrammenu.tag"></script>
+
+	<script type="text/javaScript" src="js/designer.js"></script>
+	
+	<style>
+		#context-menu ul li a{
+		  color:black;
+		  padding:5px;
+		}
+	</style>
+	<div id="context-menu">
+		<ul class="dropdown-menu" role="menu">
+			<!--<li><a tabindex="-1" href="#" alt="newitem">New Item</a></li>-->
+			<li><a tabindex="-1" href="#" alt="delete">Delete</a></li>
+		</ul>
+	</div>
+	
+</body>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<head>
+    <title>在线设计工具</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta http-equiv="Cache-Control" content="no-store" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<link rel="icon" type="image/x-icon" href="<c:url value='/res/images/favicon.png' />" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<script type="text/javaScript" src="vendor/jquery-1.10.2.min.js"></script>
+ </head>
+<body class="pace-done" oncontextmenu="return false" onselectstart="return false"  style="margin:0px;">	
+<div class="container-fluid">
+	<div class="row">
+		<iframe id="designer" src="index.html" frameborder='0'  allowTransparency='true' scrolling='no' width="100%" height="970px"></iframe>
+	</div>
+</div>
+<script>
+
+$(document).ready(function(){
+	var iframe=$("#designer")[0].contentWindow;
+	window.addEventListener('message',function(e){
+		var messages=e.data;
+		if(messages=='loaded'){
+			
+			var NumberInt=function(number){
+				return  number;
+			}
+//sample 1:  init er diagram from schema			
+			var schema={
+				"schema" : {
+			        "tables" : [
+			            {
+			                "_class" : "com.tapdata.entity.RelateDataBaseTable", 
+			                "table_name" : "salaries", 
+			                "fields" : [
+			                    {
+			                        "field_name" : "from_date", 
+			                        "table_name" : "salaries", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(2), 
+			                        "key" : "PRI"
+			                    }, 
+			                    {
+			                        "field_name" : "to_date", 
+			                        "table_name" : "salaries", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "emp_no", 
+			                        "table_name" : "salaries", 
+			                        "data_type" : "int", 
+			                        "primary_key_position" : NumberInt(1), 
+			                        "foreign_key_table" : "employees", 
+			                        "foreign_key_column" : "emp_no", 
+			                        "key" : "PRI"
+			                    }, 
+			                    {
+			                        "field_name" : "salary", 
+			                        "table_name" : "salaries", 
+			                        "data_type" : "int", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }
+			                ]
+			            }, 
+			            {
+			                "_class" : "com.tapdata.entity.RelateDataBaseTable", 
+			                "table_name" : "dept_emp", 
+			                "fields" : [
+			                    {
+			                        "field_name" : "dept_no", 
+			                        "table_name" : "dept_emp", 
+			                        "data_type" : "char", 
+			                        "primary_key_position" : NumberInt(2), 
+			                        "foreign_key_table" : "departments", 
+			                        "foreign_key_column" : "dept_no", 
+			                        "key" : "PRI"
+			                    }, 
+			                    {
+			                        "field_name" : "from_date", 
+			                        "table_name" : "dept_emp", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "to_date", 
+			                        "table_name" : "dept_emp", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "emp_no", 
+			                        "table_name" : "dept_emp", 
+			                        "data_type" : "int", 
+			                        "primary_key_position" : NumberInt(1), 
+			                        "foreign_key_table" : "employees", 
+			                        "foreign_key_column" : "emp_no", 
+			                        "key" : "PRI"
+			                    }
+			                ]
+			            }, 
+			            {
+			                "_class" : "com.tapdata.entity.RelateDataBaseTable", 
+			                "table_name" : "dept_manager", 
+			                "fields" : [
+			                    {
+			                        "field_name" : "dept_no", 
+			                        "table_name" : "dept_manager", 
+			                        "data_type" : "char", 
+			                        "primary_key_position" : NumberInt(2), 
+			                        "foreign_key_table" : "departments", 
+			                        "foreign_key_column" : "dept_no", 
+			                        "key" : "PRI"
+			                    }, 
+			                    {
+			                        "field_name" : "from_date", 
+			                        "table_name" : "dept_manager", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "to_date", 
+			                        "table_name" : "dept_manager", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "emp_no", 
+			                        "table_name" : "dept_manager", 
+			                        "data_type" : "int", 
+			                        "primary_key_position" : NumberInt(1), 
+			                        "foreign_key_table" : "employees", 
+			                        "foreign_key_column" : "emp_no", 
+			                        "key" : "PRI"
+			                    }
+			                ]
+			            }, 
+			            {
+			                "_class" : "com.tapdata.entity.RelateDataBaseTable", 
+			                "table_name" : "current_dept_emp", 
+			                "fields" : [
+			                    {
+			                        "field_name" : "dept_no", 
+			                        "table_name" : "current_dept_emp", 
+			                        "data_type" : "char", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "from_date", 
+			                        "table_name" : "current_dept_emp", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "to_date", 
+			                        "table_name" : "current_dept_emp", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "emp_no", 
+			                        "table_name" : "current_dept_emp", 
+			                        "data_type" : "int", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }
+			                ]
+			            }, 
+			            {
+			                "_class" : "com.tapdata.entity.RelateDataBaseTable", 
+			                "table_name" : "dept_emp_latest_date", 
+			                "fields" : [
+			                    {
+			                        "field_name" : "from_date", 
+			                        "table_name" : "dept_emp_latest_date", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "to_date", 
+			                        "table_name" : "dept_emp_latest_date", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "emp_no", 
+			                        "table_name" : "dept_emp_latest_date", 
+			                        "data_type" : "int", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }
+			                ]
+			            }, 
+			            {
+			                "_class" : "com.tapdata.entity.RelateDataBaseTable", 
+			                "table_name" : "departments", 
+			                "fields" : [
+			                    {
+			                        "field_name" : "dept_no", 
+			                        "table_name" : "departments", 
+			                        "data_type" : "char", 
+			                        "primary_key_position" : NumberInt(1), 
+			                        "key" : "PRI"
+			                    }, 
+			                    {
+			                        "field_name" : "dept_name", 
+			                        "table_name" : "departments", 
+			                        "data_type" : "varchar", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }
+			                ]
+			            }, 
+			            {
+			                "_class" : "com.tapdata.entity.RelateDataBaseTable", 
+			                "table_name" : "employees_1", 
+			                "fields" : [
+			                    {
+			                        "field_name" : "gender", 
+			                        "table_name" : "employees_1", 
+			                        "data_type" : "char", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "emp_no", 
+			                        "table_name" : "employees_1", 
+			                        "data_type" : "int", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "birth_date", 
+			                        "table_name" : "employees_1", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "last_name", 
+			                        "table_name" : "employees_1", 
+			                        "data_type" : "tinytext", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "hire_date", 
+			                        "table_name" : "employees_1", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "first_name", 
+			                        "table_name" : "employees_1", 
+			                        "data_type" : "tinytext", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }
+			                ]
+			            }, 
+			            {
+			                "_class" : "com.tapdata.entity.RelateDataBaseTable", 
+			                "table_name" : "titles", 
+			                "fields" : [
+			                    {
+			                        "field_name" : "from_date", 
+			                        "table_name" : "titles", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(3), 
+			                        "key" : "PRI"
+			                    }, 
+			                    {
+			                        "field_name" : "to_date", 
+			                        "table_name" : "titles", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "emp_no", 
+			                        "table_name" : "titles", 
+			                        "data_type" : "int", 
+			                        "primary_key_position" : NumberInt(1), 
+			                        "foreign_key_table" : "employees", 
+			                        "foreign_key_column" : "emp_no", 
+			                        "key" : "PRI"
+			                    }, 
+			                    {
+			                        "field_name" : "title", 
+			                        "table_name" : "titles", 
+			                        "data_type" : "varchar", 
+			                        "primary_key_position" : NumberInt(2), 
+			                        "key" : "PRI"
+			                    }
+			                ]
+			            }, 
+			            {
+			                "_class" : "com.tapdata.entity.RelateDataBaseTable", 
+			                "table_name" : "employees", 
+			                "fields" : [
+			                    {
+			                        "field_name" : "gender", 
+			                        "table_name" : "employees", 
+			                        "data_type" : "enum", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "emp_no", 
+			                        "table_name" : "employees", 
+			                        "data_type" : "int", 
+			                        "primary_key_position" : NumberInt(1), 
+			                        "key" : "PRI"
+			                    }, 
+			                    {
+			                        "field_name" : "birth_date", 
+			                        "table_name" : "employees", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "last_name", 
+			                        "table_name" : "employees", 
+			                        "data_type" : "varchar", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "hire_date", 
+			                        "table_name" : "employees", 
+			                        "data_type" : "date", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }, 
+			                    {
+			                        "field_name" : "first_name", 
+			                        "table_name" : "employees", 
+			                        "data_type" : "varchar", 
+			                        "primary_key_position" : NumberInt(0)
+			                    }
+			                ]
+			            }
+			        ]
+			    }
+			};
+//			iframe.mydesigner.init(schema); //--init with schema
+//sample 2:  restore diagram from saved file						
+			var localfile=localStorage.getItem("visordesigner");
+			if(localfile){
+				iframe.mydesigner.restore(JSON.parse(localfile));			
+		 	}
+//sample 3:  save current diagram , it default saved in localstorage, if you want to save  to db, you can write code here			
+//			iframe.mydesigner.on("save",function(r){   //--save 
+//				alert(JSON.stringify(r));
+//			})
+//sample  4：  preview
+		iframe.mydesigner.on("preview",function(r){   //--preview
+				alert(r.data);				
+		})
+		
+		iframe.mydesigner.on("cancel",function(){   //--preview
+				alert("cancel");
+		})
+
+		}
+	},false);
+ });
+	
+</script>	 
+	
+</body>
