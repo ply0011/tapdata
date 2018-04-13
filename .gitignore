@@ -1,3 +1,6 @@
+datacollector-ui/node_modules
+datacollector-ui/target
+
 # Compiled class file
 *.class
 
