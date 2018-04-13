@@ -43,7 +43,7 @@ module.exports = function(grunt) {
     base_dir: 'src/main/webapp/',
     common_base_dir: '../common-ui/src/main/webapp/',
     docs_dir: '../docs/generated',
-
+    tapdata_mapping_dir: '../designer/',
     /**
      * This is a collection of file patterns that refer to our app code (the
      * stuff in `src/`). These file paths are used in the configuration of
@@ -218,6 +218,16 @@ module.exports = function(grunt) {
      * `build_dir`, and then to copy the assets to `compile_dir`.
      */
     copy: {
+      build_tapdata_mapping: {
+        files: [
+          {
+            src: [ '**' ],
+            dest: '<%= build_dir %>/mapping/',
+            cwd: '<%=  tapdata_mapping_dir %>',
+            expand: true
+          }
+        ]
+      },
       build_app_assets: {
         files: [
           {
@@ -652,7 +662,7 @@ module.exports = function(grunt) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ 'build', 'delta'] );
+  grunt.registerTask( 'watch', [ 'build', 'delta', 'copy:build_tapdata_mapping'] );
 
   /**
    * The default task is to build and compile.
@@ -669,6 +679,7 @@ module.exports = function(grunt) {
     'clean:build', 'html2js', 'jshint', 'less:build', 'concat:build_css',
     'copy:build_app_assets', 'copy:build_appjs',
     'copy:build_common_app_assets', 'copy:build_common_appjs',
+    'copy:build_tapdata_mapping',
     'copy:build_vendor_assets', 'copy:build_vendor_fonts',
     'copy:build_vendorjs', 'copy:build_docs', 'index:build', 'login:build', 'karmaconfig'
     //,'karma:continuous'
