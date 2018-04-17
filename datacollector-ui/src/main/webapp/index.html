@@ -84,7 +84,7 @@
 
       <ul class="nav navbar-nav navbar-right" ng-cloak>
 
-        <li ng-if="common.isDPMEnabled">
+        <!-- <li ng-if="common.isDPMEnabled">
           <a ng-href="{{common.dpmBaseURL}}"
              target="_blank"
              tooltip-placement="bottom"
@@ -96,9 +96,9 @@
             <i class="fa fa-cloud fa-lg"></i>
             <span>SCH</span>
           </a>
-        </li>
+        </li> -->
 
-        <li ng-if="!common.isDPMEnabled">
+        <!-- <li ng-if="!common.isDPMEnabled">
           <a href="javascript:;" ng-click="common.onDPMButtonClick()"
              tooltip-placement="bottom"
              tooltip="{{'global.menu.dpm' | translate}}"
@@ -108,9 +108,9 @@
             <i class="fa fa-cloud fa-lg"></i>
             <span>SCH</span>
           </a>
-        </li>
+        </li> -->
 
-        <li>
+        <!-- <li>
           <a ng-href="{{common.baseHref}}"
              tooltip-placement="bottom"
              tooltip="{{'global.menu.home' | translate}}"
@@ -119,8 +119,8 @@
             <i class="fa fa-home fa-lg"></i>
             <span class="menu-label">{{'global.menu.home' | translate}}</span>
           </a>
-        </li>
-
+        </li> -->
+<!-- 
         <li ng-if="!common.isSlaveNode && isAuthorized([userRoles.admin])">
           <a href="/collector/packageManager"
              tooltip-placement="bottom"
@@ -129,9 +129,9 @@
              tooltip-popup-delay="500">
             <i class="fa fa-gift fa-lg"></i>
           </a>
-        </li>
+        </li> -->
 
-        <li ng-if="common.isSlaveNode">
+        <!-- <li ng-if="common.isSlaveNode">
           <a ng-href="{{common.sdcClusterManagerURL}}"
              tooltip-placement="bottom"
              tooltip="{{'global.menu.clusterManager' | translate}}"
@@ -140,9 +140,9 @@
             <i class="fa fa-cloud fa-lg dpm-color"></i>
             <span>SCH</span>
           </a>
-        </li>
+        </li> -->
 
-
+<!-- 
         <li class="dropdown pointer notifications-dropdown"
             ng-if="common.userName && isAuthorized([userRoles.admin, userRoles.creator, userRoles.manager])">
           <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"
@@ -190,10 +190,10 @@
 
             <li ng-repeat-end role="presentation" class="divider" ng-if="!$last"></li>
           </ul>
-        </li>
+        </li> -->
 
 
-        <li class="dropdown pointer"
+        <!-- <li class="dropdown pointer"
             ng-if="common.userName && isAuthorized([userRoles.admin, userRoles.creator, userRoles.manager])">
           <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"
              tooltip-placement="bottom"
@@ -283,7 +283,7 @@
               </a>
             </li>
           </ul>
-        </li>
+        </li> -->
 
         <li class="dropdown pointer" ng-if="common.authenticationType != 'none' || common.isDPMEnabled">
           <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"
@@ -335,7 +335,7 @@
         </li>
 
 
-        <li class="dropdown pointer">
+        <!-- <li class="dropdown pointer">
           <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"
              tooltip-placement="bottom"
              tooltip="{{'global.menu.help.main' | translate}}"
@@ -412,7 +412,7 @@
             </li>
 
           </ul>
-        </li>
+        </li> -->
 
       </ul>
     </div>
