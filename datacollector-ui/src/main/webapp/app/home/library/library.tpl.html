@@ -1,40 +1,17 @@
 <div class="panel panel-default library-pane" ng-controller="LibraryController">
   <div class="panel-body">
     <div class="btn-group create-pipeline-btn-group" ng-if="!common.isSlaveNode">
-      <button type="button" class="btn btn-primary btn-sm create-pipeline-btn"
-              ng-disabled="!isAuthorized([userRoles.admin, userRoles.creator])"
-              ng-click="addPipelineConfig()">
-        <span class="glyphicon glyphicon-plus"></span>
-        <span translate="home.header.createNewPipeline">Create</span>
-      </button>
-      <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
-              ng-disabled="!isAuthorized([userRoles.admin, userRoles.creator])"
-              data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-        <span class="caret"></span>
-        <span class="sr-only">Toggle Dropdown</span>
-      </button>
-      <ul class="dropdown-menu">
-        <li>
-          <a href="#" ng-click="addPipelineConfig()" translate="home.header.createNewPipeline">Create New Pipeline</a>
-        </li>
-        <li>
-          <a href="#" ng-click="importPipelineConfig()"translate="home.header.importPipeline">Import Pipeline</a>
-        </li>
-        <li>
-          <a href="#" ng-click="importPipelinesFromArchive()"translate="home.header.importPipelinesFromArchive">Import Pipelines From Archive</a>
-        </li>
-        <li>
-          <a href="#"
-             ng-if="common.isDPMEnabled"
-             ng-click="downloadRemotePipelineConfig()"translate="home.downloadRemotePipeline">Download Remote Pipeline</a>
-        </li>
-      </ul>
+   
     </div>
 
-    <div show-loading="fetchingSystemLabels"></div>
+    <div></div>
+    <div class="menu-item">
+      <div class="list-group-item-wrapper ng-binding active">
+        <a href="./">Dashboard</a>
+      </div>
 
-    <ul class="list-group predefined-labels" mutation-callback="treeElementChange">
+    </div>
+    <!-- <ul class="list-group predefined-labels" mutation-callback="treeElementChange">
       <li class="hidden">{{treeElementTimestamp}}</li>
 
       <li ng-repeat="systemLabel in systemPipelineLabels"
@@ -84,6 +61,6 @@
         </div>
       </li>
 
-    </ul>
+    </ul> -->
   </div>
  </div>

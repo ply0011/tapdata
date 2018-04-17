@@ -262,10 +262,10 @@ angular
     /**
      * Labels are loaded only once in home.js so we get notified with them here
      */
-    $scope.onLabelsLoaded(function(systemPipelineLabels, rawPipelineLabels) {
-      $scope.fetchingSystemLabels = false;
-      $scope.systemPipelineLabels = systemPipelineLabels;
-      $scope.rawPipelineLabels = rawPipelineLabels;
-      $scope.pipelineLabels = parsePipelineLabels();
-    });
+    // $scope.onLabelsLoaded(function(systemPipelineLabels, rawPipelineLabels) {
+    //   $scope.fetchingSystemLabels = false;
+    //   $scope.systemPipelineLabels = systemPipelineLabels;
+    //   $scope.rawPipelineLabels = rawPipelineLabels;
+    //   $scope.pipelineLabels = parsePipelineLabels();
+    // });
   });
