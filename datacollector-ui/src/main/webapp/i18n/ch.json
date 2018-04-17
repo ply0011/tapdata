@@ -1,8 +1,8 @@
 {
   "global": {
     "title": "Pipeline Agent",
-    "login": "Log in",
-    "tapdata_dashboard": "Tapdata dashboard",
+    "login": "登陆",
+    "tapdata_dashboard": "Tapdata 控制面板",
     "menu": {
       "account": {
         "title": "User",

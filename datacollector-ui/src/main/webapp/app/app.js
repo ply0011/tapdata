@@ -51,10 +51,10 @@ angular.module('dataCollectorApp')
       suffix: '.json'
     });
 
-    $translateProvider.preferredLanguage('en');
 
     $translateProvider.useCookieStorage();
     $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
+    $translateProvider.preferredLanguage('ch');
 
     tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js');
     tmhDynamicLocaleProvider.useCookieStorage('NG_TRANSLATE_LANG_KEY');
@@ -181,6 +181,14 @@ angular.module('dataCollectorApp')
         registrationStatus: false
       },
 
+      switchEnglish: function() {
+        $translate.use('en');
+      },
+
+      switchChinese: function() {
+        $translate.use('ch');
+      },
+      
       /**
        * Open the Control Hub Information Dialog
        */
