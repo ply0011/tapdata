@@ -20,7 +20,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="description" content="StreamSets Data Collector">
-  <title ng-bind="common.title">StreamSets | Data Collector</title>
+  <title  >Tapdata | your data on tap</title>
 
   <script type="text/javascript">
     function escapeHtml(str) {
@@ -39,7 +39,7 @@
     document.write("<base href='" + escapeHtml(baseHref) + "' />");
   </script>
 
-  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <!-- <link rel="icon" type="image/png" href="assets/favicon.png"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
@@ -193,6 +193,24 @@
         </li> -->
 
 
+        <li class="dropdown pointer" ng-if="common.authenticationType != 'none' || common.isDPMEnabled">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"
+             tooltip-placement="bottom"
+             tooltip="{{'global.menu.account.title' | translate}}"
+             tooltip-trigger="mouseenter"
+             tooltip-popup-delay="500">
+              <i class="fa fa-globe fa-lg"></i>
+            <span class="menu-label">{{'global.menu.account.title' | translate}}</span>
+          </a>
+          <ul class="dropdown-menu">
+
+            <li role="presentation" class="dropdown-header" ng-click="common.switchEnglish()">English</li>
+ 
+            <li role="presentation" class="dropdown-header" ng-click="common.switchChinese()">中文</li>
+
+          </ul>
+        </li>
+        
         <!-- <li class="dropdown pointer"
             ng-if="common.userName && isAuthorized([userRoles.admin, userRoles.creator, userRoles.manager])">
           <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"
@@ -415,23 +433,7 @@
         </li> -->
 
 
-        <li class="dropdown pointer" ng-if="common.authenticationType != 'none' || common.isDPMEnabled">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"
-             tooltip-placement="bottom"
-             tooltip="{{'global.menu.account.title' | translate}}"
-             tooltip-trigger="mouseenter"
-             tooltip-popup-delay="500">
-              <i class="fa fa-globe fa-lg"></i>
-            <span class="menu-label">{{'global.menu.account.title' | translate}}</span>
-          </a>
-          <ul class="dropdown-menu">
-
-            <li role="presentation" class="dropdown-header" ng-click="common.switchEnglish()">English</li>
- 
-            <li role="presentation" class="dropdown-header" ng-click="common.switchChinese()">中文</li>
-
-          </ul>
-        </li>
+       
       </ul>
     </div>
   </div>

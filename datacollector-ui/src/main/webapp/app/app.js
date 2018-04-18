@@ -182,11 +182,11 @@ angular.module('dataCollectorApp')
       },
 
       switchEnglish: function() {
-        $translate.use('en');
+        return $translate.use('en');
       },
 
       switchChinese: function() {
-        $translate.use('ch');
+        return $translate.use('ch');
       },
       
       /**
