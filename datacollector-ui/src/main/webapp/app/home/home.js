@@ -800,7 +800,6 @@ angular
       }
 
     });
-
     $q.all([
       api.pipelineAgent.getPipelinesCount(),
       configuration.init()
@@ -839,7 +838,6 @@ angular
       api.pipelineAgent.getPipelineLabels()
     ]).then(
       function (results) {
-
         /**
          * Labels are loaded only once so they're sent to library.js
          */

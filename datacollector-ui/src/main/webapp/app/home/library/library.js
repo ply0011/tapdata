@@ -24,7 +24,6 @@ angular
   .controller('LibraryController', function ($scope, $timeout) {
     var DEBOUNCE_LIMIT = 300; // Meaning for +300 raw pipeline labels,
     var DEBOUNCE_TIME = 500; // debounce label filter for 500ms
-
     angular.extend($scope, {
       fetchingSystemLabels: true,
       systemPipelineLabels: [],
@@ -262,10 +261,10 @@ angular
     /**
      * Labels are loaded only once in home.js so we get notified with them here
      */
-    // $scope.onLabelsLoaded(function(systemPipelineLabels, rawPipelineLabels) {
-    //   $scope.fetchingSystemLabels = false;
-    //   $scope.systemPipelineLabels = systemPipelineLabels;
-    //   $scope.rawPipelineLabels = rawPipelineLabels;
-    //   $scope.pipelineLabels = parsePipelineLabels();
-    // });
+    $scope.onLabelsLoaded(function(systemPipelineLabels, rawPipelineLabels) {
+      $scope.fetchingSystemLabels = false;
+      $scope.systemPipelineLabels = systemPipelineLabels;
+      $scope.rawPipelineLabels = rawPipelineLabels;
+      $scope.pipelineLabels = parsePipelineLabels();
+    });
   });

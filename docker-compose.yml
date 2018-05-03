@@ -7,4 +7,8 @@ services:
       - ./datacollector-ui/target/dist:/opt/streamsets-datacollector-3.1.2.0/sdc-static-web
     ports:
       - "18630:18630"
- 
+  streamset2: 
+    image: streamsets/datacollector
+    ports:
+      - "18631:18630"
+
