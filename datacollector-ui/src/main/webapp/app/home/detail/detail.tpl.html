@@ -40,7 +40,7 @@
 
     <div class="pull-right size-toolbar">
 
-      <!-- <div class="btn-group pull-left detail-settings-dropdown"
+      <!-- --><div class="btn-group pull-left detail-settings-dropdown"
            ng-if="!$storage.dontShowRESTResponseMenu || isPipelineRunning">
         <a class="btn btn-link dropdown-toggle" data-toggle="dropdown"
            tooltip-placement="top"
@@ -94,13 +94,13 @@
           </li>
 
         </ul>
-      </div> -->
+      </div> 
 
-      <span class="fa fa-question-circle fa-14x pointer"
+      <!-- <span class="fa fa-question-circle fa-14x pointer"
             tooltip-placement="top"
             tooltip="{{'global.form.help' | translate}}"
             tooltip-popup-delay="500"
-            ng-click="launchHelp()"></span>
+            ng-click="launchHelp()"></span> -->
 
       <span class="glyphicon pointer"
             tooltip-placement="top"
@@ -142,7 +142,7 @@
 
   <div class="panel-body">
     <tabset class="detail-tabs-left tabs-left" ng-if="detailPaneConfigDefn">
-      <tab ng-repeat="tab in detailPaneTabs track by $index" active="tab.active" disable="tab.disabled"
+      <tab ng-repeat="tab in detailPaneTabs track by $index" active="tab.name === 'configuration'" disable="tab.disabled"
            select="onTabSelect(tab)">
         <tab-heading>  <!--tooltip-placement="right" tooltip="{{tab.label}}" -->
           <i class="fa fa-exclamation-triangle icon-danger"

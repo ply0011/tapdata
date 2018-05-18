@@ -89,29 +89,30 @@ angular.module('pipelineGraphDirectives', [])
       var height = svgHeight - margin.top - margin.bottom;
 
       var container = svg.append('g');
-      container.append('g')
-        .attr('class', 'x axis')
-        .selectAll('line')
-        .data(d3.range(0, width, 10))
-        .enter().append('line')
-        .attr('x1', function(d) { return d; })
-        .attr('y1', 0)
-        .attr('x2', function(d) { return d; })
-        .attr('y2', height);
+      // container.append('g')
+      //   .attr('class', 'x axis')
+      //   .selectAll('line')
+      //   .data(d3.range(0, width, 10))
+      //   .enter().append('line')
+      //   .attr('x1', function(d) { return d; })
+      //   .attr('y1', 0)
+      //   .attr('x2', function(d) { return d; })
+      //   .attr('y2', height);
 
-      container.append('g')
-        .attr('class', 'y axis')
-        .selectAll('line')
-        .data(d3.range(0, height, 10))
-        .enter().append('line')
-        .attr('x1', 0)
-        .attr('y1', function(d) { return d; })
-        .attr('x2', width)
-        .attr('y2', function(d) { return d; });
+      // container.append('g')
+      //   .attr('class', 'y axis')
+      //   .selectAll('line')
+      //   .data(d3.range(0, height, 10))
+      //   .enter().append('line')
+      //   .attr('x1', 0)
+      //   .attr('y1', function(d) { return d; })
+      //   .attr('x2', width)
+      //   .attr('y2', function(d) { return d; });
 
       thisGraph.svgG = svg.append('g')
         .classed(thisGraph.consts.graphClass, true);
-      var svgG = thisGraph.svgG;
+      var svgG = thisGraph.svgG; 
+    
 
       // displayed when dragging between nodes
       thisGraph.dragLine = svgG.append('svg:path')
@@ -171,7 +172,6 @@ angular.module('pipelineGraphDirectives', [])
         .on('zoomend', function(){
           d3.select('body').style('cursor', 'auto');
         });
-
       svg.call(thisGraph.zoom)
         .on('dblclick.zoom', null);
 
@@ -208,7 +208,8 @@ angular.module('pipelineGraphDirectives', [])
       nodeRadius: 70,
       rectWidth: 140,
       rectHeight: 100,
-      rectRound: 14
+      rectRound: 14,
+      defaultScale: 1
     };
 
     /* PROTOTYPE FUNCTIONS */

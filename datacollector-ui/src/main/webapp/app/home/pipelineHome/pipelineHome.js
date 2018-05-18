@@ -895,10 +895,12 @@ angular
       $q.all([api.pipelineAgent.getPipelineConfig(configName),
         api.pipelineAgent.getPipelineRules(configName)]
       ).then(function(results) {
+        alert("!!")
+
         var config = results[0].data;
         var rules = results[1].data;
         var clickedAlert = $rootScope.common.clickedAlert;
-
+        console.log(config, "!!");
         $rootScope.common.errors = [];
 
         archive = [];
