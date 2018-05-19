@@ -75,6 +75,7 @@ angular
 
     angular.extend($scope, {
       _: _,
+      showJobConfig: false,
       showLoading: true,
       monitorMemoryEnabled: false,
       isPipelineReadOnly: !authService.isAuthorized([userRoles.admin, userRoles.creator]),
@@ -146,8 +147,7 @@ angular
 
         if ($scope.isPipelineReadOnly) {
           return;
-        }
-
+        } 
         $scope.trackEvent(pipelineConstant.STAGE_CATEGORY, pipelineConstant.ADD_ACTION, stage.label, 1);
 
         if (stage.type === pipelineConstant.SOURCE_STAGE_TYPE) {
@@ -384,7 +384,6 @@ angular
             $scope.$broadcast('selectEdge', options.selectedObject, options.moveToCenter);
           }
         }
-
         updateDetailPane(options);
       },
 
@@ -2000,6 +1999,10 @@ angular
       }
     }, true);
 
+    $scope.$on('showJobConfigView', function (event, options) {
+      $scope.showJobConfig = !$scope.showJobConfig;
+    });
+     
     $scope.$on('onNodeSelection', function (event, options) {
       updateDetailPane(options);
     });

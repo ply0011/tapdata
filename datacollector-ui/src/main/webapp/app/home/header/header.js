@@ -68,6 +68,9 @@ angular
         $scope.firstOpenLane.stageInstance = undefined;
       },
 
+      setJobConfig: function(){
+        $rootScope.$broadcast('showJobConfigView');
+      },
       /**
        * Validate Pipeline
        */

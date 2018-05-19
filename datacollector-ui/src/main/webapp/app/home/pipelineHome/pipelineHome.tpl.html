@@ -3,7 +3,8 @@
 <div class="pipeline-home-loading" show-loading="showLoading"></div>
 
 <ng-include src="'app/home/header/header.tpl.html'"></ng-include>
-<div>Job configview</div>
+<div ng-if="!showJobConfig">
+  <div>Job configview</div>
  
 <div class="home-bg-splitter" ng-cloak
      ng-class="{'comfortable-density': $storage.displayDensity === pipelineConstant.DENSITY_COMFORTABLE,
@@ -50,3 +51,12 @@
 
   </bg-splitter>
 </div>  
+
+</div>
+
+
+<!--Tapdata job configuration here-->
+
+<div mg-if="showJobConfig">
+  job config
+</div>
