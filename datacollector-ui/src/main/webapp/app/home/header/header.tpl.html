@@ -344,9 +344,9 @@
     </div>
 
     <div class="pull-left" ng-switch="activeConfigStatus.status">
-      <div class="panel-title pull-left" ng-if="activeConfigStatus.executionMode === pipelineConstant.CLUSTER || activeConfigStatus.executionMode === pipelineConstant.CLUSTER_BATCH || activeConfigStatus.executionMode === pipelineConstant.CLUSTER_YARN_STREAMING || activeConfigStatus.executionMode === pipelineConstant.CLUSTER_MESOS_STREAMING">
+      <!-- <div class="panel-title pull-left" ng-if="activeConfigStatus.executionMode === pipelineConstant.CLUSTER || activeConfigStatus.executionMode === pipelineConstant.CLUSTER_BATCH || activeConfigStatus.executionMode === pipelineConstant.CLUSTER_YARN_STREAMING || activeConfigStatus.executionMode === pipelineConstant.CLUSTER_MESOS_STREAMING">
         <h3 class="pull-left" translate="home.header.clusterManagerNode">Cluster Manager: </h3>
-      </div>
+      </div> -->
 
       <div class="panel-title pull-left" ng-if="activeConfigStatus.executionMode === pipelineConstant.SLAVE">
         <h3 class="pull-left" translate="home.header.workerNode">Worker:</h3>
