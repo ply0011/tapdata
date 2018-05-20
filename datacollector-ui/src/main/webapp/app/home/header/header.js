@@ -71,6 +71,10 @@ angular
       setJobConfig: function(){
         $rootScope.$broadcast('showJobConfigView');
       },
+
+      setMapping: function(){
+        $rootScope.$broadcast('showMappingView');
+      },
       /**
        * Validate Pipeline
        */

@@ -3,7 +3,7 @@
 <div class="pipeline-home-loading" show-loading="showLoading"></div>
 
 <ng-include src="'app/home/header/header.tpl.html'"></ng-include>
-<div ng-if="!showJobConfig && !isPipelineRunning">
+<div ng-if="!showMappingView && !showJobConfig && !isPipelineRunning">
   <div>Job configview</div>
  
 <div class="home-bg-splitter" ng-cloak
@@ -57,13 +57,15 @@
 
 <!--Tapdata job configuration here-->
 
-<div ng-if="showJobConfig">
+<div ng-if="!showMappingView && showJobConfig && !isPipelineRunning">
   <ng-include  src="'app/home/tapdataJobConfig/jobConfig.tpl.html'"></ng-include>
 </div>
 
 <div ng-if="isPipelineRunning">
-
     isPipelineRunning !!
     <ng-include  src="'common/administration/logs/logs.tpl.html'"></ng-include>
+</div>
 
+<div ng-if="showMappingView && !showJobConfig && !isPipelineRunning">
+  <iframe src="./designer/index.html" style="width: 100%;height: 800px;"></iframe>
 </div>

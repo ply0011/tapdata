@@ -76,6 +76,7 @@ angular
     angular.extend($scope, {
       _: _,
       showJobConfig: false,
+      showMappingView: false,
       showLoading: true,
       monitorMemoryEnabled: false,
       isPipelineReadOnly: !authService.isAuthorized([userRoles.admin, userRoles.creator]),
@@ -2002,7 +2003,10 @@ angular
     $scope.$on('showJobConfigView', function (event, options) {
       $scope.showJobConfig = !$scope.showJobConfig;
     });
-     
+    $scope.$on('showMappingView', function (event, options) {
+      $scope.showMappingView = !$scope.showMappingView;
+    });
+    
     $scope.$on('onNodeSelection', function (event, options) {
       updateDetailPane(options);
     });
