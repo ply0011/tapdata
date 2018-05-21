@@ -221,7 +221,7 @@ module.exports = function(grunt) {
         files: [
           {
             src: [ '**' ],
-            dest: '<%= build_dir %>/mapping/',
+            dest: '<%= build_dir %>/designer/',
             cwd: '<%=  tapdata_mapping_dir %>',
             expand: true
           }

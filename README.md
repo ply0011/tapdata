@@ -3,14 +3,15 @@
 ##dataset frontend dev env
 
 
-* for frontend setup
-  in the bash of host
+* for frontend setup, in the bash env of the host 
+  First time setup libs 
   * ```cd datacollector-ui```
   * ```npm i```
-  * ```grunt``` (run first time only)
+  * ```npm install -g bower```
+  * ```npm install -g grunt-cli```
   * ```bower install```
+ 
+  How to start:
   * ```grunt watch``` 
-  
-
-* for boot backend env
-```docker-compose up``` 
+  * ```docker-compose up streamset``` 
+  * visit URL: http//localhost:18630
