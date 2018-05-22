@@ -61,9 +61,9 @@
   <ng-include  src="'app/home/tapdataJobConfig/jobConfig.tpl.html'"></ng-include>
 </div>
 
-<div ng-if="isPipelineRunning">
-    isPipelineRunning !!
-    <ng-include  src="'common/administration/logs/logs.tpl.html'"></ng-include>
+<div ng-if=" isPipelineRunning">
+    <div style="height:300px;"> <ng-include src="'app/home/detail/summary/summary.tpl.html'"></ng-include></div>
+    <div style="z-index:999999;"><ng-include  src="'common/administration/logs/logs.tpl.html'"></ng-include></div>
 </div>
 
 <div ng-if="showMappingView && !showJobConfig && !isPipelineRunning">
