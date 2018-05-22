@@ -797,7 +797,7 @@ angular.module('pipelineGraphDirectives', [])
         .attr('width', 48)
         .attr('height', 48)
         .attr('xlink:href', function(d) {
-          return 'rest/v1/definitions/stages/' + d.library + '/' + d.stageName + '/icon';
+          // return 'rest/v1/definitions/stages/' + d.library + '/' + d.stageName + '/icon';
         });
 
       //Add Error icons

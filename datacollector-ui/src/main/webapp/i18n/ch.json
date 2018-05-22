@@ -209,7 +209,7 @@
 				"no​​PipelineExists": "找不到名为“{{name}}”的任务",
 				"no​​DataAvailable": "无可用数据。",
 				"originExists": "Origin已经存在。",
-				"saveOperationInProgress": "保存的所有更改",
+				"saveOperationInProgress": "所有更改已保存",
 				"savingConfiguration": "正在保存...",
 				"unloadMessage": "如果您离开此页面，您将丢失所有未保存的更改，您确定要离开吗？"
 			},
@@ -630,7 +630,7 @@
       "system:localPipelines": "本地任务",
       "system:runningPipelines": "运行中任务",
       "system:localPipelines": "本地任务",
-      "system:nonRunningPipelines": "非运行任务",
+      "system:nonRunningPipelines": "已停止任务",
       "system:invalidPipelines": "无效任务",
       "system:errorPipelines": "错误任务",
       "system:sharedWithMePipelines": "与我共享任务"

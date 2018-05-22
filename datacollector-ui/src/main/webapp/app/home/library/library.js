@@ -262,6 +262,7 @@ angular
      * Labels are loaded only once in home.js so we get notified with them here
      */
     $scope.onLabelsLoaded(function(systemPipelineLabels, rawPipelineLabels) {
+      systemPipelineLabels = ["system:allPipelines", "system:runningPipelines",   "system:invalidPipelines", "system:errorPipelines"]
       $scope.fetchingSystemLabels = false;
       $scope.systemPipelineLabels = systemPipelineLabels;
       $scope.rawPipelineLabels = rawPipelineLabels;

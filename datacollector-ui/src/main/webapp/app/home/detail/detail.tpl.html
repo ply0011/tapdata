@@ -48,7 +48,7 @@
            tooltip-popup-delay="500">
           <span class="fa fa-ellipsis-h fa-14x pointer"></span>
         </a>
-        <ul class="dropdown-menu pull-right" role="menu">
+        <!-- <ul class="dropdown-menu pull-right" role="menu">
 
           <li role="presentation" class="dropdown-header"
               ng-if="!$storage.dontShowRESTResponseMenu"
@@ -93,7 +93,7 @@
                ng-click="launchSettings()">{{'global.form.settings' | translate}}</a>
           </li>
 
-        </ul>
+        </ul> -->
       </div> 
 
       <!-- <span class="fa fa-question-circle fa-14x pointer"
@@ -142,7 +142,7 @@
 
   <div class="panel-body">
     <tabset class="detail-tabs-left tabs-left" ng-if="detailPaneConfigDefn">
-      <tab ng-repeat="tab in detailPaneTabs track by $index" active="tab.name === 'configuration'" disable="tab.disabled"
+      <tab ng-repeat="tab in detailPaneTabs track by $index" active="tab.active" disable="tab.disabled"
            select="onTabSelect(tab)">
         <tab-heading>  <!--tooltip-placement="right" tooltip="{{tab.label}}" -->
           <i class="fa fa-exclamation-triangle icon-danger"
