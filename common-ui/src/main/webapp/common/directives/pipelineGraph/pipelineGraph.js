@@ -206,8 +206,8 @@ angular.module('pipelineGraphDirectives', [])
       COPY_KEY: 67,
       PASTE_KEY: 86,
       nodeRadius: 70,
-      rectWidth: 140,
-      rectHeight: 100,
+      rectWidth: 100,
+      rectHeight: 50,
       rectRound: 14,
       defaultScale: 1
     };
@@ -280,7 +280,7 @@ angular.module('pipelineGraphDirectives', [])
       var el = gEl.append('text')
         .attr('text-anchor','middle')
         .attr('x', 50)
-        .attr('y', 75),
+        .attr('y', 27),
         text = el,
         words = title.split(/\s+/).reverse(),
         word,
@@ -289,7 +289,7 @@ angular.module('pipelineGraphDirectives', [])
         lineHeight = 1.1, // ems
         y = text.attr('y'),
         dy = 0,
-        tspan = text.text(null).append('tspan').attr('x', 70).attr('y', y).attr('dy', dy + 'em'),
+        tspan = text.text(null).append('tspan').attr('x', 50).attr('y', y).attr('dy', dy + 'em'),
         totalLines = 1;
 
       if (words.length === 1) {
@@ -307,7 +307,7 @@ angular.module('pipelineGraphDirectives', [])
             }
 
             line = [word];
-            tspan = text.append('tspan').attr('x', 70).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word);
+            tspan = text.append('tspan').attr('x', 50).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word);
             totalLines++;
           }
         }
