@@ -2002,9 +2002,12 @@ angular
 
     $scope.$on('showJobConfigView', function (event, options) {
       $scope.showJobConfig = !$scope.showJobConfig;
+      $scope.refreshGraph();
+
     });
     $scope.$on('showMappingView', function (event, options) {
       $scope.showMappingView = !$scope.showMappingView;
+      $scope.refreshGraph();
     });
     
     $scope.$on('onNodeSelection', function (event, options) {
@@ -2047,6 +2050,7 @@ angular
       if (configInfo) {
         $scope.activeConfigInfo = configInfo;
         $scope.closePreview();
+        
         loadPipelineConfig($scope.activeConfigInfo.pipelineId);
       } else {
         //No Pipieline config exists
