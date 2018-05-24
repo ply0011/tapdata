@@ -2,7 +2,7 @@
 	"global": {
 		"title": "任务代理",
 		"login": "登录",
-		"Jobs": '任务',
+		"Jobs": "任务",
 		"tapdata_dashboard": "Tapdata仪表板",
 		"create_new_job": "创建新任务",
 		"menu": {
