@@ -361,7 +361,7 @@
       <div class="panel-title pull-left"
            ng-switch-when="RUNNING">
         <h3 class="pull-left all-pipelines-link">
-          <a ng-href="{{common.baseHref}}">Pipelines</a>
+          <a ng-href="{{common.baseHref}}">{{'global.jobs' | translate}}</a>
         </h3>
         <h3 class="pull-left all-pipelines-link"> / </h3>
         <h3 class="pull-left">{{pipelineConfig.info.title | limitTo: 40}}: </h3>
@@ -418,7 +418,7 @@
       <div class="panel-title pull-left"
            ng-switch-default>
         <h3 class="pull-left all-pipelines-link">
-          <a ng-href="{{common.baseHref}}">Jobs</a>
+          <a ng-href="{{common.baseHref}}">{{'global.jobs' | translate}}</a>
         </h3>
         <h3 class="pull-left all-pipelines-link"> / </h3>
         <h3 class="pull-left" contenteditable="true"

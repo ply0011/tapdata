@@ -2,6 +2,7 @@
   "global":{
      "title":"Job Agent",
      "login":"Log in",
+     "Jobs": 'Jobs',
      "tapdata_dashboard":"Tapdata dashboard",
      "create_new_job":"Create New Job",
      "menu":{
