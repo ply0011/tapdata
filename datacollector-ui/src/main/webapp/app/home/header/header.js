@@ -265,6 +265,8 @@ angular
         }, function () {
 
         });
+        $scope.refreshGraph()
+
       },
 
       /**
