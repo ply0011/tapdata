@@ -5,7 +5,7 @@
 
     <div class="pull-right" ng-if="pipelineConfig && activeConfigStatus.status !== 'STOPPING' && activeConfigStatus.status !== 'CONNECTING' && activeConfigStatus.status !== 'DISCONNECTING' && activeConfigStatus.status !== 'STARTING_ERROR' && activeConfigStatus.status !== 'RUNNING_ERROR' && activeConfigStatus.status !== 'STOPPING_ERROR' && activeConfigStatus.status !== 'FINISHING'">
 
-      <!-- <div class="btn-group" dropdown
+     <div class="btn-group" dropdown
            ng-hide="previewMode || snapshotMode">
        <span class="btn btn-link dropdown-toggle icon-button" dropdown-toggle aria-expanded="true"
              tooltip-placement="bottom" tooltip="{{'home.header.more' | translate}}"
@@ -15,14 +15,7 @@
           <i class="fa fa-ellipsis-h fa-14x"></i>
         </span>
         <ul class="dropdown-menu pull-right" role="menu">
-          <li role="presentation"
-              ng-if="isAuthorized([userRoles.admin, userRoles.manager]) && canExecute && !(isPipelineRunning || previewMode || snapshotMode)"
-              ng-class="{'disabled': !pipelineConfig.valid}">
-            <a href="#" dropdown-toggle ng-click="(!pipelineConfig.valid) || startPipelineWithParameters()">
-              <i class="glyphicon glyphicon-play"></i> {{'home.header.startWithParametersTitle' | translate}}
-            </a>
-          </li>
-
+         
           <li role="presentation"
               ng-if="!isPipelineRunning && isAuthorized([userRoles.admin, userRoles.manager])"
               ng-class="{'disabled': !pipelineConfig.valid || activeConfigStatus.executionMode != pipelineConstant.STANDALONE}">
@@ -30,71 +23,21 @@
               <i class="fa fa-power-off"></i> {{'home.resetOffset.title' | translate}}
             </a>
           </li>
-
-          <li role="presentation"
-              ng-if="isAuthorized([userRoles.admin, userRoles.creator]) && !common.isSlaveNode"
-              ng-hide="common.pipelineStatusMap[pipeline.pipelineId].status === 'RUNNING'">
-            <a href="#" dropdown-toggle ng-click="deletePipelineConfig(activeConfigInfo, $event)">
-              <i class="fa fa-trash-o"></i>
-              <span>{{'global.form.delete' | translate}}</span>
-            </a>
-          </li>
-
           <li role="presentation" ng-if="isAuthorized([userRoles.admin, userRoles.creator]) && !common.isSlaveNode">
-            <a href="#" dropdown-toggle ng-click="duplicatePipelineConfig(activeConfigInfo, $event)">
-              <i class="fa fa-files-o"></i>
-              <span>{{'global.form.duplicate' | translate}}</span>
-            </a>
-          </li>
-
-          <li role="presentation" ng-if="isAuthorized([userRoles.admin, userRoles.creator]) && !common.isSlaveNode">
-            <a href="#" dropdown-toggle ng-click="importPipelineConfig(activeConfigInfo, $event)">
-              <i class="glyphicon glyphicon-import"></i>
-              <span>{{'global.form.import' | translate}}</span>
-            </a>
-          </li>
-
-          <li role="presentation">
-            <a href="#" dropdown-toggle ng-click="exportPipelineConfig(activeConfigInfo, false, $event)">
-              <i class="glyphicon glyphicon-export"></i>
-              <span>{{'global.form.export' | translate}}</span>
-            </a>
-          </li>
-
-          <li role="presentation" ng-if="activeConfigInfo.valid">
-            <a href="#" dropdown-toggle ng-click="exportPipelineConfig(activeConfigInfo, true, $event)">
-              <i class="glyphicon glyphicon-export"></i>
-              <span>{{'global.form.exportWithLibraryDefinitions' | translate}}</span>
-            </a>
-          </li>
-
-          <li role="presentation"
-              ng-if="!isPipelineRunning && isAuthorized([userRoles.admin, userRoles.manager]) && activeConfigStatus.executionMode != pipelineConstant.CLUSTER  && activeConfigStatus.executionMode !== pipelineConstant.CLUSTER_BATCH && activeConfigStatus.executionMode !== pipelineConstant.CLUSTER_YARN_STREAMING && activeConfigStatus.executionMode !== pipelineConstant.CLUSTER_MESOS_STREAMING">
-            <a href="#" dropdown-toggle ng-click="viewSnapshots()">
-              <i class="glyphicon glyphicon-camera"></i> {{'home.header.snapshots' | translate}}
-            </a>
-          </li>
-
-          <li role="presentation" ng-if="isPipelineRunning && !monitoringPaused">
-            <a href="#" dropdown-toggle ng-click="pauseMonitoring()">
-              <i class="fa fa-pause"></i> {{'home.header.pauseMonitoring' | translate}}
-            </a>
-          </li>
-
-          <li role="presentation" ng-if="isPipelineRunning && monitoringPaused">
-            <a href="#" dropdown-toggle ng-click="continueMonitoring()">
-              <i class="fa fa-play"></i> {{'home.header.continueMonitoring' | translate}}
-            </a>
-          </li>
-
-          <li role="presentation" ng-if="isAuthorized([userRoles.admin, userRoles.creator]) && canExecute && pipelineConfig.previewable && activeConfigStatus.executionMode != pipelineConstant.SLAVE && !(isPipelineRunning || previewMode || snapshotMode)">
-            <a href="#" dropdown-toggle ng-click="!pipelineConfig.previewable || previewPipeline(true)">
-              <i class="glyphicon glyphicon-eye-open"></i> {{'home.header.previewConfig' | translate}}
-            </a>
-          </li>
-
+              <a href="#" dropdown-toggle ng-click="importPipelineConfig(activeConfigInfo, $event)">
+                <i class="glyphicon glyphicon-import"></i>
+                <span>{{'global.form.import' | translate}}</span>
+              </a>
+            </li>
+  
+            <li role="presentation">
+              <a href="#" dropdown-toggle ng-click="exportPipelineConfig(activeConfigInfo, false, $event)">
+                <i class="glyphicon glyphicon-export"></i>
+                <span>{{'global.form.export' | translate}}</span>
+              </a>
+            </li> 
         </ul>
-      </div> -->
+      </div> <!--  -->
 
       <div class="btn-group issues-dropdown"
            ng-show="pipelineConfig && pipelineConfig.issues.issueCount > 0 && !previewMode && !snapshotMode">
