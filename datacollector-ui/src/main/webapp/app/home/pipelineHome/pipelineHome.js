@@ -77,6 +77,7 @@ angular
       _: _,
       showJobConfig: false,
       showMappingView: false,
+      viewJobConfigWhileRunning: false,
       showLoading: true,
       monitorMemoryEnabled: false,
       isPipelineReadOnly: !authService.isAuthorized([userRoles.admin, userRoles.creator]),
@@ -2005,6 +2006,20 @@ angular
       $scope.refreshGraph();
 
     });
+    $scope.$on('viewJobConfigWhileRunning', function (event, options) {
+      if($scope.isPipelineRunning ){
+        $scope.viewJobConfigWhileRunning = !$scope.viewJobConfigWhileRunning;
+        $scope.refreshGraph();
+        setTimeout(function(){
+          $scope.changeStageSelection({selectedObject: undefined, type: pipelineConstant.PIPELINE})
+        },100)
+      }
+    })
+
+    setInterval(function(){
+      $scope.refreshGraph();
+    }, 2000);
+
     $scope.$on('showMappingView', function (event, options) {
       $scope.showMappingView = !$scope.showMappingView;
       $scope.refreshGraph();

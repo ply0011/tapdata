@@ -72,6 +72,10 @@ angular
         $rootScope.$broadcast('showJobConfigView');
       },
 
+      viewJobConfigWhileRunning: function(){
+        $rootScope.$broadcast('viewJobConfigWhileRunning');
+
+      },
       setMapping: function(){
         $rootScope.$broadcast('showMappingView');
       },

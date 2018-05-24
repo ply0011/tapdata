@@ -197,6 +197,7 @@
 			"value": "值",
 			"view": "View",
 			"viewLogs": "查看日志",
+			"viewConfig": "日志/配置 视图切换",
 			"write": "写入",
 			"yes": "是的"
 		},

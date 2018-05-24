@@ -200,6 +200,7 @@
         "value":"Value",
         "view":"View",
         "viewLogs":"View Logs",
+        "viewConfig":"Logs/Config view switch",
         "write":"Write",
         "yes":"Yes"
      },
