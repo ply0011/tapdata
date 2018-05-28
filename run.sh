@@ -53,7 +53,7 @@ watch_ui() {
 run_sdc() {
     echo "start to run sdc"
     cd "${__bash_dir__}"
-    export SDC_FILE_LIMIT=4864
+    export SDC_FILE_LIMIT=1024
     # dist/sdc/bin/streamsets dc
     nohup dist/sdc/bin/streamsets dc &
 }
