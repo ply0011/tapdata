@@ -33,9 +33,9 @@ download_sdc() {
 build_ui() {
     echo "start to build html"
     cd "${__bash_dir__}/datacollector-ui"
-    npm i 
-    npm install -g bower
-    npm install -g grunt-cli
+    yarn i 
+    yarn install -g bower
+    yarn install -g grunt-cli
     bower install
     grunt build
 }
