@@ -23,7 +23,7 @@ download_sdc() {
     if [ ! -f "${__bash_dir__}/dist/streamsets-datacollector-core-${SDC_VERSION}.tgz" ]; then
         curl -O http://nightly.streamsets.com.s3-us-west-2.amazonaws.com/datacollector/latest/tarball/streamsets-datacollector-core-${SDC_VERSION}.tgz
     fi
-    rm sdc
+    rm -r sdc
     tar -xvf streamsets-datacollector-core-${SDC_VERSION}.tgz 
     mv streamsets-datacollector-${SDC_VERSION} sdc
     rm  -r sdc/sdc-static-web
@@ -33,7 +33,7 @@ download_sdc() {
 build_ui() {
     echo "start to build html"
     cd "${__bash_dir__}/datacollector-ui"
-    yarn i 
+    yarn install 
     yarn install -g bower
     yarn install -g grunt-cli
     bower install
