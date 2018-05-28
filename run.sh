@@ -43,9 +43,9 @@ build_ui() {
 watch_ui() {
     echo "start to grunt watch"
     cd "${__bash_dir__}/datacollector-ui"
-    npm i 
-    npm install -g bower
-    npm install -g grunt-cli
+    yarn install
+    yarn install -g bower
+    yarn install -g grunt-cli
     bower install
     grunt watch
 }
