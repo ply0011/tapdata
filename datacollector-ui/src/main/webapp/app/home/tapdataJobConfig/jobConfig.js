@@ -20,7 +20,7 @@ angular
     })
 
     if(!$scope.pipelineConfig.metadata.op_filter || $scope.pipelineConfig.metadata.op_filter.length === 0) {
-      $scope.pipelineConfig.metadata.op_filter = {"action": "skip", "filters":[{ collection:'users', op: 'delete'}]}
+      $scope.pipelineConfig.metadata.op_filter = {"action": "skip", "filters":[{ collection:'', op: ''}]}
     }
     
     $scope.pipelineConfig.metadata.op_filter2 =`
