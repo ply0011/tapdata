@@ -66,6 +66,7 @@ main () {
     if [ "$SKIP_SDC_SOURCE_TEST" <> "true" ]; then
         download_sdc
     fi
+    kill $(lsof -t -i:18630)
     run_sdc
 
     if [ "$SKIP_BUILD_LIB" <> "true" ]; then
