@@ -56,7 +56,7 @@ run_sdc() {
     cd "${__bash_dir__}"
     export SDC_FILE_LIMIT=1024
     # dist/sdc/bin/streamsets dc
-    nohup dist/sdc/bin/streamsets dc &
+    BUILD_ID=dontKillMe  nohup dist/sdc/bin/streamsets dc &
 }
 
 main () {
