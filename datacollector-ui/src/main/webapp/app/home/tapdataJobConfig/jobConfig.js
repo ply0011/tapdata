@@ -3,11 +3,11 @@ angular
   .module('dataCollectorApp.home')
   .controller('jobConfigController', function ($scope,    $rootScope,    api, pipelineService, pipelineConstant) {
     angular.extend($scope, {
-      addOneOPFilter: function(){
-        $scope.pipelineConfig.metadata.op_filter.filters.push({collection:'', op: ''})
+      addOneOPFilter: function(type){
+        $scope.pipelineConfig.metadata.op_filter[type].filters.push({collection:'', op: ''})
       },
-      removeFromOPFilters: function(index){
-        $scope.pipelineConfig.metadata.op_filter.filters.splice(index, 1);
+      removeFromOPFilters: function(type,index){
+        $scope.pipelineConfig.metadata.op_filter[type].filters.splice(index, 1);
       }, 
       tempSave: function(){
         $scope.lastChangeTime = new Date().getTime();
@@ -20,7 +20,10 @@ angular
     })
 
     if(!$scope.pipelineConfig.metadata.op_filter || $scope.pipelineConfig.metadata.op_filter.length === 0) {
-      $scope.pipelineConfig.metadata.op_filter = {"action": "skip", "filters":[{ collection:'', op: ''}]}
+      $scope.pipelineConfig.metadata.op_filter = [
+        {"action": "skip", "filters":[{ collection:'', op: ''}]},
+        {"action": "abort", "filters":[{ collection:'', op: ''}]},
+      ]
     }
     
     $scope.pipelineConfig.metadata.op_filter2 =`

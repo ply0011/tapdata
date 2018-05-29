@@ -47,7 +47,7 @@
                 <label class="col-lg-3 col-md-4 control-label">OP Filter (Skip)</label>
                 <div style="    margin-left: 30%;">
                     <div class="controls col-lg-7 col-md-8 map-list-type" 
-                ng-repeat="mapObject  in  pipelineConfig.metadata.op_filter.filters track by $index">
+                ng-repeat="mapObject  in  pipelineConfig.metadata.op_filter[0].filters track by $index">
                     <!-- <div class="col-xs-4">
                         <input type="text" class="form-control input-sm"
                                name="{{configDefinition.name + 'key' + $index}}"
@@ -63,7 +63,7 @@
                                    ng-keyup="tempSave()"
                                    ng-model="mapObject.collection"/>
                     </div>
-                    <div class="col-xs-3">
+                    <div class="col-xs-3" style="width: 200px;">
                             <!-- <input type="text" class="form-control input-sm"
                                    name="{{configDefinition.name + 'key3' + $index}}"
                                    ng-required="true"
@@ -87,12 +87,12 @@
                    
                     <div class="btn-group" role="group" aria-label="Default button group">
                         <button type="button" class="btn btn-default btn-sm"
-                                ng-click="removeFromOPFilters($index)">
+                                ng-click="removeFromOPFilters(0,$index)">
                             <i class="fa fa-minus pointer"></i>
                         </button>
                         <button type="button" class="btn btn-default btn-sm"
                                 ng-show="$last"
-                                ng-click="addOneOPFilter()">
+                                ng-click="addOneOPFilter(0)">
                             <i class="fa fa-plus pointer"></i>
                         </button>
                     </div>    
@@ -100,7 +100,63 @@
                 </div>
         </div>
 
- 
+        <div class="form-group">
+            <label class="col-lg-3 col-md-4 control-label">OP Filter (Abort)</label>
+            <div style="    margin-left: 30%;">
+                <div class="controls col-lg-7 col-md-8 map-list-type" 
+            ng-repeat="mapObject  in  pipelineConfig.metadata.op_filter[1].filters track by $index">
+                <!-- <div class="col-xs-4">
+                    <input type="text" class="form-control input-sm"
+                           name="{{configDefinition.name + 'key' + $index}}"
+                           ng-required="true"
+                           ng-keyup="tempSave()"
+                           ng-model="mapObject.db"/>
+                </div>
+                 -->
+                <div class="col-xs-3">
+                        <input type="text" class="form-control input-sm"
+                               name="{{configDefinition.name + 'key2' + $index}}"
+                               ng-required="true"
+                               ng-keyup="tempSave()"
+                               ng-model="mapObject.collection"/>
+                </div>
+                <div class="col-xs-3"  style="width: 200px;"> 
+                        <!-- <input type="text" class="form-control input-sm"
+                               name="{{configDefinition.name + 'key3' + $index}}"
+                               ng-required="true"
+                               ng-keyup="tempSave()"
+                               ng-model="mapObject.op"/> -->
+                        <select class="form-control"
+                               name="syncType"
+                               ng-model="mapObject.op">
+                               <option value="insert">insert</option>
+                               <option value="update">update</option>
+                               <option value="delete">delete</option>
+                               <option value="create_index">create index</option>
+                               <option value="drop_index">drop index</option>
+                               <option value="create_table">create table</option>
+                               <option value="drop_table">drop table</option>
+                               <option value="renameCollection">renameCollection</option> 
+                       
+                       </select>
+                </div>
+
+               
+                <div class="btn-group" role="group" aria-label="Default button group">
+                    <button type="button" class="btn btn-default btn-sm"
+                            ng-click="removeFromOPFilters(1, $index)">
+                        <i class="fa fa-minus pointer"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm"
+                            ng-show="$last"
+                            ng-click="addOneOPFilter(1)">
+                        <i class="fa fa-plus pointer"></i>
+                    </button>
+                </div>    
+            </div>
+            </div>
+    </div>
+
         
 
     </form> 
