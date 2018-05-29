@@ -1018,7 +1018,7 @@ angular
       currArchivePos = archive.length -1;
     };
 
-
+   
     /**
      * Save Updates
      * @param config
@@ -1106,6 +1106,8 @@ angular
           });
       }
     };
+
+    
 
     /**
      * Update Pipeline Graph
@@ -1984,6 +1986,11 @@ angular
         configTimeout = $timeout(saveUpdates, 1000);
       }
     }, true);
+
+    $scope.$on('pip-saveUpdates', function(event, config) {
+      return saveUpdates(config);
+    
+    });
 
     $scope.$watch('pipelineRules', function (newValue, oldValue) {
       if (ignoreUpdate) {
