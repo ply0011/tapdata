@@ -74,8 +74,8 @@
 	<div class="container-fluid"  style="background-color:white">
 		<form class="form-horizontal"  if={widget}>
 			<div  class="form-group form-group-sm row" each={props.elements} style="margin-bottom:0px" if={editor[key].visible!=false&&showProperty(key)}> 
-				<label class="pull-left control-label" style="padding:10px;text-align: left;"> <raw content="{editor[key].title}"/> <span  if={!editor[key].required}>&nbsp;</span><span style="color:red" if={editor[key].required}>*</span></label>
-				<div style="margin-left:125px;"> 
+				<label class="pull-left control-label" style="padding:10px 0 10px 10px;text-align: left;"> <raw content="{editor[key].title}"/> <span  if={!editor[key].required}>&nbsp;</span><span style="color:red" if={editor[key].required}>*</span></label>
+				<div style="margin-left:110px;"> 
 					<div style="padding:5px;"> 
 						<input type="text" class="form-control" id="{key}" value={widget['objectdata'][key]} required={editor[key].required} readonly={!editor[key].editable}  onchange="{change}"  if="{editor[key].format=='string'&&showProperty(key)}"/>
 						
@@ -84,10 +84,10 @@
 						<input type="checkbox" style="margin-top:8px;" onclick="{change}" id="{key}" checked="{widget['objectdata'][key]}" if={editor[key].format=='boolean' }>
 						
 						<select id="{key}" onchange={change} style="width:100%" if={editor[key].format=="single" } >
-							<option each={option, i in editor[key].options}  value={option.id||option} selected={(option.id||option)==widget['objectdata'][key]}>{option.text||option}</option>
+							<option each={option, i in editor[key].options}  value={option.id||option} selected={getValue(option,key)}>{option.text||option}</option>
 						</select>
 						
-						<textarea rows=5 id="values" class="form-control" style="resize:vertical;"  onchange="{change}" onblur="{leave}" if={editor[key].format=='text' }>{widget['objectdata'][key]}</textarea>							
+						<textarea  id="values" rows=5  style="resize:vertical;width:100%"   onchange="{change}" if={editor[key].format=='text' }>{widget['objectdata'][key]}</textarea>							
 	
 						<input type="text" class="form-control number" id="{key}" value={widget['objectdata'][key]} required={editor[key].required} readonly={!editor[key].editable}  onchange="{change}"  if={editor[key].format=='int' }/>
 						
@@ -101,6 +101,8 @@
 								</div>
 							</div>
 							<div  each={obj,i in widget['objectdata'][key].values} name={key} style="margin-bottom:5px"  class="table-grid">
+								<a href="#" name="{key}" onclick={goup} if={i>0}><i class="fa fa-long-arrow-up" style="width:10px;"></i></a>
+								<a href="#" name="{key}" onclick={godown} if={i<widget['objectdata'][key].values.length-1}><i class="fa fa-long-arrow-down" style="width:10px;"></i></a>
 								<div each={field,k in widget['objectdata'][key].fields} class="table-cell">
 									<input  type="text" class="form-control" name="{key}" alt="{i}" onchange="{listitemchange}"  value="{obj[field.id]}" />
 								</div>
@@ -137,6 +139,26 @@
 	}
 	updateEditor();
 	
+	goup(e){
+		var target=e.currentTarget;
+		var name=target.name;
+		var item=e.item.obj;
+		var index=this.widget["objectdata"][name].values.indexOf(item);
+		if(index>0){
+			this.widget["objectdata"][name].values[index]=this.widget["objectdata"][name].values.splice(index-1,1,item)[0];
+		}
+	}
+	
+	godown(e){
+		var target=e.currentTarget;
+		var name=target.name;
+		var item=e.item.obj;
+		var index=this.widget["objectdata"][name].values.indexOf(item);
+		if(index>0){
+			this.widget["objectdata"][name].values[index]=this.widget["objectdata"][name].values.splice(index+1,1,item)[0];
+		}
+	}
+	
 	listadd(e){
 		var target=e.target;
 		var name=target.name;
@@ -145,6 +167,50 @@
 			obj[this.widget['objectdata'][name].fields[i].id]="";
 		}
 		this.widget['objectdata'][name].values.push(obj);
+	}
+	
+	getValue(option,key){
+		if(option.id=="String"){
+			switch(ths.widget.objectdata[key]){
+				case "String":
+				case "varchar2":
+				case "char":
+				case "varchar":
+					return true;
+				default:
+				    return false;
+			
+			}
+		}
+		else if(option.id=="Integer"){
+			switch(ths.widget.objectdata[key]){
+				case "Integer":
+				case "number":
+				case "int":
+					return true;
+				default:
+				    return false;
+			
+			}
+		}
+		else if(option.id=="Date"){
+			switch(ths.widget.objectdata[key]){
+				case "Date":
+				case "timestamp(6)":
+				case "time":
+					return true;
+				default:
+				    return false;
+			
+			}
+		}
+		else{
+		  if(option.id==ths.widget.objectdata[key])
+		     return true;
+		  else 
+		  	return false;
+		}
+		
 	}
 	
 	listremove(e){

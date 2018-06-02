@@ -4,12 +4,17 @@
 		this.thumbnail=null;
 		this.interval=20000;
 		var ths=this;
-		$.extend(this,opt);
+		var offsetX=335,offsetY=80;
+		/*opt.width=document.body.clientWidth-offsetX;
+		opt.height=document.body.clientHeight-offsetY;*/
+		$.extend(this,opt);		
 		this.createdocument=function(parent,opt){
 	    	 this.document=new visordocument(parent,opt);
+	    	 var offset="0px";
 	    	 ths.parent.find(".designer").each(function(i,item){
-	    		 $(item).css("left","200px")
-				 .css("top","200px")			
+	    		 $(item).
+	    		  css("left",offset)
+				 .css("top",offset)			
 				 .css("position","relative");
 	    	 });
 	    	 riot.observable(this);
@@ -17,7 +22,7 @@
 	    	 this.on("navigation_loaded",function(){
 	    		 ths.trigger("openpropertypanel",1);
 	    		 window.onresize=function(){
-	 				var height=90;
+	 				var height=70;
 	 				var clientHeight=document.documentElement.clientHeight;
 	 				var clientWidth=document.documentElement.clientWidth;
 	 				var panelHeight=$("#panel_workspace .panel-heading").css("height");
@@ -32,6 +37,7 @@
 	 			};
 	 			window.onresize(); 
 	 		 	$("widgets img").attr("draggable",true);
+			   	$("widgets img").attr("ondragstart","drag(event)");	  
 			   	$("widgets img").attr("ondragstart","drag(event)");	  
 			   	$("#widgets button").attr("draggable",true);
 			   	$("#widgets button").attr("ondragstart","drag(event)");
@@ -68,6 +74,11 @@
 				ths.document.activePanel.instance.focuswidget=widget;
 				visordesigner.fieldclickEvent.call(widget,e);
 	    	});
+	    	
+	    	this.document.on("savedocument",function(){
+				ths.trigger("savedocument");
+				ths.resize();
+	    	});
 			
 			this.document.on("keypress",function(e,panel){
 	    		var ctrdown=e.ctrlKey;
@@ -89,8 +100,11 @@
 					if(focuswidget&&focuswidget.parent.deletefield){
 						focuswidget.parent.deletefield(focuswidget);
 					}				 
-					else{
-						panel.deleteFocus();	
+					else if(focuswidget){
+						 if(focuswidget.type=="table")
+						  	focuswidget.visible=false;
+						else							  	 
+							panel.deleteFocus();	
 					}
 	        	}
 	        	else if(key==90&&ctrdown){
@@ -140,6 +154,7 @@
 			    		 exportDoc.id=null;	
 			    		 ths.document.restoreSchema(exportDoc);
 			    		 this.trigger("restoredocument");
+			    		
 			    	}	
 	    	})
 	    	
@@ -172,6 +187,9 @@
 	 			$("#document-name").val(ths.title);
 	 			$("#document-description").val(ths.description);
 	 			ths.setActive(ths.document.activePanel.instance.name);
+	 			setTimeout(function(){
+	 				ths.resize();
+	 			},500);
 	 		});
 	 		
 	 		this.on("uploadFile",function(file){
@@ -202,9 +220,9 @@
 						else if(value=="MergedObject")
 							src="images/tree/lable.png";
 						else if(value=="Date")
-							src='date-40-1.png';
+							src='images/tree/date-40-1.png';
 						else if(value=="Integer")
-							src='number-40-1.png';	
+							src='images/tree/number-40-1.png';	
 	 					widget.Background({filltype:'image',image:src},function(){
 	 						ths.document.activePanel.instance.paint();
 	 					});
@@ -331,6 +349,7 @@
 			
 			this.document.on("deletewidget",function(){
 				 ths.updatePropertyEditor();
+				 riot.mount("navigation",ths);
 			});
 	    }
 		
@@ -411,9 +430,9 @@
 			else
 				$("#thumbnail-box").hide();
 			
-			 if(!ths.thumbnail&&ths.showthumbnail){
+			/* if(!ths.thumbnail&&ths.showthumbnail){
 				 ths.createThumbnail();
-			 }	
+			 }	*/
 			this.updateDesktop=function(){
 				var filltype=$("#backgroundfilltype").select2("val");
 				var target=this.document.activePanel.instance.rootwidget;
@@ -433,10 +452,12 @@
 			
 			var setdesktop=function(){
 				 var target=ths.document.activePanel.instance.rootwidget;
-				 $("#workspace").css("width",parseInt(target.width)+400);
-				 $("#workspace").css("height",parseInt(target.height)+400);
-				 $("#editor").scrollTop(200-20);
-				 $("#editor").scrollLeft(200-20);
+//				 $("#workspace").css("width",parseInt(target.width)+400);
+//				 $("#workspace").css("height",parseInt(target.height)+400);
+//				 $("#editor").scrollTop(200-20);
+//				 $("#editor").scrollLeft(200-20);
+ 				 $("#workspace").css("width",parseInt(target.width));
+				 $("#workspace").css("height",parseInt(target.height));
 				 $("#editor").scroll(function(){
 					 if(ths.showthumbnail)
 						 ths.drawthumbnail();					
@@ -502,10 +523,10 @@
 				this.updateInfo();
 		};
 		
-		this.init=function(schema){
-				alert("!");
+		this.init=function(schema,opts){
 			 ths.reset();   
     		 ths.document.restoreSchema(schema||{});
+    		 riot.mount("navigation",ths);
     		 ths.trigger("restoredocument");
 		}
 		
@@ -514,6 +535,22 @@
     		 ths.document.restoreDocument(data||{});
     		 ths.trigger("restoredocument");
 		}
+		
+		this.resize=function(){
+	    		var  width=document.body.clientWidth-offsetX-10,
+					height=document.body.clientHeight-offsetY;
+				for(var i=0;i<ths.document.activePanel.instance.widgets.length;i++){
+					var _widget=ths.document.activePanel.instance.widgets[i];
+					if(_widget.visible&&(_widget.y+_widget.height>height))
+					    height=_widget.y+_widget.height+20;
+				}
+				ths.document.activePanel.instance.Height(height);
+				ths.document.activePanel.instance.Width(width);
+				$("#workspace,.designer").css("width",width);
+				$("#workspace,.designer").css("height",height);
+				ths.document.activePanel.instance.paint();
+	    };	
+	    	
 		
 		this.getJsonResult=function(){
 			 var ths=this;
@@ -543,7 +580,10 @@
 
 		ths.createdocument(parent,{
 		   name: opt.type+"_"+new Date().format("yyyyMMddhhmm"),
-		   category:opt.category
+		   category:opt.category,
+		   mode:opt.mode,
+		   width:opt.width,
+		   height:opt.height
 		});
 		
 		var _target="background";
@@ -554,8 +594,13 @@
 			 var r={};			 
 			 $.extend(r,this.document.persist());
 			 this.trigger("save",r);
-			 localStorage.setItem("visordesigner",JSON.stringify(r));
-			 console.info(r.data);
+			 try{
+				 localStorage.setItem("visordesigner",JSON.stringify(r));
+				 console.info(r.data);
+			 }
+			 catch(e){
+			 	console.error(e);
+			 }
 			 ShowConfirmClose(false);
 		 };
 		
@@ -619,15 +664,14 @@
 				widget1=_widget.persist();
 	    	if(this.document.activePanel&&this.document.activePanel.instance.focuswidget)
 	    	{
-	    		if(this.document.activePanel.instance.focuswidget.type!="table"&&this.document.activePanel.instance.focuswidget.type!="field")
+	    		/*if(this.document.activePanel.instance.focuswidget.type!="table"&&this.document.activePanel.instance.focuswidget.type!="field")
 	    			ths.trigger("openpropertypanel",0);
 	    		else
-	    			ths.trigger("openpropertypanel",1);
+	    			ths.trigger("openpropertypanel",1);*/
+	    		ths.trigger("openpropertypanel",0);
 	    		ShowConfirmClose(true);
 	    	}
 	    	riot.mount("propertyEditorWidget",ths);
-	    	riot.mount("animation",ths);
-	    	
 		};
 	    
 		visordesigner.createWidget=function(data){
@@ -642,9 +686,10 @@
 	    	ev.preventDefault();
 	    	var data=ev.dataTransfer.getData("text");
 	    	var files=ev.dataTransfer.files;
-	    	if(data.indexOf("widget")>=0){
+	    	var currentPanel=mydesigner.document.activePanel.instance;
+	    	if(data.indexOf("move")==0){
+	    		var table=data.split(":")[1];
 	    		var point={};
-	    		var currentPanel=mydesigner.document.activePanel.instance;
 	    		if(ev.offsetX){
 	    			point.x=ev.offsetX-offsetX;
 	    			point.y=ev.offsetY-offsetY;
@@ -652,7 +697,24 @@
 	    		else{
 	    			point.x=ev.layerX-offsetX;
 	    			point.y=ev.layerY-offsetY;
-	    		}	    		
+	    		}	
+	    		var _widget=currentPanel.Widget(table);
+	    		_widget.visible=true;
+	    		_widget.x=point.x/currentPanel.scale;
+	    		_widget.y=point.y/currentPanel.scale;
+	    		riot.update();
+	    		currentPanel.paint();
+	    	}
+	    	else if(data.indexOf("widget")>=0){
+	    		var point={};
+	    		if(ev.offsetX){
+	    			point.x=ev.offsetX-offsetX;
+	    			point.y=ev.offsetY-offsetY;
+	    		}
+	    		else{
+	    			point.x=ev.layerX-offsetX;
+	    			point.y=ev.layerY-offsetY;
+	    		}	    
 	    		var _widget=visordesigner.createWidget(data);
 	    		_widget.x=point.x/currentPanel.scale;
 	    		_widget.y=point.y/currentPanel.scale;
@@ -660,6 +722,20 @@
 	    		_widget.appendPresenter(currentPanel);
 	    		if(_widget.type==="table"||_widget.type==="entity"||_widget.type==="collection")
 	    			_widget.fieldclickEvent=visordesigner.fieldclickEvent;
+	    			
+	    		if(_widget.type=="collection"){
+	    			_widget.mouseup=function(e){
+				 		var offset=e.currentTarget.x-currentPanel.width/(currentPanel.scale*2)-40;
+				 		if(offset<0)
+				 			e.currentTarget.x=currentPanel.width/(currentPanel.scale*2)+100;	
+				 	}
+				 	_widget.afterPaint=function(ctx){
+				 		var offset=this.x-currentPanel.width/(currentPanel.scale*2)-40;
+				 		if(offset<0){
+				 			this.x=currentPanel.width/(currentPanel.scale*2)+100;
+				 		}
+				 	}
+	    		}
 	    		if(currentPanel.focuswidget!=null){
 	    			currentPanel.focuswidget.focus=false;
 	    		}

@@ -17,7 +17,7 @@
 	    	 this.on("navigation_loaded",function(){
 	    		 ths.trigger("openpropertypanel",1);
 	    		 window.onresize=function(){
-	 				var height=90;
+	 				var height=70;
 	 				var clientHeight=document.documentElement.clientHeight;
 	 				var clientWidth=document.documentElement.clientWidth;
 	 				var panelHeight=$("#panel_workspace .panel-heading").css("height");
@@ -32,6 +32,7 @@
 	 			};
 	 			window.onresize(); 
 	 		 	$("widgets img").attr("draggable",true);
+			   	$("widgets img").attr("ondragstart","drag(event)");	  
 			   	$("widgets img").attr("ondragstart","drag(event)");	  
 			   	$("#widgets button").attr("draggable",true);
 			   	$("#widgets button").attr("ondragstart","drag(event)");
@@ -202,9 +203,9 @@
 						else if(value=="MergedObject")
 							src="images/tree/lable.png";
 						else if(value=="Date")
-							src='date-40-1.png';
+							src='images/tree/date-40-1.png';
 						else if(value=="Integer")
-							src='number-40-1.png';	
+							src='images/tree/number-40-1.png';	
 	 					widget.Background({filltype:'image',image:src},function(){
 	 						ths.document.activePanel.instance.paint();
 	 					});
@@ -331,6 +332,7 @@
 			
 			this.document.on("deletewidget",function(){
 				 ths.updatePropertyEditor();
+				 riot.mount("navigation",ths);
 			});
 	    }
 		
@@ -411,9 +413,9 @@
 			else
 				$("#thumbnail-box").hide();
 			
-			 if(!ths.thumbnail&&ths.showthumbnail){
+			/* if(!ths.thumbnail&&ths.showthumbnail){
 				 ths.createThumbnail();
-			 }	
+			 }	*/
 			this.updateDesktop=function(){
 				var filltype=$("#backgroundfilltype").select2("val");
 				var target=this.document.activePanel.instance.rootwidget;
@@ -505,6 +507,7 @@
 		this.init=function(schema){
 			 ths.reset();   
     		 ths.document.restoreSchema(schema||{});
+    		 riot.mount("navigation",ths);
     		 ths.trigger("restoredocument");
 		}
 		
@@ -542,7 +545,8 @@
 
 		ths.createdocument(parent,{
 		   name: opt.type+"_"+new Date().format("yyyyMMddhhmm"),
-		   category:opt.category
+		   category:opt.category,
+		   mode:opt.mode
 		});
 		
 		var _target="background";
@@ -553,8 +557,15 @@
 			 var r={};			 
 			 $.extend(r,this.document.persist());
 			 this.trigger("save",r);
-			 localStorage.setItem("visordesigner",JSON.stringify(r));
-			 console.info(r.data);
+			 var content=JSON.stringify(r);
+			 console.info(content.length);
+			 try{
+				 localStorage.setItem("visordesigner",JSON.stringify(r));
+				 console.info(r.data);
+			 }
+			 catch(e){
+			 	
+			 }
 			 ShowConfirmClose(false);
 		 };
 		
@@ -625,8 +636,6 @@
 	    		ShowConfirmClose(true);
 	    	}
 	    	riot.mount("propertyEditorWidget",ths);
-	    	riot.mount("animation",ths);
-	    	
 		};
 	    
 		visordesigner.createWidget=function(data){
@@ -641,9 +650,27 @@
 	    	ev.preventDefault();
 	    	var data=ev.dataTransfer.getData("text");
 	    	var files=ev.dataTransfer.files;
-	    	if(data.indexOf("widget")>=0){
+	    	var currentPanel=mydesigner.document.activePanel.instance;
+	    	if(data.indexOf("move")==0){
+	    		var table=data.split(":")[1];
 	    		var point={};
-	    		var currentPanel=mydesigner.document.activePanel.instance;
+	    		if(ev.offsetX){
+	    			point.x=ev.offsetX-offsetX;
+	    			point.y=ev.offsetY-offsetY;
+	    		}
+	    		else{
+	    			point.x=ev.layerX-offsetX;
+	    			point.y=ev.layerY-offsetY;
+	    		}	
+	    		var _widget=currentPanel.Widget(table);
+	    		_widget.visible=true;
+	    		_widget.x=point.x/currentPanel.scale;
+	    		_widget.y=point.y/currentPanel.scale;
+	    		riot.update();
+	    		currentPanel.paint();
+	    	}
+	    	else if(data.indexOf("widget")>=0){
+	    		var point={};
 	    		if(ev.offsetX){
 	    			point.x=ev.offsetX-offsetX;
 	    			point.y=ev.offsetY-offsetY;
@@ -769,9 +796,9 @@
 		this.name="";
 		this.description="";
 		this.activePanel=null;
-		this.width=1510;
-		this.height=1050;
-		this.pagesize="1050X1510";
+		this.width=2500;
+		this.height=1900;
+		this.pagesize="1900X2500";
 		this.pagedirection="horization";
 		this.editable=true;
 		this.showRelation=true;
@@ -782,6 +809,7 @@
 		this.defaulttableconnectionType="relationConnector-02120";
 		this.defaultentityconnectionType="referenceConnector-012101";
 		this.defaultmapconnectionType="mapConnector-0322";
+		this.tables=new Map();
 		this.defaultfont={
 				style:"normal",  //normal, italic
 				weight:"normal", //normal,bold
@@ -885,25 +913,104 @@
 			delete this.content;
 		}
 		
-		this.restoreSchema=function(data){
-			var panel1=this.newpage();
-			var x=100,y=100;
-			var FKs=[];
-			for(var i=0;i<=data.schema.tables.length-1;i++){
-				var tb=data.schema.tables[i];
+		var listSort=function(arraylist,sortby,direction,type){	
+		    direction=direction.toUpperCase( );
+		    var obj =arraylist.slice(0); 
+			obj = obj.sort(function (a,b){
+				 var dosort=function(fields,a,b,index){
+					 var field=fields;
+					 if((typeof fields=="object")&&fields.join){
+						 if(!index)
+							 index=0;
+						 if(index<fields.length)
+						 	field=fields[index];
+						 else
+							 return false;
+					 }
+					 if(a[field]){
+							var codeA=a[field];
+							var codeB=b[field];
+						}
+						else{
+							var codeA=a.data.get(field)==null?'':a.data.get(field);
+							var codeB=b.data.get(field)==null?'':b.data.get(field);
+						}
+						typeB=type||typeof codeB;
+						typeA=type||typeof codeA;
+						if(typeA!=typeB){
+							return true;
+						}
+						var _type=typeB;
+						if(typeof codeA=="object"&&codeA.join)					
+							codeA=codeA.join(",");
+						else if(typeof codeA=="object"&&codeA.text)
+							codeA=codeA.text;
+						else if(typeof codeA=="object"&&codeA.displayName)
+							codeA=codeA.displayName;
+						type=type||typeB;
+						if(type=="object"&&codeB.join){
+							codeB=codeB.join(",");
+							_type="string";
+						}
+						else if(type=="object"&&codeB.text){
+							codeB=codeB.text;
+							_type="string";
+						}
+						else if(typeof type=="object"&&codeB.displayName){
+							codeB=codeB.displayName;
+							_type="string";
+						}
+						if(direction==="DESC"||direction==="ASC"||direction===" "){
+							if(direction==="ASC"){
+								t=codeA;codeA=codeB;codeB=t;
+							}
+							if (_type=="string"){
+								try{
+									var ret=codeB.localeCompare(codeA);
+									if(ret==0&&typeof index=='number'){
+										 return dosort(sortby,a,b,++index);
+									}
+									return ret;
+								}
+								catch(e){
+									return true;
+								}
+							}
+							else if(_type=="number"){
+								var ret= codeB-codeA;
+								if(ret==0&&typeof index=='number'){
+									 return dosort(sortby,a,b,++index);
+								}
+								return ret;
+							}
+							else if(_type=="date"){
+								var ret= Date.parse(codeB)-Date.parse(codeA);
+								if(ret==0&&typeof index=='number'){
+									 return dosort(sortby,a,b,++index);
+								}
+								return ret;
+							}
+						}
+				 }
+				 return dosort(sortby,a,b)
+		   });
+			return obj;
+		};
+		
+		this.createTable=function(tb,panel,x,y){
+				var FKs=[];
+				x=x||100;
+				y=y||180;
 				var table1=new table({
 					x:x,
 					y:y,
 					name:tb['table_name'],
 					text:tb['table_name'],
-					editable:true
-				}).appendPresenter(panel1.instance);
-				x=x+180;
-				y=y+30;
-				if(x>=this.activePanel.instance.width/2){
-						x=100;
-						y+=100;
-				}
+					editable:true,
+					visible:tb.visible,
+					mode:ths.mode,
+					silence:true
+				}).appendPresenter(panel.instance);
 			
 				table1.fieldclickEvent=visordesigner.fieldclickEvent;
 				for(var j=0;j<=tb['fields'].length-1;j++){
@@ -915,7 +1022,8 @@
 						    data:{
 							    datatype:getDataType(field['data_type']),
 							    isfk:field.foreign_key_table?true:false
-						    }
+						    },
+						    silence:true
 					    })
 					}
 					else{
@@ -925,7 +1033,9 @@
 							data:{
 								datatype:getDataType(field['data_type']),
 								isfk:field.foreign_key_table?true:false
-							}
+							},							
+							silence:true,
+							visible:(table1.mode=="full")||((table1.mode=="simple")&&(field.foreign_key_table?true:false))
 						});
 					}
 					if(field.foreign_key_table){
@@ -933,15 +1043,45 @@
 						FKs.push(fk);
 					}
 				}
-				
+				ths.tables.update(tb["table_name"],table1);
+				return  FKs;
+		}
+		
+		this.restoreSchema=function(data){
+			var panel1=this.newpage();
+			var x=100,y=100;
+			var FKs=[];
+			data.schema.tables=listSort(data.schema.tables,"table_name","ASC");
+			for(var i=0;i<=data.schema.tables.length-1;i++){
+				var tb=data.schema.tables[i];
+				if(i<20){	
+					tb.visible=true;
+				}
+				else{
+					tb.visible=false;
+//					ths.tables.update(tb["table_name"],tb);
+				}
+				x=x+180;
+				y=y+30;
+				if(x>=this.activePanel.instance.width/2){
+						x=100;
+						y+=100;
+				}
+				var fks=this.createTable(tb,panel1,x,y);
+				if(fks.length>0)
+				$(fks).each(function(i,fk){
+					FKs.push(fk);
+				});
+					
 			}
 			for(var i=0;i<=FKs.length-1;i++){
 				var source=this.activePanel.instance.Widget(FKs[i].source);
 				var target=this.activePanel.instance.Widget(FKs[i].target);
-				addFk(source,target);
+				if(target&&source)
+					addFk(source,target);
 			}
 			console.info(FKs);
-			table1.paint();
+			panel1.instance.paint();
 		}
 		
 		var  addFk=function(source,target){		
@@ -1285,6 +1425,7 @@
         });
 		var connectors=[];
 		for(var i=0;i<opt.widgets.length;i++){
+			 opt.widgets[i].silence=true;
 			 if(opt.widgets[i].begin!=null&&opt.widgets[i].end!=null&&opt.widgets[i].type.indexOf("Connector")>0){
 					connectors.push(opt.widgets[i]);
 			 }
@@ -1331,14 +1472,14 @@
 		 instance.animations=animations;
 		 this.instance=instance;
 		 
-		 for(var i=0;i<=this.instance.widgets.length-1;i++){
-				var _widget=this.instance.widgets[i];
-				console.info(_widget.name+"-"+_widget.height);
-				 for(var ii=0;ii<=_widget.widgets.length-1;ii++){
-						console.info(_widget.widgets[ii].name+"-"+_widget.widgets[ii].height);
-				 }
-		 }
-		 
+//		 for(var i=0;i<=this.instance.widgets.length-1;i++){
+//				var _widget=this.instance.widgets[i];
+//				console.info(_widget.name+"-"+_widget.height);
+//				 for(var ii=0;ii<=_widget.widgets.length-1;ii++){
+//						console.info(_widget.widgets[ii].name+"-"+_widget.widgets[ii].height);
+//				 }
+//		 }
+//		 
 		 
 		 riot.observable(this);
 		
@@ -1581,14 +1722,38 @@
 		setcontextmenu();
 	}
 	
+	visorpanel.prototype.Scale=function(a){
+		var ths=this;
+		if(arguments.length==1){
+			if(!this.width){
+				var width=$(this.instance.canvas).prop("width");
+				var height=$(this.instance.canvas).prop("height");
+				this.width=width;
+				this.height=height;
+			}
+			else{
+				var width=this.width;
+				var height=this.height;
+			}
+			var newwidth=width/a;
+			var newheight=height/a;
+		 	var target=ths.instance.rootwidget;
+		 	ths.instance.scale=a;
+		 	target.scale=a;
+			target.Height(newheight);
+			target.Width(newwidth);	
+		}
+		else
+			return this.instance.scale;
+	}
 	
 	visorpanel.prototype.listTables=function(){
     	var tables=[];
     	var connections=[];
     	var widgets=[];
-    	widgets=this.selectwidgets;
+    	widgets=this.instance.selectwidgets;
     	if(widgets.length===0)
-	   		widgets=this.widgets;
+	   		widgets=this.instance.widgets;
     	    	
     	for(var i=0;i<=widgets.length-1;i++){
     		if(widgets[i].type=="table"){
@@ -1648,7 +1813,7 @@
     			var mapping={
     				from_table:connector.begin.widget.name,
     				to_table:connector.objectdata.targetpath,
-    				join_condition:connector.objectdata.matchcriteria.values,	 
+    				join_condition:connector.objectdata.matchcriteria2.values,	 
     				relationship:(connector.objectdata.mappingtype=='Array'?'ManyOne':'OneOne'),
     				target_path:''
     			};
@@ -1711,15 +1876,18 @@
 			var _rootwidget=this.activePanel.instance.rootwidget;
 			var _width=Math.min(300,_rootwidget.width);
 			var _height=Math.min(300,_rootwidget.height);
-			if(this.cover&&this.cover.indexOf("data:image")<0)
-				r.cover=this.cover;
-			else
-				r.cover=this.activePanel.instance.rootwidget.getImageData(0,0,null,null,_width,_height);
+//			if(this.cover&&this.cover.indexOf("data:image")<0)
+//				r.cover=this.cover;
+//			else
+//				r.cover=this.activePanel.instance.rootwidget.getImageData(0,0,null,null,_width,_height);
 			var _panels=[];
 			var mappings=[];
 			for(var i=0;i<this.panels.length;i++){
 				var panel=this.panels[i];
 				var _panel=panel.instance.persist();
+				_panel.scale=1;
+				_panel.width=panel.width||_panel.width;
+				_panel.height=panel.height||_panel.height;
 				if(panel.instance.animations!=null){		
 					var animations=new Map();
 					$(panel.instance.animations.elements).each(function(i,item){						

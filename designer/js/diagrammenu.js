@@ -1,4 +1,4 @@
-riot.tag2('diagrammenu', '<div> <div> <div class="diagrammenu-panel diagrammenu"> <div class="row"> <div class="component widget text-center"> <a href="#" onclick="{zoomout}"> <div data-type="textinput"> <div class="title" style="margin-bottom:10px;"><i class="fa fa-search-minus fa-2x"></i>Zoom In</div> </div> </a> </div> <div class="component widget text-center"> <a href="#" onclick="{zoomin}"> <div data-type="textinput"> <div class="title" style="margin-bottom:10px;"><i class="fa fa-search-plus fa-2x"></i>Zoom Out</div> </div> </a> </div> <div class="component widget text-center"> <a href="#" onclick="{savedocument}"> <div data-type="textinput"> <div class="title" style="margin-bottom:10px;"><img src="images/save.png">Save</div> </div> </a> </div> <div class="component widget text-center"> <a href="#" onclick="{cancel}"> <div data-type="textinput"> <div class="title" style="margin-bottom:10px;"><img src="images/cancel.png">Cancel</div> </div> </a> </div> <div class="component widget text-center"> <a href="#" onclick="{display}"> <div data-type="textinput"> <div class="title" style="margin-bottom:10px;"><img src="images/preview.png">Preview</div> </div> </a> </div> <div class="btn-group text-center"> <label><input type="checkbox" name="showRelation" __checked="{document.showRelation?true:false}" onclick="{showRelationchange}">Show ER Relationship</label> </div> </div> </div> </div> <input type="file" style="display: none" id="documentFile" accept="text/plain">', '#menu li{ margin-bottom:0px; } .menu_title{ margin-bottom:-5px; font-size:9pt; } #menu.nav.nav-tabs li a{ padding-top:5px; padding-bottom:5px; } .diagrammenu .select2-container .select2-choice, .diagrammenu .select2-container-multi .select2-choices { padding-top:0px; height:30px; margin-top:0px; border-top:0px solid #dbdbdb; border-left:0px solid #dbdbdb; border-right:0px solid #dbdbdb; border-bottom:0px solid #dbdbdb; border-image-width:0px; -webkit-border-radius: 0px; -moz-border-radius: 0px; border-radius: 0px; background:white; filter: none; -webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075); -moz-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075); box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075); } .diagrammenu .sp-replacer { margin:0; overflow:hidden; cursor:pointer; height:32px; padding: 5px 4px 4px 3px; margin-top:0px; display:inline-block; *zoom: 1; *display: inline; border-top-width:0px; border-bottom:0px solid black; border:0px solid black; vertical-align: middle; } .diagrammenu .sp-replacer:hover, .diagrammenu .sp-replacer.sp-active { border-color: #aaa; border-bottom-width:0px; border-top-width:0px; } .btn-toolbaritem{ min-width:44px; height:32px; } .diagrammenu .btn-default{ backgroud:#d7dee3; border:none; } ul.dropdown-menu>li>a{ padding:5px 20px !important; } .diagrammenu .component{ padding: 10px 10px; width:140px; display:inline-block; }', '', function(opts) {
+riot.tag2('diagrammenu', '<div> <div> <div class="diagrammenu-panel diagrammenu"> <div class="row"> <div class="component widget text-center"> <a href="#" onclick="{zoomout}"> <div data-type="textinput"> <div class="title" style="margin-bottom:10px;"><i class="fa fa-search-minus fa-2x"></i>Zoom In</div> </div> </a> </div> <div class="component widget text-center"> <a href="#" onclick="{zoomin}"> <div data-type="textinput"> <div class="title" style="margin-bottom:10px;"><i class="fa fa-search-plus fa-2x"></i>Zoom Out</div> </div> </a> </div> <div class="component widget text-center"> <a href="#" onclick="{savedocument}"> <div data-type="textinput"> <div class="title" style="margin-bottom:10px;"><img src="images/save.png">Save</div> </div> </a> </div> <div class="component widget text-center"> <a href="#" onclick="{cancel}"> <div data-type="textinput"> <div class="title" style="margin-bottom:10px;"><img src="images/cancel.png">Cancel</div> </div> </a> </div> <div class="component widget text-center"> <a href="#" onclick="{display}"> <div data-type="textinput"> <div class="title" style="margin-bottom:10px;"><img src="images/preview.png">Preview</div> </div> </a> </div> <div class="btn-group text-center"> <label><input type="checkbox" name="showRelation" __checked="{document.showRelation?true:false}" onclick="{showRelationchange}">Show ER Relationship</label> </div> <div class="component widget text-center"> <label><input type="checkbox" name="showSimple" __checked="{document.mode==\'simple\'?true:false}" onclick="{showSimplechange}">Simple Mode</label> </div> </div> </div> </div> <input type="file" style="display: none" id="documentFile" accept="text/plain">', '#menu li{ margin-bottom:0px; } .menu_title{ margin-bottom:-5px; font-size:9pt; } #menu.nav.nav-tabs li a{ padding-top:5px; padding-bottom:5px; } .diagrammenu .select2-container .select2-choice, .diagrammenu .select2-container-multi .select2-choices { padding-top:0px; height:30px; margin-top:0px; border-top:0px solid #dbdbdb; border-left:0px solid #dbdbdb; border-right:0px solid #dbdbdb; border-bottom:0px solid #dbdbdb; border-image-width:0px; -webkit-border-radius: 0px; -moz-border-radius: 0px; border-radius: 0px; background:white; filter: none; -webkit-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075); -moz-box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075); box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075); } .diagrammenu .sp-replacer { margin:0; overflow:hidden; cursor:pointer; height:32px; padding: 5px 4px 4px 3px; margin-top:0px; display:inline-block; *zoom: 1; *display: inline; border-top-width:0px; border-bottom:0px solid black; border:0px solid black; vertical-align: middle; } .diagrammenu .sp-replacer:hover, .diagrammenu .sp-replacer.sp-active { border-color: #aaa; border-bottom-width:0px; border-top-width:0px; } .btn-toolbaritem{ min-width:44px; height:32px; } .diagrammenu .btn-default{ backgroud:#d7dee3; border:none; } ul.dropdown-menu>li>a{ padding:5px 20px !important; } .diagrammenu .component{ padding: 10px 10px; width:140px; display:inline-block; }', '', function(opts) {
 	this.designer=opts;
 	this.document=opts.document;
 	this.activePanel=opts.document.activePanel.instance;
@@ -59,13 +59,9 @@ riot.tag2('diagrammenu', '<div> <div> <div class="diagrammenu-panel diagrammenu"
 		else{
 			$("#panel_propertyEditor").hide();
 		}
+		$("#panel_workspace").removeClass("col-lg-8").removeClass("col-lg-12").addClass("col-lg-10");
+		opts.trigger("showproperty",(windows.property===1));
 
-		if((windows.property===1)&&(windows.navigation===1))
-		   $("#panel_workspace").removeClass("col-lg-10").removeClass("col-lg-12").addClass("col-lg-8");
-		else if((windows.property===1)||(windows.navigation===1))
-			$("#panel_workspace").removeClass("col-lg-8").removeClass("col-lg-12").addClass("col-lg-10");
-		else
-			$("#panel_workspace").removeClass("col-lg-8").removeClass("col-lg-10").addClass("col-lg-12");
 	};
 
 	this.designer.on("openpropertypanel",function(state){
@@ -288,13 +284,28 @@ riot.tag2('diagrammenu', '<div> <div> <div class="diagrammenu-panel diagrammenu"
 	  panel1.paint();
 	}.bind(this)
 
+	this.showSimplechange = function(e){
+	  var target=e.currentTarget;
+	  var checked=target.checked;
+	  name=target.name;
+	  ths.document[name]=checked;
+	  var panel1=ths.document.activePanel.instance;
+	  for(var i=0;i<=panel1.widgets.length-1;i++){
+	     if(panel1.widgets[i].type=="table")
+  	        panel1.widgets[i].mode=checked?"simple":"full";
+	  }
+	  panel1.paint();
+	}.bind(this)
+
 	this.zoomout = function(){
+		var panel=ths.activePanel;
 		var scale=ths.activePanel.scale||1;
-		if(scale-0.1>0.1)
+		if(scale-0.1>0.3)
 			scale-=0.1;
 		ths.activePanel.Scale(scale);
-		$("#workspace canvas").css("height",ths.activePanel.canvas.height*scale);
-		ths.activePanel.paint();
+		ths.document.activePanel.Scale(scale);
+		ths.document.activePanel.instance.paint();
+
 	}.bind(this)
 
 	this.zoomin = function(){
@@ -303,8 +314,9 @@ riot.tag2('diagrammenu', '<div> <div> <div class="diagrammenu-panel diagrammenu"
 		if(scale+0.1<2.1)
 			scale+=0.1;
 		panel.Scale(scale);
-		setTimeout(panel.canvas.focus(),200);
-		$("#workspace canvas").css("height",ths.activePanel.canvas.height*scale);
+		ths.document.activePanel.Scale(scale);
+		ths.document.activePanel.instance.paint();
+
 	}.bind(this)
 
 	this.designer.on("undo",function(){

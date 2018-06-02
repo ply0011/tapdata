@@ -34,6 +34,17 @@
      		margin-bottom:0px;
      		border-bottom:none;
      	}
+     	.mask{
+     		position:absolute;
+     		background-color:rgb(41, 52, 70);
+     		width:100%;
+     		z-index:10000;
+     		height:100%;   
+     		opacity:0.6;
+     		display:none;  		
+     		top:0px;
+     		left:0;
+     	}
      	textarea,input[type=text] {
      		border:solid 1px lightgray;
      	}
@@ -72,40 +83,45 @@
  </head>
 <body class="pace-done" oncontextmenu="return false" onselectstart="return false">	
 <div class="container-fluid">
-	<div class="row">
+	<div>
 		<div class="visor-header">
 		  <diagrammenu></diagrammenu>
 		</div>
-		<div class="workspace">
-			<div class="leftside"  id="navigation">
-				<div class="panel panel-default" style="border-width:0px;">
-			   		 <navigation></navigation>
+		<div class="row">
+			<div class="workspace">
+				<div class="leftside"  id="navigation">
+					<div class="panel panel-default" style="border-width:0px;">
+				   		 <navigation></navigation>
+				    </div>
 			    </div>
-		    </div>
-		    <div id="panel_workspace"  class="panel_workspace">
-				<div class="panel panel-default">
-					<div class="panel-heading" style="padding-bottom:5px;padding-top:5px;display:none">
-						   <div class="btn-group">
-								<label style="font-size:9pt;">当前文档：</label><span class="document-name" style="font-size:9pt;"></span>
-								<span class="document-description" style="font-size:9pt;"></span>
-							</div>
-							<div class="btn-group pull-right document-modified" style="display:none;">
-								<label style="font-size:9pt">更新时间：</label><span id="document-modified" style="font-size:9pt;"></span>							
-							</div>
-							
+			    <div id="panel_workspace"  class="panel_workspace">
+					<div class="panel panel-default">
+						<div class="panel-heading" style="padding-bottom:5px;padding-top:5px;display:none">
+							   <div class="btn-group">
+									<label style="font-size:9pt;">当前文档：</label><span class="document-name" style="font-size:9pt;"></span>
+									<span class="document-description" style="font-size:9pt;"></span>
+								</div>
+								<div class="btn-group pull-right document-modified" style="display:none;">
+									<label style="font-size:9pt">更新时间：</label><span id="document-modified" style="font-size:9pt;"></span>							
+								</div>
+								
+						</div>
+						<div id="editor" class="panel-body" style="position:relative;margin-bottom:0px;padding:0px;z-index:1;overflow-x:auto;overflow-y:auto;">
+							<div id="workspace" style="min-height:300px;padding:0px;background-color:gray;border-top-width:0px">
+							</div>	
+						</div>
 					</div>
-					<div id="editor" class="panel-body" style="position:relative;margin-bottom:0px;padding:0px;z-index:1;overflow-x:auto;overflow-y:auto;">
-						<div id="workspace" style="min-height:300px;padding:0px;background-color:gray;border-top-width:0px">
-						</div>	
+				</div> 
+				<!-- <div class="propertyEditor hidden-xs hidden-sm"  id="panel_propertyEditor">
+					<div class="propertyEditForm sidebar-nav" style="margin:0px;border-top:solid 5px #e5e5e5;" id="propertyEditorForm">
+						<propertyEditorWidget></propertyEditorWidget>
 					</div>
-				</div>
-			</div> 
-			 <div class="propertyEditor hidden-xs hidden-sm"  id="panel_propertyEditor">
-				<div class="propertyEditForm sidebar-nav" style="margin:0px;border-top:solid 5px #e5e5e5;" id="propertyEditorForm">
-					<propertyEditorWidget></propertyEditorWidget>
-				</div>
-		    </div> 
+			    </div> -->
+		 </div>
 	 </div>
+	</div>
+	<div class="mask mask-clone text-center">
+		<h2>Cluster  Clone</h2>
 	</div>
 </div>
 
@@ -144,8 +160,9 @@
 	</style>
 	<div id="context-menu">
 		<ul class="dropdown-menu" role="menu">
-			<!--<li><a tabindex="-1" href="#" alt="newitem">New Item</a></li>-->
-			<li><a tabindex="-1" href="#" alt="delete">Delete</a></li>
+			<li><a tabindex="-1" href="#" alt="newcollection">New Collection</a></li>
+			<li><a tabindex="-1" href="#" alt="deletecollection">Delete Collection</a></li>
+			<li><a tabindex="-1" href="#" alt="save">Save</a></li>
 		</ul>
 	</div>
 	

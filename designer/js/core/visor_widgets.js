@@ -115,8 +115,6 @@
         this.dblclick=null;
         this.imageload=null,
         this.ondelete=null;
-        
-        
         this.selectable=true;
         this.allowconnectionPoint=true;
         this.allowRotate=true;
@@ -182,7 +180,7 @@
 					else if(ths.imageload!=null){
 						ths.imageload.call(ths);
 					}
-					else
+					else if(ths.visible&&!ths.silence)
 						ths.paint({action:"loading image"});
 				}, true);
 		    	_a.src=url;
@@ -249,6 +247,8 @@
 	};
 
 	widget.prototype.checkPointIn =function(x, y,scale) {
+		if(!this.visible)
+			return false;
 		if(this.root!=null)
 			scale=scale||this.root.scale;
 		if(!scale)
@@ -297,6 +297,7 @@
 		   var r={};		   
 		   r.name=widget.name;
 		   r.version=widget.version;
+		   r.visible=widget.visible;
 	       r.x=widget.x;
 	       r.y=widget.y;
 	       r.width=widget.width;
@@ -750,7 +751,8 @@
 		}
 		if(this.parent!=null){
 			for(var i=0;i<=this.widgets.length-1;i++){
-				this.widgets[i].paintTo(canvas);
+				if(this.widgets[i].visible)
+					this.widgets[i].paintTo(canvas);
 			}
 		}
 		ctx.restore();
@@ -930,6 +932,7 @@
 	widget.prototype.restoreChildren=function(_widgets,opt){
 		var connectors=[];
 		for(var i=0;i<=_widgets.length-1;i++){
+			_widgets[i].scilence=this.scilence;
 			$.extend(_widgets[i],opt);
 			if(_widgets[i].background&&_widgets[i].background.image!=null&&_widgets[i].background.filltype==null)
 				_widgets[i].background.filltype==="image";
@@ -1297,7 +1300,7 @@
 		if(this.showgrid)
 			this.drawGrid();
 		this.connectors.splice(0,this.connectors.length);
-		
+		var  widgets=[];
 		for(var i=0;i<this.widgets.length;i++){
 			var _widget=this.widgets[i];
 			if(_widget.begin!=null&&_widget.begin.widget!=null&&_widget.end!=null&&_widget.type.indexOf("Connector")>0&&_widget.end.widget!=null)
@@ -1305,7 +1308,8 @@
 			else{
 				if(!opt||!opt.filter||typeof opt.filter!="function"||opt.filter(_widget)==false){
 					if(_widget.visible)
-					_widget.paintTo(this.canvas);
+						widgets.push(_widget);
+					//_widget.paintTo(this.canvas);
 				}
 			}
 		}
@@ -1313,9 +1317,13 @@
 		for(var j=0;j<=this.connectors.length-1;j++){
 			var _connector=this.connectors[j];
 			if(!opt||!opt.filter||typeof opt.filter!="function"||opt.filter(_connector)==false){
-				if(_connector.visible)
+				if(_connector.visible&&_connector.begin.widget.visible&&_connector.end.widget.visible)
 					_connector.paintTo(this.canvas);
 			}
+		}
+		for(var j=0;j<=widgets.length-1;j++){
+			if(widgets[j].visible)
+				widgets[j].paintTo(this.canvas);
 		}
 		
 		if(this.selectwidgets.length>0){
@@ -2220,6 +2228,12 @@
 				required:false,
 				editable:true,
 				options:[{id:'String',text:"String"},{id:'Integer',text:"Integer"},{id:'Date',text:"Date"},{id:'Boolean',text:"Boolean"},{id:'Array',text:"Array"},{id:'Object',text:"Object"},{id:'MergedObject',text:"MergedObject"}]
+			},
+			originedatatype:{
+				format:"string",
+				title:"DB Datatype",
+				required:false,
+				editable:false
 			},
 			mappingtype:{
 				format:"single",
@@ -7680,6 +7694,7 @@
 		this.persist=function(){
 			var r=widget.persistproperty(this);
 			r.data={};
+			delete r.font;
 			$.extend(r.data,this.data);
 			return r;
 		};
@@ -7898,6 +7913,7 @@
 				width:140,
 				height:160,
 				showtype:"physical",
+				mode:"full",
 				pk:[],
 				fields:[]
 		};
@@ -7909,8 +7925,7 @@
 		this.allowRotate=false;
 		var ths=this;
 		this.margin=5;
-		this.type="table";	
-	
+		this.type="table";		
 		if(this.widgets.length>0){
 			var _widgets=[];
 			$.extend(_widgets,this.widgets);
@@ -7919,12 +7934,11 @@
 				editable:ths.editable				
 			});
 		}
-		
 		if(this.fields.length>0){
 			var _fields=[];
 			$.extend(_fields,this.fields);
 			this.fields.splice(0,this.fields.length);
-			for(var i=0;i<=_fields.length-1;i++){				
+			for(var i=0;i<=_fields.length-1;i++){
 				this.fields.push(ths.Widget(_fields[i]));
 			}
 		}
@@ -7944,11 +7958,15 @@
 			for(var i=0;i<=this.pk.length-1;i++)
 				r.pk.push(this.pk[i].name);
 			r.showtype=this.showtype;
+			r.mode=this.mode||"full";
 			r.fields=[];
 			for(var i=0;i<=this.fields.length-1;i++)
 				r.fields.push(this.fields[i].name);
 			r.settings={};
 			$.extend(r.settings,this.settings);
+			
+			delete r.font;
+			delete r.background;
 			return r;
 		};
 		
@@ -8020,7 +8038,6 @@
 		this.drawBorderTo=function(ctx){
 			ctx.save();
 			var ths=this;
-			var ths=this;
 			pkcount=this.pk.length;
 			fieldcount=pkcount+1+Math.max(this.fields.length,2);
 			this.lineheight=ths.fontSize()+2*ths.margin;
@@ -8036,12 +8053,21 @@
 				if(_w)
 					_w.y=(i+1)*(ths.lineheight)+ths.margin;
 			});
+			var  index=0;
 			$(this.fields).each(function(i,item){
-				ths.findfield(item.name).y=(i+1+pkcount)*(ths.lineheight)+ths.margin;
+				if(ths.mode=="full"||(ths.mode=="simple"&&item.data.isfk)){
+					item.visible=true;
+					ths.findfield(item.name).y=(index+1+pkcount)*(ths.lineheight)+ths.margin;
+					index++;
+				}
+				else  
+					item.visible=false;
 			});
+			fieldcount=pkcount+1+Math.max(index,2);
+			this.minheight=(fieldcount+1)*(ths.lineheight);
+			this.height=this.minheight;
 			var _widget=this;
 			if (_widget.border.color !== "none") {
-				
 				ctx.beginPath();
 				ctx.lineJoin="round";
 				_widget.border.width=parseInt(_widget.border.width);
@@ -8204,7 +8230,8 @@
 			var field1=new field(opt);
 			field1.data.name=fieldname;
 			this.addfield(field1);
-			this.paint();
+			if(!option.silence)
+				this.paint();
 			return field1;
 		};
 		
@@ -8237,7 +8264,8 @@
 			var field1=new field(opt);
 			field1.data.name=fieldname;
 			this.addpk(field1);
-			field1.click({x:0,y:0});
+			if(!option.silence)
+				field1.click({x:0,y:0});
 			return field1;
 		};
 		
@@ -8502,6 +8530,7 @@
 					imageType : "center"// repeat center fit fill
 				},
 				objectdata:{
+					originedatatype:"",
 					datatype:"String",//String,Integer,object,array,Datetime
 					targetpath:'',
 					collapse:false,
@@ -8525,17 +8554,46 @@
 		this.margin=4;
 		this.propertyEditors=["common"];
 		var ths=this;
+		var  getDataType=function(datatype){
+			switch(datatype){
+				case "String":
+				case "varchar2":
+				case "char":
+				case "varchar":
+					return "String";
+				case "Integer":
+				case "number":
+				case "int":
+					return "Integer";	
+				case "Date":
+				case "timestamp(6)":
+				case "time":
+					return Date;
+				default:
+					return "datatype"
+			}
+		}
 		var  src='images/tree/40-1-1.png';
-		if(this.objectdata.datatype=="Array")
-			src='images/tree/40-1.png';
-		else if(this.objectdata.datatype=="Object")
-			src='images/tree/json-40-1.png';
-		else if(this.objectdata.datatype=="MergedObject")
-			src="images/tree/lable.png"
-		else if(this.objectdata.datatype=="Date")
-			src='date-40-1.png';
-		else if(this.objectdata.datatype=="Integer")
-			src='number-40-1.png';
+		var  dataType=getDataType(this.objectdata.datatype);
+		switch(dataType){
+			case "String":
+				break;
+			case "Array":
+				src='images/tree/40-1.png';
+				break;
+			case "Object":
+				src='images/tree/json-40-1.png';
+				break;
+			case "MergedObject":
+				src="images/tree/lable.png";
+				break;
+			case "Date":
+				src='images/tree/date-40-1.png';
+				break;
+			case "Integer":
+				src='images/tree/number-40-1.png';
+				break;
+		}
 		this.Background({filltype:'image',image:src},function(){
 			ths.paint();
 		});
@@ -8587,6 +8645,7 @@
 		
 		
 		this.newfield=function(option){
+			debugger;
 			var attributename=this.getName();
 			var opt={
 				name:attributename,
@@ -8602,10 +8661,12 @@
 			if(node.type&&node.type==="treeNode"&&this.findnode(node.name)==null){
 				node.objectdata.index=this.widgets.length+1;
 				node.objectdata.layer=this.objectdata.layer+1;
+				this.objectdata.originedatatype=this.objectdata.datatype||"Object";
 				this.objectdata.datatype=this.objectdata.datatype||"Object";
 				this.appendWidget(node);
 				node.fieldclickEvent=this.fieldclickEvent;
-				src='images/tree/3-40.png';
+				debugger;
+				//src='images/tree/3-40.png';
 				this.Background({filltype:'image',image:src},function(){
 					ths.paint();
 				});
@@ -8652,11 +8713,11 @@
 			else if(this.parent.type=="treeNode")
 				this.objectdata.layer=this.parent.objectdata.layer+1;
 			var lineheight=this.fontSize()+2*this.margin;
-			var height=lineheight+Math.round(this.margin);
+			var height=lineheight+Math.round(this.margin/2);
 			if(this.widgets.length>0){
 				$(this.widgets).each(function(i,item){
 					item.y=height;
-					height=height+item.height+Math.round(this.margin);
+					height=height+item.height;
 				})
 				if(this.objectdata.targetpath){
 					var connector=this.collection().presenters[0].Widget(this.objectdata.targetpath);
@@ -8665,14 +8726,6 @@
 							connector.end.y=relativeY(this)+lineheight/2;
 							connector.end.offsetx=this.margin+this.objectdata.layer*(layerinst+iconwidth)+0.5;
 						}
-//						else if(connector.end.position=='top'){
-//							connector.end.offsety=relativeY(this)+0.5;
-//						}
-//						else if(connector.end.position=='bottom'){
-//							debugger;
-//							var dx=this.collection().height-relativeY(this)-this.height;
-//							connector.end.offsety=-dx;
-//						}
 					}
 				}
 			}
@@ -8745,6 +8798,7 @@
 			var margin=this.margin;
 			var autosize=this.autosize||false;		
 			ctx.save();
+			debugger;
 			var font=this.font;
 			if(this.font.color==="none")
 			   font=this.parent.font;
@@ -8965,7 +9019,6 @@
 		this.margin=6;
 		this.type="collection";	
 		this.allowRotate=false;
-		
 		this.click=function(e){
 			for(var i=0;i<=this.widgets.length-1;i++){
 				this.widgets[i].focus=false;
@@ -9069,15 +9122,18 @@
 		this.beforePaint=function(ctx){
 			var lineheight=this.parent.fontSize()+2*this.margin;
 			var height=lineheight+ths.margin;
+			this.minheight=60;
+			var  y=this.y;
 			$(this.widgets).each(function(i,item){
 				ths.minwidth=Math.max(ths.minwidth,item.minwidth);
 				item.y=height+ths.margin;
 				height+=item.height+ths.margin;
 				item.width=this.width;
 			})
-			this.minheight=height+lineheight;
-			if(this.height<this.minheight)
-				this.Height(this.minheight);
+			if(this.minheight<height){
+				this.Height(height);
+			}
+			this.y=y;
 		};
 		
 		this.drawBorderTo=function(ctx){
@@ -9199,7 +9255,6 @@
 			var attributename=this.getName();
 			var opt={
 				name:attributename,
-				font:this.font
 			};
 			$.extend(opt,option);	
 			var node1=new treeNode(opt);
@@ -9270,7 +9325,6 @@
 					},
 					matchcriteria2:{
 						type:'object',
-						visible:false,
 						fields:[
 						        {id:"source",value:"",type:"textinput",title:"源"},
 						        {id:"target",value:"",type:"textinput",title:"目标"}
@@ -9375,6 +9429,7 @@
 			if(this.end.position!="left"&&this.end.position!="right"){
 				if(this.end.widget.x>this.begin.widget.x+this.begin.widget.width){
 					this.end.position="left";
+					this.begin.position="right";
 				}
 				else if((this.begin.widget.x+this.begin.widget.width>this.end.widget.x)&&(this.begin.widget.x+this.begin.widget.width<this.end.widget.x+this.end.x)){
 					if(this.begin.position!="left"){
@@ -9388,6 +9443,12 @@
 						this.end.position="right";
 					}
 				}
+				else if((this.end.widget.x+this.end.widget.width<this.begin.x)){
+					if(this.begin.position!="right"){
+						this.begin.position="right";
+						this.end.position="left";
+					}
+				}
 			}
 		};
 		
@@ -9399,10 +9460,12 @@
 			var mappingtype="MergedObject";
 			this.name=this.presenters[0].getName("Rule");
 			this.text=this.name;
+			debugger;
 			if(target){
 				if(target.objectdata.datatype=="Object"){
 					newNode=target.newfield({
 						name:this.begin.widget.name,
+						text:this.begin.widget.name
 					});
 					mappingtype="Object";
 				}
@@ -9418,6 +9481,7 @@
 				}
 				newNode=this.end.widget.newfield({
 					name:this.begin.widget.name,
+					text:this.begin.widget.name,
 					objectdata:{
 						datatype:mappingtype,
 					}
@@ -9431,7 +9495,6 @@
 				mappingtype:mappingtype,
 				matchcriteria2:{
 					type:'object',
-					visible:false,
 					fields:[
 					        {id:"source",value:"",type:"textinput",title:"源"},
 					        {id:"target",value:"",type:"textinput",title:"目标"}
@@ -9458,35 +9521,49 @@
 			if(mappingtype!="MergedObject"){
 				this.objectdata.targetpath=gettargetpath(newNode,0,1);
 			}
-			for(var i=0;i<=this.begin.widget.pk.length-1;i++){				
-				var name=this.begin.widget.pk[i].name;			
+			
+			if(mappingtype!="Array"){
+				this.objectdata.matchcriteria.visible=false;
+			}
+
+			this.objectdata.target.objectdata={
+					visible:false,
+					datatype:mappingtype,
+					targetpath:this.name
+			};
+			
+			for(var i=0;i<=this.begin.widget.pk.length-1;i++){
+				var field=this.begin.widget.pk[i];
+				var name=field.name;	
+				if(field.data.isfk){
+					this.objectdata.matchcriteria2.values.push({source:name,target:name});
+				}
 				var prefix=gettargetpath(newNode,1,1);
 				if(prefix)
 					this.objectdata.matchcriteria.values.push({source:name,target:prefix+"."+name});
 				else
 					this.objectdata.matchcriteria.values.push({source:name,target:name});
 				this.objectdata.fieldmaps.values.push({source:name,target:name});
-			}
-			this.objectdata.target.objectdata={
-					visible:false,
-					datatype:mappingtype,
-					targetpath:this.name
-			};
-			for(var i=0;i<=this.begin.widget.pk.length-1;i++){
-				var field=this.begin.widget.pk[i];
 				newNode.newfield({
 					name:field.name,
+					text:field.name,
 					objectdata:{
-						datatype:field.datatype,
+						originedatatype:field.data.datatype,
+						datatype:field.data.datatype,
 					}
 				});
 			}
 			for(var i=0;i<=this.begin.widget.fields.length-1;i++){
 				var field=this.begin.widget.fields[i];
+				var name=field.name;	
+				if(field.data.isfk){
+					this.objectdata.matchcriteria2.values.push({source:name,target:name});
+				}
 				newNode.newfield({
 					name:field.name,
 					objectdata:{
-						datatype:field.datatype,
+						originedatatype:field.data.datatype,
+						datatype:field.data.datatype,
 					}
 				});
 			}			

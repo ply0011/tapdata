@@ -31,9 +31,6 @@
 </style>
 <div class="common"  style="margin-bottom:0px;border-width:0px"  if={widget}>
 	<table class="table table-propertyEditor" style="width:100%;">
-		<tr>
-			<td colspan="2">Attribute</td>
-		</tr>
    		<tr class="common property-panel"  if={enableEdit("common")}>
 	   		<td style="border-top:none">  
 		    <table class="table table-nobordered" style="width:100%">
@@ -505,7 +502,7 @@
 	<!--<propertyEditorExtension></propertyEditorExtension> -->
 </div> 
 <div class="property_message" if={!widget}>
-	<label>Please select widget first</label>
+	<label>Please select an object to display the properties.</label>
 </div>
 <script>
 	var parent=this;

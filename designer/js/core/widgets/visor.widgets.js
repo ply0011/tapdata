@@ -31,6 +31,18 @@
 				editable:true,
 				options:[{id:'String',text:"String"},{id:'Integer',text:"Integer"},{id:'Date',text:"Date"},{id:'Boolean',text:"Boolean"},{id:'Array',text:"Array"},{id:'Object',text:"Object"},{id:'MergedObject',text:"MergedObject"}]
 			},
+			originedatatype:{
+				format:"string",
+				title:"DB Datatype",
+				required:false,
+				editable:false
+			},
+			originefieldname:{
+				format:"string",
+				title:"Original Name",
+				required:false,
+				editable:false
+			},
 			mappingtype:{
 				format:"single",
 				title:"Mapping Type",
@@ -40,13 +52,13 @@
 			},
 			matchcriteria:{
 				format:"list",
-				title:"Array Match <br>Criteria",
+				title:"Array Unique <br>Keys",
 				required:false,
 				editable:false
 			},
 			matchcriteria2:{
 				format:"list",
-				title:"Join Criteria",
+				title:"Unique Keys",
 				required:false,
 				editable:false
 			},
@@ -56,6 +68,18 @@
 				required:false,
 				editable:false
 			},
+			customsql:{
+				format:"text",
+				title:"Custom Sql <br>(optional)",
+				required:false,
+				editable:true
+			},
+			offset:{
+				format:"string",
+				title:"Offset <br>(optional)",
+				required:false,
+				editable:true
+			}
 		}
 		$.extend(opt,option);
 		return opt;
