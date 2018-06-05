@@ -7,8 +7,11 @@
   in the bash of host
   * ```cd datacollector-ui```
   * ```npm i```
-  * ```grunt``` (run first time only)
+  * ```npm install -g bower```
+  * ```npm install -g grunt-cli```
   * ```bower install```
+ 
+  How to start:
   * ```grunt watch``` 
   
 

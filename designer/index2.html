@@ -338,13 +338,18 @@ $(document).ready(function(){
 			if(localfile){
 				iframe.mydesigner.restore(JSON.parse(localfile));			
 		 	}
+			else
+				$.getJSON("schema.json",function(e) {
+	          			var  schema=e[0];
+	          			iframe.mydesigner.init(schema);
+	       		});
 //sample 3:  save current diagram , it default saved in localstorage, if you want to save  to db, you can write code here			
 //			iframe.mydesigner.on("save",function(r){   //--save 
 //				alert(JSON.stringify(r));
 //			})
 //sample  4：  preview
 		iframe.mydesigner.on("preview",function(r){   //--preview
-				alert(r.data);				
+				alert(r.data);
 		})
 		
 		iframe.mydesigner.on("cancel",function(){   //--preview

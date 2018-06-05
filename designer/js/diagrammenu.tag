@@ -69,7 +69,7 @@ ul.dropdown-menu>li>a{
 }
 
 .diagrammenu .component{
-	 padding: 10px 10px;
+	 padding-top:10px;
 	 width:140px;
 	 display:inline-block;
 }
@@ -78,21 +78,35 @@ ul.dropdown-menu>li>a{
 	<div>
 			<div class="diagrammenu-panel diagrammenu">
 			<div class="row">
-				<div class="component widget text-center" > 
-					<a href="#"  onclick="{zoomout}"> 
-						<div data-type="textinput"> 
-						<div class="title" style="margin-bottom:10px;"><i class="fa fa-search-minus fa-2x"></i>Zoom In</div> 
-						</div> 
-					</a> 
+				<div class="component widget text-center" >
+					<a href="#"  onclick="{zoomout}">
+						<div data-type="textinput">
+						<div class="title" style="margin-bottom:10px;"><i class="fa fa-search-minus fa-2x"></i> Zoom Out</div>
+						</div>
+					</a>
 				</div>
-				<div class="component widget  text-center" > 
-					<a href="#"  onclick="{zoomin}"> 
-						<div data-type="textinput"> 
-						<div class="title" style="margin-bottom:10px;"><i class="fa fa-search-plus fa-2x"></i>Zoom Out</div> 
-						</div> 
-					</a> 
+				<div class="component widget  text-center">
+					<a href="#"  onclick="{zoomin}">
+						<div data-type="textinput">
+						<div class="title" style="margin-bottom:10px;"><i class="fa fa-search-plus fa-2x"></i> Zoom In</div>
+						</div>
+					</a>
 				</div>
-				<div class="component widget  text-center" > 
+				<div class="component widget  text-center" >
+					<a href="#"  onclick="{fullscreen}">
+						<div data-type="textinput">
+						<div class="title" style="margin-bottom:10px;"><i class="fa fa-expand fa-2x" ></i> Full Screen</div>
+						</div>
+					</a>
+				</div>
+				<div class="component widget  text-center" >
+					<a href="#"  onclick="{normalscreen}">
+						<div data-type="textinput">
+						<div class="title" style="margin-bottom:10px;"><i class="fa fa-compress fa-2x" ></i> Normal</div>
+						</div>
+					</a>
+				</div>
+			<!--	<div class="component widget  text-center" > 
 					<a href="#"  onclick="{savedocument}"> 
 						<div data-type="textinput"> 
 						<div class="title" style="margin-bottom:10px;"><img src="images/save.png"/>Save</div> 
@@ -106,15 +120,24 @@ ul.dropdown-menu>li>a{
 						</div> 
 					</a> 
 				</div>
-				<div class="component widget  text-center" > 
-					<a href="#"  onclick="{display}"> 
-						<div data-type="textinput"> 
-						<div class="title" style="margin-bottom:10px;"><img src="images/preview.png"/>Preview</div> 
-						</div> 
-					</a> 
-				</div>
-				<div class="btn-group text-center" > 
-					<label><input type="checkbox"  name="showRelation" checked="{document.showRelation?true:false}" onclick="{showRelationchange}"/>Show ER Relationship</label>
+				-->
+				<div class="pull-right">
+					<div class="component widget  text-right" > 
+						<a href="#"  onclick="{display}"> 
+							<div data-type="textinput"> 
+							<div class="title" style="margin-bottom:10px;"><img src="images/preview.png"/> Preview</div> 
+							</div> 
+						</a> 
+					</div>
+					<div class="component widget text-center" style="cursor:pointer"> 
+						<label style="cursor:pointer"><input style="cursor:pointer" type="checkbox"  name="clusterclone" checked="{document.clusterclone?true:false}" onclick="{ClusterClone}"/> Cluster Clone</label>
+					</div>
+					<div class="btn-group text-center" style="cursor:pointer"> 
+						<label style="cursor:pointer"><input style="cursor:pointer" type="checkbox"  name="showRelation" checked="{document.showRelation?true:false}" onclick="{showRelationchange}"/> Show ER Relationship</label>
+					</div>
+					<div class="component widget text-center" style="cursor:pointer"> 
+						<label style="cursor:pointer"><input style="cursor:pointer" type="checkbox"  name="showSimple" checked="{document.mode=='simple'?true:false}" onclick="{showSimplechange}"/> Simple Mode</label>
+					</div>
 				</div>
 			</div>
 	</div>	
@@ -182,13 +205,18 @@ ul.dropdown-menu>li>a{
 		else{
 			$("#panel_propertyEditor").hide();
 		}
+		$("#panel_workspace").removeClass("col-lg-8").removeClass("col-lg-12").addClass("col-lg-10");
+		opts.trigger("showproperty",(windows.property===1));
 		
-		if((windows.property===1)&&(windows.navigation===1))
+		
+		
+	/*	if((windows.property===1)&&(windows.navigation===1))
 		   $("#panel_workspace").removeClass("col-lg-10").removeClass("col-lg-12").addClass("col-lg-8");
 		else if((windows.property===1)||(windows.navigation===1))
 			$("#panel_workspace").removeClass("col-lg-8").removeClass("col-lg-12").addClass("col-lg-10");
 		else
 			$("#panel_workspace").removeClass("col-lg-8").removeClass("col-lg-10").addClass("col-lg-12");
+		*/
 	};
 	
 
@@ -270,13 +298,19 @@ ul.dropdown-menu>li>a{
 	cancel(){
 		opts.trigger("cancel");
 	}
-	
+	fullscreen (){
+		opts.trigger("fullscreen");
+	}
+	normalscreen (){
+		opts.trigger("normalscreen");
+	}
 	var  win=null;
 	display(e){		
 		var r={};			 
 		$.extend(r,this.document.persist());
 		e.preventDefault();
 		e.stopPropagation();
+		alert(r.data);
 		opts.trigger("preview",r);
 	
 	}
@@ -402,34 +436,68 @@ ul.dropdown-menu>li>a{
 	showRelationchange(e){
 	  var target=e.currentTarget;
 	  var checked=target.checked;
-	  name=target.name;
+	  var name=target.name;
 	  ths.document[name]=checked;
 	  var panel1=ths.document.activePanel.instance;
 	  for(var i=0;i<=panel1.widgets.length-1;i++){
 	     if(panel1.widgets[i].type=="relationConnector")
   	        panel1.widgets[i].visible=checked;
-	  }
+	  }	  
 	  panel1.paint();
+	  ths.designer.resize();
+	}
+	
+	ClusterClone(e){
+	   var target=e.currentTarget;
+	   var checked=target.checked;
+	   var name=target.name;
+	   ths.document[name]=checked;
+	   if(checked){
+	   	$(".mask-clone").show();
+	   }
+	}
+	
+	showSimplechange(e){
+	  var target=e.currentTarget;
+	  var checked=target.checked;
+	  name=target.name;
+	  ths.document[name]=checked;
+	  var panel1=ths.document.activePanel.instance;
+	  for(var i=0;i<=panel1.widgets.length-1;i++){
+	     if(panel1.widgets[i].type=="table")
+  	        panel1.widgets[i].mode=checked?"simple":"full";
+	  }	  
+	  panel1.paint();
+	  ths.designer.resize();
 	}
 	
 	zoomout(){		
-		var scale=ths.activePanel.scale||1;
-		if(scale-0.1>0.1)
+		var panel=ths.document.activePanel.instance;
+		var scale=panel.scale;
+		if(scale-0.1>0.3)
 			scale-=0.1;
-		ths.activePanel.Scale(scale);		
-		$("#workspace canvas").css("height",ths.activePanel.canvas.height*scale);
-		ths.activePanel.paint();
+		//ths.activePanel.Scale(scale);		
+		ths.document.activePanel.Scale(scale);
+		ths.document.activePanel.instance.paint();
 	}
 	
 	zoomin(){		
-		var panel=ths.activePanel;
-		var scale=panel.scale||1;
-		if(scale+0.1<2.1)
+		var panel=ths.document.activePanel.instance;
+		var scale=panel.scale;
+		if(scale+0.1<1)
 			scale+=0.1;
-		panel.Scale(scale);
-		setTimeout(panel.canvas.focus(),200);
-		$("#workspace canvas").css("height",ths.activePanel.canvas.height*scale);
+//		panel.Scale(scale);
+		ths.document.activePanel.Scale(scale);
+		ths.document.activePanel.instance.paint();
 	}	
+	
+	this.designer.on("zoomin",function(){
+		ths.zoomin();
+	});
+	
+	this.designer.on("zoomout",function(){
+		ths.zoomout();
+	});
 	
 	this.designer.on("undo",function(){
 		ths.undo();

@@ -28,3 +28,75 @@
 @import '../app/help/restapi/restapi.less';
 @import '../app/home/packageManager/package_manager.less';
 @import '../app/home/usersAndGroups/users_and_groups.less';
+
+
+.navbar-default{
+    background-color: #2c5e88 !important;
+    border-color: #e7e7e7;
+}
+ 
+.detail-pane .panel-body {
+    padding: 0;
+    overflow: auto;
+    // background-color: #19caff !important;
+}
+
+
+
+.navbar-default .navbar-nav>li>a{
+    color: #ffffff !important;
+}
+.navbar-default .navbar-nav>li>a:hover{
+    color: #dacece !important;
+}
+.navbar-default .navbar-nav>li>a:focus{
+    color: #227790 !important;
+}
+
+.list-group-item {
+    background-color: #2a3545 !important;
+    padding: 0 0 0 0px  !important;
+    border: 2px; 
+}
+
+.pipeline-graph {
+    .graph-container {
+      height: 140px !important;
+    }
+}
+.graph-container svg {
+    height: 140px !important; 
+    background-color: #fcf8e6 !important;
+}
+
+.pipeline-views {
+    // width: 50% !important;
+    .split-panes {
+        .split-pane2 {
+            top: 140px !important;
+        }
+    }
+}
+
+
+.detail-pane .tabs-left > .tab-content {
+    float: left !important;
+    width: calc(~"100% - 200px")  !important;
+}
+
+
+div.detail-pane > div.panel-body > div > ul {
+    display: none !important;
+}
+
+body > div.ng-scope > div.home-bg-splitter.ng-scope.comfortable-density > div > div.split-pane2 > div > div > div > div.split-pane2 > ng-include:nth-child(1) > div > div.panel-body > div > div > div.tab-pane.ng-scope.active > div > div > div > div > div.tab-pane.ng-scope.active > div{
+    margin-left: 200px;
+}
+
+body > div.ng-scope > ng-include:nth-child(3) > div > div.panel-body{
+    padding: 0px !important;
+}
+
+body > div.modal.fade.ng-isolate-scope.in > div > div > form > div.modal-body > div:nth-child(4){
+    display: none !important;
+}

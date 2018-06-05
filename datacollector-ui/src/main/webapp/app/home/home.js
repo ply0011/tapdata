@@ -64,7 +64,7 @@ angular
       totalPipelinesCount: 0,
       filteredPipelines: [],
       header: {
-        pipelineGridView: $rootScope.$storage.pipelineListState.gridView,
+        pipelineGridView: true, //$rootScope.$storage.pipelineListState.gridView,
         sortColumn: 'LAST_MODIFIED',
         sortReverse: true,
         searchInput: $scope.$storage.pipelineListState.searchInput,
@@ -800,7 +800,6 @@ angular
       }
 
     });
-
     $q.all([
       api.pipelineAgent.getPipelinesCount(),
       configuration.init()
@@ -839,7 +838,6 @@ angular
       api.pipelineAgent.getPipelineLabels()
     ]).then(
       function (results) {
-
         /**
          * Labels are loaded only once so they're sent to library.js
          */
@@ -870,9 +868,10 @@ angular
         $location.path('/collector/pipeline/' + alert.pipelineName);
       }
     });
-
+ 
     var pipelineGridViewWatchListener = $scope.$watch('header.pipelineGridView', function() {
-      $rootScope.$storage.pipelineListState.gridView = $scope.header.pipelineGridView;
+     
+      $rootScope.$storage.pipelineListState.gridView = true // $scope.header.pipelineGridView;
     });
 
     $scope.$on('$destroy', function() {

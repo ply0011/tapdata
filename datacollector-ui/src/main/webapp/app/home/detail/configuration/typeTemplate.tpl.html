@@ -311,6 +311,25 @@
              data-type="'STRING'">
         </div>
       </div>
+      <div class="col-xs-5">
+        <div ui-codemirror
+             ng-class="{'codemirror-read-only': isPipelineReadOnly || isPipelineRunning}"
+             ng-model="mapObject.value"
+             ui-refresh="refreshCodemirror"
+             ui-codemirror-opts="getCodeMirrorOptions({
+                readOnly: (isPipelineReadOnly || isPipelineRunning),
+                extraKeys: {
+                  'Tab': false,
+                  'Ctrl-Space': 'autocomplete'
+                }
+              }, configDefinition)"
+             codemirror-el
+             field-paths="fieldPaths"
+             d-field-paths="dFieldPaths"
+             data-type="'STRING'">
+        </div>
+      </div>
+
 
       <div class="btn-group" role="group" aria-label="Default button group"
            ng-hide="isPipelineReadOnly || isPipelineRunning">

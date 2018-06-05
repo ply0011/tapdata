@@ -39,7 +39,7 @@
 		};
 		$.extend(opt,option);
 		$.extend(this,new widget(opt));
-		this.propertyEditors=[];
+		this.propertyEditors=["common"];
 		this.allowconnectionPoint=false;
 		this.type="field";
 		if(this.text==="")
@@ -49,6 +49,7 @@
 		this.persist=function(){
 			var r=widget.persistproperty(this);
 			r.data={};
+			delete r.font;
 			$.extend(r.data,this.data);
 			return r;
 		};
@@ -263,23 +264,27 @@
 		        	sequenceName:"",
 		        	owner:""
 		        },
+		        objectdata:{
+					customsql:"",
+					offset:""						
+				},	
 		        includeChildren:true,
 				width:140,
 				height:160,
 				showtype:"physical",
+				mode:"full",
 				pk:[],
 				fields:[]
 		};
 		$.extend(opt,option);
 		opt.click=this.click;
 		$.extend(this,new widget(opt));
-		this.propertyEditors=[];
+		this.propertyEditors=["common"];
 		this.gradient=null;
 		this.allowRotate=false;
 		var ths=this;
 		this.margin=5;
-		this.type="table";	
-	
+		this.type="table";		
 		if(this.widgets.length>0){
 			var _widgets=[];
 			$.extend(_widgets,this.widgets);
@@ -288,12 +293,11 @@
 				editable:ths.editable				
 			});
 		}
-		
 		if(this.fields.length>0){
 			var _fields=[];
 			$.extend(_fields,this.fields);
 			this.fields.splice(0,this.fields.length);
-			for(var i=0;i<=_fields.length-1;i++){				
+			for(var i=0;i<=_fields.length-1;i++){
 				this.fields.push(ths.Widget(_fields[i]));
 			}
 		}
@@ -313,11 +317,18 @@
 			for(var i=0;i<=this.pk.length-1;i++)
 				r.pk.push(this.pk[i].name);
 			r.showtype=this.showtype;
+			r.mode=this.mode||"full";
+			r.objectdata={};
+			$.extend(r.objectdata,this.objectdata);
 			r.fields=[];
 			for(var i=0;i<=this.fields.length-1;i++)
 				r.fields.push(this.fields[i].name);
 			r.settings={};
 			$.extend(r.settings,this.settings);
+
+			delete r.font;
+			delete r.background;
+			delete r.shadow;
 			return r;
 		};
 		
@@ -389,7 +400,6 @@
 		this.drawBorderTo=function(ctx){
 			ctx.save();
 			var ths=this;
-			var ths=this;
 			pkcount=this.pk.length;
 			fieldcount=pkcount+1+Math.max(this.fields.length,2);
 			this.lineheight=ths.fontSize()+2*ths.margin;
@@ -405,12 +415,21 @@
 				if(_w)
 					_w.y=(i+1)*(ths.lineheight)+ths.margin;
 			});
+			var  index=0;
 			$(this.fields).each(function(i,item){
-				ths.findfield(item.name).y=(i+1+pkcount)*(ths.lineheight)+ths.margin;
+				if(ths.mode=="full"||(ths.mode=="simple"&&item.data.isfk)){
+					item.visible=true;
+					ths.findfield(item.name).y=(index+1+pkcount)*(ths.lineheight)+ths.margin;
+					index++;
+				}
+				else  
+					item.visible=false;
 			});
+			fieldcount=pkcount+1+Math.max(index,2);
+			this.minheight=(fieldcount+1)*(ths.lineheight);
+			this.height=this.minheight;
 			var _widget=this;
 			if (_widget.border.color !== "none") {
-				
 				ctx.beginPath();
 				ctx.lineJoin="round";
 				_widget.border.width=parseInt(_widget.border.width);
@@ -433,7 +452,6 @@
 			if (this.background!=null && this.background.color !== "none") {
 				ctx.save();
 				ctx.fillStyle = this.background.color;
-//				this.drawShadowTo(ctx);
 				ctx.fillRect(0, 0,this.width,this.height);
 				ctx.restore();				
 			}
@@ -510,6 +528,8 @@
 					ctx.fillStyle=this.font.color||"black";
 				}
 				this.font.fill=this.font.fill!=null?this.font.fill:true;
+				if(this.background.filltype=="color")
+					iconwidth=0;
 				if(this.font.fill)
 					ctx.fillText(text,margin+iconwidth,this.fontSize()+margin);
 				else
@@ -573,14 +593,15 @@
 			var field1=new field(opt);
 			field1.data.name=fieldname;
 			this.addfield(field1);
-			this.paint();
+			if(!option.silence)
+				this.paint();
 			return field1;
 		};
 		
 		this.deletefield=function(field){
 			var focusfield=field;
 			if(focusfield!=null&&focusfield.data.isfk){
-				alert("外键不能这样删除,如果要删除外键，请删除连接关联");
+				alert("Foreign key was not able to be deleted, you can delete relatitve connection to remove foreign Key"); //外键不能这样删除,如果要删除外键，请删除连接关联
 				e.cancel=true;
 				return;
 			}
@@ -606,7 +627,8 @@
 			var field1=new field(opt);
 			field1.data.name=fieldname;
 			this.addpk(field1);
-			field1.click({x:0,y:0});
+			if(!option.silence)
+				field1.click({x:0,y:0});
 			return field1;
 		};
 		

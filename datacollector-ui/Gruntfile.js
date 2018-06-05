@@ -26,7 +26,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-ng-annotate');
   grunt.loadNpmTasks('grunt-html2js');
 
@@ -38,7 +37,7 @@ module.exports = function(grunt) {
     /**
      * The `build_dir` folder is where our projects are compiled.
      */
-    build_dir: 'target/dist',
+    build_dir: '../dist/sdc/sdc-static-web',
     target_dir: 'target',
     base_dir: 'src/main/webapp/',
     common_base_dir: '../common-ui/src/main/webapp/',
@@ -222,7 +221,7 @@ module.exports = function(grunt) {
         files: [
           {
             src: [ '**' ],
-            dest: '<%= build_dir %>/mapping/',
+            dest: '<%= build_dir %>/designer/',
             cwd: '<%=  tapdata_mapping_dir %>',
             expand: true
           }
@@ -587,7 +586,7 @@ module.exports = function(grunt) {
           '<%= base_dir %>app/**/*.js',
           '<%= common_base_dir %>common/**/*.js'
         ],
-        tasks: [ 'jshint:src', 'karma:unit:run', 'copy:build_appjs', 'copy:build_common_appjs', 'index:build' ]
+        tasks: [ 'jshint:src', 'copy:build_appjs', 'copy:build_common_appjs', 'index:build' ]
       },
 
       /**
@@ -643,7 +642,7 @@ module.exports = function(grunt) {
         files: [
           '<%= app_files.jsunit %>'
         ],
-        tasks: [ 'jshint:test', 'karma:unit:run' ],
+        tasks: [ 'jshint:test' ],
         options: {
           livereload: false
         }

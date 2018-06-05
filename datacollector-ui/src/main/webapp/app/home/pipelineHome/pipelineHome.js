@@ -75,6 +75,9 @@ angular
 
     angular.extend($scope, {
       _: _,
+      showJobConfig: false,
+      showMappingView: false,
+      viewJobConfigWhileRunning: false,
       showLoading: true,
       monitorMemoryEnabled: false,
       isPipelineReadOnly: !authService.isAuthorized([userRoles.admin, userRoles.creator]),
@@ -146,8 +149,7 @@ angular
 
         if ($scope.isPipelineReadOnly) {
           return;
-        }
-
+        } 
         $scope.trackEvent(pipelineConstant.STAGE_CATEGORY, pipelineConstant.ADD_ACTION, stage.label, 1);
 
         if (stage.type === pipelineConstant.SOURCE_STAGE_TYPE) {
@@ -384,7 +386,6 @@ angular
             $scope.$broadcast('selectEdge', options.selectedObject, options.moveToCenter);
           }
         }
-
         updateDetailPane(options);
       },
 
@@ -895,10 +896,12 @@ angular
       $q.all([api.pipelineAgent.getPipelineConfig(configName),
         api.pipelineAgent.getPipelineRules(configName)]
       ).then(function(results) {
+        alert("!!")
+
         var config = results[0].data;
         var rules = results[1].data;
         var clickedAlert = $rootScope.common.clickedAlert;
-
+        console.log(config, "!!");
         $rootScope.common.errors = [];
 
         archive = [];
@@ -1015,7 +1018,7 @@ angular
       currArchivePos = archive.length -1;
     };
 
-
+   
     /**
      * Save Updates
      * @param config
@@ -1103,6 +1106,8 @@ angular
           });
       }
     };
+
+    
 
     /**
      * Update Pipeline Graph
@@ -1982,6 +1987,11 @@ angular
       }
     }, true);
 
+    $scope.$on('pip-saveUpdates', function(event, config) {
+      return saveUpdates(config);
+    
+    });
+
     $scope.$watch('pipelineRules', function (newValue, oldValue) {
       if (ignoreUpdate) {
         $timeout(function () {
@@ -1998,6 +2008,30 @@ angular
       }
     }, true);
 
+    $scope.$on('showJobConfigView', function (event, options) {
+      $scope.showJobConfig = !$scope.showJobConfig;
+      $scope.refreshGraph();
+
+    });
+    $scope.$on('viewJobConfigWhileRunning', function (event, options) {
+      if($scope.isPipelineRunning ){
+        $scope.viewJobConfigWhileRunning = !$scope.viewJobConfigWhileRunning;
+        $scope.refreshGraph();
+        setTimeout(function(){
+          $scope.changeStageSelection({selectedObject: undefined, type: pipelineConstant.PIPELINE})
+        },100)
+      }
+    })
+
+    setInterval(function(){
+      $scope.refreshGraph();
+    }, 2000);
+
+    $scope.$on('showMappingView', function (event, options) {
+      $scope.showMappingView = !$scope.showMappingView;
+      $scope.refreshGraph();
+    });
+    
     $scope.$on('onNodeSelection', function (event, options) {
       updateDetailPane(options);
     });
@@ -2038,6 +2072,7 @@ angular
       if (configInfo) {
         $scope.activeConfigInfo = configInfo;
         $scope.closePreview();
+        
         loadPipelineConfig($scope.activeConfigInfo.pipelineId);
       } else {
         //No Pipieline config exists

@@ -1,4 +1,5 @@
-<section class="tile-list" ng-if="header.pipelineGridView">
+<!-- <section class="tile-list" ng-if="header.pipelineGridView"> -->
+<section class="tile-list" ng-if="1">
 
   <section class="pipeline-container new-pipeline" ng-if="filteredPipelines.length === 0 && !fetching">
     <div class="centering-container">
@@ -81,7 +82,7 @@
               </a>
             </li>
 
-            <li role="presentation" ng-if="isAuthorized([userRoles.admin, userRoles.creator]) && !common.isSlaveNode">
+            <!-- <li role="presentation" ng-if="isAuthorized([userRoles.admin, userRoles.creator]) && !common.isSlaveNode">
               <a href="#" dropdown-toggle ng-click="sharePipelineConfig(pipeline, $event)">
                 <i class="fa fa-share-alt"></i>
                 <span>{{'global.form.share' | translate}}</span>
@@ -129,7 +130,7 @@
                 <i class="glyphicon glyphicon-stop"></i>
                 <span>{{'home.header.stop' | translate}}</span>
               </a>
-            </li>
+            </li> -->
 
           </ul>
         </div>

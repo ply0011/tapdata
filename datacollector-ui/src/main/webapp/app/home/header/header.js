@@ -68,6 +68,17 @@ angular
         $scope.firstOpenLane.stageInstance = undefined;
       },
 
+      setJobConfig: function(){
+        $rootScope.$broadcast('showJobConfigView');
+      },
+
+      viewJobConfigWhileRunning: function(){
+        $rootScope.$broadcast('viewJobConfigWhileRunning');
+
+      },
+      setMapping: function(){
+        $rootScope.$broadcast('showMappingView');
+      },
       /**
        * Validate Pipeline
        */
@@ -258,6 +269,8 @@ angular
         }, function () {
 
         });
+        $scope.refreshGraph()
+
       },
 
       /**

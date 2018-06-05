@@ -1,0 +1,163 @@
+<div ng-controller="jobConfigController">
+    <form class="form-horizontal" ng-class="{'form-group-sm': $storage.displayDensity === pipelineConstant.DENSITY_COZY || $storage.displayDensity === pipelineConstant.DENSITY_COMPACT}"
+        role="form" name="stageGeneralInfo">
+    
+        <div class="form-group">
+            <label class="col-lg-3 col-md-4 control-label">Job Description</label>
+            <div class="controls col-lg-7 col-md-8">
+                <textarea class="form-control" name="description" rows="1" ng-model="pipelineConfig.metadata.tapdata_description"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 col-md-4 control-label">Sync Type</label>
+            <div class="controls col-lg-7 col-md-8">
+            <select class="form-control"
+                    name="syncType"
+                    ng-model="pipelineConfig.metadata.tapdata_syncType">
+                    <option value="initial">Initial Sync</option>
+                    <option value="cdc">CDC</option>
+                    <option value="all">ALL</option>
+            </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 col-md-4 control-label">Sync Point</label>
+            <div class="controls col-lg-7 col-md-8">
+            <select class="form-control"
+                    name="syncType"
+                    ng-model="pipelineConfig.metadata.tapdata_syncPoint">
+                    <option value="Begining">Begining</option>
+                    <option value="Current">Current</option>
+                    <option value="Sync_Time">Sync Time</option>
+            </select>
+            </div>
+        </div>
+<!-- 
+        <div class="form-group">
+            <label class="col-lg-3 col-md-4 control-label">Sync date</label>
+            <div class="controls col-lg-7 col-md-8">
+                <input type="datetime-local" id="syncDate" name="input" ng-model="pipelineConfig.metadata.tapdata_syncDate"
+                    placeholder="yyyy-MM-ddTHH:mm:ss" min="1001-01-01T00:00:00" max="2018-12-31T00:00:00" required />
+            </div>
+        </div>   -->
+
+        <div class="form-group">
+                <label class="col-lg-3 col-md-4 control-label">OP Filter (Skip)</label>
+                <div style="    margin-left: 30%;">
+                    <div class="controls col-lg-7 col-md-8 map-list-type" 
+                ng-repeat="mapObject  in  pipelineConfig.metadata.op_filter[0].filters track by $index">
+                    <!-- <div class="col-xs-4">
+                        <input type="text" class="form-control input-sm"
+                               name="{{configDefinition.name + 'key' + $index}}"
+                               ng-required="true"
+                               ng-keyup="tempSave()"
+                               ng-model="mapObject.db"/>
+                    </div>
+                     -->
+                    <div class="col-xs-3">
+                            <input type="text" class="form-control input-sm"
+                                   name="{{configDefinition.name + 'key2' + $index}}"
+                                   ng-required="true"
+                                   ng-keyup="tempSave()"
+                                   ng-model="mapObject.collection"/>
+                    </div>
+                    <div class="col-xs-3" style="width: 200px;">
+                            <!-- <input type="text" class="form-control input-sm"
+                                   name="{{configDefinition.name + 'key3' + $index}}"
+                                   ng-required="true"
+                                   ng-keyup="tempSave()"
+                                   ng-model="mapObject.op"/> -->
+                            <select class="form-control"
+                                   name="syncType"
+                                   ng-model="mapObject.op">
+                                   <option value="insert">insert</option>
+                                   <option value="update">update</option>
+                                   <option value="delete">delete</option>
+                                   <option value="create_index">create index</option>
+                                   <option value="drop_index">drop index</option>
+                                   <option value="create_table">create table</option>
+                                   <option value="drop_table">drop table</option>
+                                   <option value="renameCollection">renameCollection</option> 
+                           
+                           </select>
+                    </div>
+
+                   
+                    <div class="btn-group" role="group" aria-label="Default button group">
+                        <button type="button" class="btn btn-default btn-sm"
+                                ng-click="removeFromOPFilters(0,$index)">
+                            <i class="fa fa-minus pointer"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm"
+                                ng-show="$last"
+                                ng-click="addOneOPFilter(0)">
+                            <i class="fa fa-plus pointer"></i>
+                        </button>
+                    </div>    
+                </div>
+                </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 col-md-4 control-label">OP Filter (Abort)</label>
+            <div style="    margin-left: 30%;">
+                <div class="controls col-lg-7 col-md-8 map-list-type" 
+            ng-repeat="mapObject  in  pipelineConfig.metadata.op_filter[1].filters track by $index">
+                <!-- <div class="col-xs-4">
+                    <input type="text" class="form-control input-sm"
+                           name="{{configDefinition.name + 'key' + $index}}"
+                           ng-required="true"
+                           ng-keyup="tempSave()"
+                           ng-model="mapObject.db"/>
+                </div>
+                 -->
+                <div class="col-xs-3">
+                        <input type="text" class="form-control input-sm"
+                               name="{{configDefinition.name + 'key2' + $index}}"
+                               ng-required="true"
+                               ng-keyup="tempSave()"
+                               ng-model="mapObject.collection"/>
+                </div>
+                <div class="col-xs-3"  style="width: 200px;"> 
+                        <!-- <input type="text" class="form-control input-sm"
+                               name="{{configDefinition.name + 'key3' + $index}}"
+                               ng-required="true"
+                               ng-keyup="tempSave()"
+                               ng-model="mapObject.op"/> -->
+                        <select class="form-control"
+                               name="syncType"
+                               ng-model="mapObject.op">
+                               <option value="insert">insert</option>
+                               <option value="update">update</option>
+                               <option value="delete">delete</option>
+                               <option value="create_index">create index</option>
+                               <option value="drop_index">drop index</option>
+                               <option value="create_table">create table</option>
+                               <option value="drop_table">drop table</option>
+                               <option value="renameCollection">renameCollection</option> 
+                       
+                       </select>
+                </div>
+
+               
+                <div class="btn-group" role="group" aria-label="Default button group">
+                    <button type="button" class="btn btn-default btn-sm"
+                            ng-click="removeFromOPFilters(1, $index)">
+                        <i class="fa fa-minus pointer"></i>
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm"
+                            ng-show="$last"
+                            ng-click="addOneOPFilter(1)">
+                        <i class="fa fa-plus pointer"></i>
+                    </button>
+                </div>    
+            </div>
+            </div>
+    </div>
+
+        
+
+    </form> 
+</div>

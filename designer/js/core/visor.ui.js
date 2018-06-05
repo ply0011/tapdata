@@ -185,7 +185,7 @@ riot.tag2('propertyeditorextension', '<table class="table table-nobordered table
 		});
 	})
 });
-riot.tag2('propertyeditorobjectdata', '<div class="container-fluid" style="background-color:white"> <form class="form-horizontal" if="{widget}"> <div class="form-group form-group-sm row" each="{props.elements}" style="margin-bottom:0px" if="{editor[key].visible!=false&&showProperty(key)}"> <label class="pull-left control-label" style="padding:10px;text-align: left;"> <raw content="{editor[key].title}"></raw> <span if="{!editor[key].required}">&nbsp;</span><span style="color:red" if="{editor[key].required}">*</span></label> <div style="margin-left:125px;"> <div style="padding:5px;"> <input type="text" class="form-control" id="{key}" value="{widget[\'objectdata\'][key]}" __required="{editor[key].required}" __readonly="{!editor[key].editable}" onchange="{change}" if="{editor[key].format==\'string\'&&showProperty(key)}"> <input type="hidden" class="colorpick" style="width:30px;height:30px;padding:0px" id="{key}" value="{widget[\'objectdata\'][key]}" __required="{editor[key].required}" __readonly="{!editor[key].editable}" onchange="{change}" if="{editor[key].format==\'color\'}"> <input type="checkbox" style="margin-top:8px;" onclick="{change}" id="{key}" __checked="{widget[\'objectdata\'][key]}" if="{editor[key].format==\'boolean\'}"> <select id="{key}" onchange="{change}" style="width:100%" if="{editor[key].format==⁗single⁗}"> <option each="{option, i in editor[key].options}" value="{option.id||option}" __selected="{(option.id||option)==widget[\'objectdata\'][key]}">{option.text||option}</option> </select> <textarea rows="5" id="values" class="form-control" style="resize:vertical;" onchange="{change}" onblur="{leave}" if="{editor[key].format==\'text\'}">{widget[\'objectdata\'][key]}</textarea> <input type="text" class="form-control number" id="{key}" value="{widget[\'objectdata\'][key]}" __required="{editor[key].required}" __readonly="{!editor[key].editable}" onchange="{change}" if="{editor[key].format==\'int\'}"> <div if="{editor[key].format==⁗list⁗ && widget[\'objectdata\'][key].type.toLowerCase()==⁗object⁗}"> <div style="margin-bottom:5px" class="table-grid"> <div class="table-cell"> <input type="text" class="form-control" style="border:none" value="Source Field"> </div> <div class="table-cell"> <input type="text" class="form-control" style="border:none" value="Target Field"> </div> </div> <div each="{obj,i in widget[\'objectdata\'][key].values}" name="{key}" style="margin-bottom:5px" class="table-grid"> <div each="{field,k in widget[\'objectdata\'][key].fields}" class="table-cell"> <input type="text" class="form-control" name="{key}" alt="{i}" onchange="{listitemchange}" value="{obj[field.id]}"> </div> <a href="#" name="{key}" onclick="{listremove}"><i class="fa fa-times" style="width:10px;"></i></a> </div> <div class="input-group" style="margin-top:5px" name="{key}"> <a href="#" name="{key}" onclick="{listadd}">Add new</a> </div> </div> </div> </div> </form> </div>', '.table-bordered,.table-nobordered{ font-size:9pt; width:100%; margin-bottom:5px; } .table-nobordered{ font-size:9pt; } .table-bordered input[type=\'text\']{ width:100%; padding:5px; } .table-bordered>tbody>tr>td{ padding:5px; } .table-extension select{ width:100%; } .spinner-input.input-group .input-group-addon{ padding:4px 6px 3px 2px; background-color:white; color:black; } .spinner-input.input-group .input-group-addon .spin-up, .spinner-input.input-group .input-group-addon .spin-down { height: 10px; width: 12px; overflow: hidden; display: block; text-align: right; color: #999; } .spinner-input.input-group .input-group-addon .spin-up:hover, .spinner-input.input-group .input-group-addon .spin-down:hover { color: #555; } .spinner-input.input-group .input-group-addon .spin-up .fa, .spinner-input.input-group .input-group-addon .spin-down .fa { margin-top: -3px; padding:0px; margin:0px; vertical-align: middle; } .spinner-input.input-group .input-group-addon .spin-up .glyphicon, .spinner-input.input-group .input-group-addon .spin-down .glyphicon { font-size: 10px; top: -2px; } .spinner-input.input-group .input-group-addon a.spin-up, .spinner-input.input-group .input-group-addon a.spin-down { text-decoration: none; } .spinner-input.input-group .input-group-addon button.spin-up, .spinner-input.input-group .input-group-addon button.spin-down { background: none; border: none; padding: 0; } .table-grid{ display:flex; align-items:center; } .table-cell{ margin-right:5px; }', '', function(opts) {
+riot.tag2('propertyeditorobjectdata', '<div class="container-fluid" style="background-color:white"> <form class="form-horizontal" if="{widget}"> <div class="form-group form-group-sm row" each="{props.elements}" style="margin-bottom:0px" if="{editor[key].visible!=false&&showProperty(key)}"> <label class="pull-left control-label" style="padding:10px;text-align: left;"> <raw content="{editor[key].title}"></raw> <span if="{!editor[key].required}">&nbsp;</span><span style="color:red" if="{editor[key].required}">*</span></label> <div style="margin-left:125px;"> <div style="padding:5px;"> <input type="text" class="form-control" id="{key}" value="{widget[\'objectdata\'][key]}" __required="{editor[key].required}" __readonly="{!editor[key].editable}" onchange="{change}" if="{editor[key].format==\'string\'&&showProperty(key)}"> <input type="hidden" class="colorpick" style="width:30px;height:30px;padding:0px" id="{key}" value="{widget[\'objectdata\'][key]}" __required="{editor[key].required}" __readonly="{!editor[key].editable}" onchange="{change}" if="{editor[key].format==\'color\'}"> <input type="checkbox" style="margin-top:8px;" onclick="{change}" id="{key}" __checked="{widget[\'objectdata\'][key]}" if="{editor[key].format==\'boolean\'}"> <select id="{key}" onchange="{change}" style="width:100%" if="{editor[key].format==⁗single⁗}"> <option each="{option, i in editor[key].options}" value="{option.id||option}" __selected="{getValue(option,key)}">{option.text||option}</option> </select> <textarea rows="5" id="values" class="form-control" style="resize:vertical;" onchange="{change}" onblur="{leave}" if="{editor[key].format==\'text\'}">{widget[\'objectdata\'][key]}</textarea> <input type="text" class="form-control number" id="{key}" value="{widget[\'objectdata\'][key]}" __required="{editor[key].required}" __readonly="{!editor[key].editable}" onchange="{change}" if="{editor[key].format==\'int\'}"> <div if="{editor[key].format==⁗list⁗ && widget[\'objectdata\'][key].type.toLowerCase()==⁗object⁗}"> <div style="margin-bottom:5px" class="table-grid"> <div class="table-cell"> <input type="text" class="form-control" style="border:none" value="Source Field"> </div> <div class="table-cell"> <input type="text" class="form-control" style="border:none" value="Target Field"> </div> </div> <div each="{obj,i in widget[\'objectdata\'][key].values}" name="{key}" style="margin-bottom:5px" class="table-grid"> <div each="{field,k in widget[\'objectdata\'][key].fields}" class="table-cell"> <input type="text" class="form-control" name="{key}" alt="{i}" onchange="{listitemchange}" value="{obj[field.id]}"> </div> <a href="#" name="{key}" onclick="{listremove}"><i class="fa fa-times" style="width:10px;"></i></a> </div> <div class="input-group" style="margin-top:5px" name="{key}"> <a href="#" name="{key}" onclick="{listadd}">Add new</a> </div> </div> </div> </div> </form> </div>', '.table-bordered,.table-nobordered{ font-size:9pt; width:100%; margin-bottom:5px; } .table-nobordered{ font-size:9pt; } .table-bordered input[type=\'text\']{ width:100%; padding:5px; } .table-bordered>tbody>tr>td{ padding:5px; } .table-extension select{ width:100%; } .spinner-input.input-group .input-group-addon{ padding:4px 6px 3px 2px; background-color:white; color:black; } .spinner-input.input-group .input-group-addon .spin-up, .spinner-input.input-group .input-group-addon .spin-down { height: 10px; width: 12px; overflow: hidden; display: block; text-align: right; color: #999; } .spinner-input.input-group .input-group-addon .spin-up:hover, .spinner-input.input-group .input-group-addon .spin-down:hover { color: #555; } .spinner-input.input-group .input-group-addon .spin-up .fa, .spinner-input.input-group .input-group-addon .spin-down .fa { margin-top: -3px; padding:0px; margin:0px; vertical-align: middle; } .spinner-input.input-group .input-group-addon .spin-up .glyphicon, .spinner-input.input-group .input-group-addon .spin-down .glyphicon { font-size: 10px; top: -2px; } .spinner-input.input-group .input-group-addon a.spin-up, .spinner-input.input-group .input-group-addon a.spin-down { text-decoration: none; } .spinner-input.input-group .input-group-addon button.spin-up, .spinner-input.input-group .input-group-addon button.spin-down { background: none; border: none; padding: 0; } .table-grid{ display:flex; align-items:center; } .table-cell{ margin-right:5px; }', '', function(opts) {
 	var parent=this;
 	while(parent.parent!=null)
 		parent=parent.parent;
@@ -217,6 +217,44 @@ riot.tag2('propertyeditorobjectdata', '<div class="container-fluid" style="backg
 		this.widget['objectdata'][name].values.push(obj);
 	}.bind(this)
 
+	this.getValue = function(option,key){
+		if(option.id=="String"){
+			switch(ths.widget.objectdata[key]){
+				case "String":
+				case "varchar2":
+				case "char":
+				case "varchar":
+					return true;
+				default:
+				    return false;
+
+			}
+		}
+		else if(option.id=="Integer"){
+			switch(ths.widget.objectdata[key]){
+				case "Integer":
+				case "number":
+				case "int":
+					return true;
+				default:
+				    return false;
+
+			}
+		}
+		else if(option.id=="Date"){
+			switch(ths.widget.objectdata[key]){
+				case "Date":
+				case "timestamp(6)":
+				case "time":
+					return true;
+				default:
+				    return false;
+
+			}
+		}
+
+	}.bind(this)
+
 	this.listremove = function(e){
 		var item=e.item.obj;
 		var target=e.currentTarget;
@@ -233,6 +271,9 @@ riot.tag2('propertyeditorobjectdata', '<div class="container-fluid" style="backg
 		var obj=this.widget['objectdata'][key].values[index];
 		var value=target.value;
 		obj[item.id]=value;
+		var prop="objectdata";
+		var name=target.name;
+		parent.opts.trigger("propertychange",this.widget,prop,name);
 
 	}.bind(this)
 
@@ -296,25 +337,19 @@ riot.tag2('raw', '<span></span>', '', '', function(opts) {
 	    	 this.root.innerHTML =opts.content;
 	    })
 });
-riot.tag2('widgets', '<div class="sidebar-nav " id="widgetgroup"> <a class="nav-header collapsed er" data-toggle="collapse" data-parent="#widgetgroup" href="#er" name="database" if="{widgetgroup.database.visible}"> <i class="fa {widgetgroup.database.selected?\'fa-caret-down\':\'fa-caret-right\'}" style="margin-top:1px;"></i>Database </a> <div id="er" class="panel-collapse {widgetgroup.database.selected?\'\':\'collapse\'} er" if="{widgetgroup.database.visible}"> <div class="panel-body" style="padding: 2px"> <div class="btn-widgets"> <img class="btn btn-default col-lg-3 col-md-3 col-sm-4 col-xs-4" style="padding:0px;" src="images/table.png" title="table" data="table" ondragstart="drag(event)"> <img class="btn btn-default col-lg-3 col-md-3 col-sm-4 col-xs-4" style="padding:0px;" src="images/jsontree.png" title="connection" data="collection" ondragstart="drag(event)"> </div> </div> </div> </div>', '#widgetgroup .nav-header{ display:block; line-height:35px; } #widgetgroup .nav-header i{ padding:5px; }', '', function(opts) {
+riot.tag2('widgets', '<div class="sidebar-nav " id="widgetgroup" style="border-top: 5px solid #e5e5e5;"> <a class="nav-header collapsed header" data-toggle="collapse" data-parent="#widgetgroup" href="#er" name="database" if="{widgetgroup.database.visible}"> <i class="fa fa-caret-down {widgetgroup.database.selected?\'fa-caret-down\':\'fa-caret-right\'}" style="margin-top:1px;"></i>Database </a> <div id="er" class="panel-collapse {widgetgroup.database.selected?\'\':\'collapse\'} er" if="{widgetgroup.database.visible}"> <div class="panel-body" style="padding: 2px"> <div class="btn-widgets"> <img class="btn col-lg-3 col-md-3 col-sm-4 col-xs-4" style="padding:0px;" src="images/table.png" title="table" data="table" ondragstart="drag(event)"> <img class="btn col-lg-3 col-md-3 col-sm-4 col-xs-4" style="padding:0px;" src="images/jsontree.png" title="connection" data="collection" ondragstart="drag(event)"> </div> </div> </div> <a class="nav-header collapsed header" data-toggle="collapse" data-parent="#widgetgroup" href="#tables" name="tables"> <i class="fa fa-caret-down {widgetgroup.tables.selected?\'fa-caret-down\':\'fa-caret-right\'}" style="margin-top:1px;"></i>Tables </a> <div id="tables" class="panel-collapse {widgetgroup.database.selected?\'\':\'collapse\'} tables"> <div class="panel-body" style="padding: 2px;"> <div class="list list-sm" riot-style="height:{maxheight}px;overflow-y:auto"> <ul> <li> <input type="text" class="form-control" placeholder="Search" onkeyup="{searchchange}"> </li> <li> <div class="btn-group btn-group-sm"> <a href="#" class="btn btn-default" onclick="{selectAll}">Select All</a> <a href="#" class="btn btn-default" onclick="{unselectAll}">Unselect All</a> </div> </li> <li class="item" each="{table, i in tables}" if="{!searching||table.selected}"> <label data="{table.name}" draggable="true" ondragstart="dragtable(event)"><input type="checkbox" __checked="{isVisible(table)?true:\'\'}" onchange="{change}"> {table.name}</label> </li> </ul> </div> </div> </div> </div>', '#widgetgroup .nav-header{ display:block; line-height:35px; } #widgetgroup .nav-header i{ padding:5px; } #widgetgroup .header{ background-color: rgb(240, 242, 245); color: rgb(153, 153, 153); } #widgetgroup .list-sm ul li{ padding-bottom:0px; margin-bottom:0px; border-bottom: 0px solid #CCC; }', '', function(opts) {
 var parent=this;
 while(parent.parent!=null)
    parent=parent.parent;
-
+var  designer=parent.opts;
+var tables=designer.document.activePanel.listTables().tables;
+this.tables=tables;
+this.instance=designer.document.activePanel.instance;
 this.fontawesomes=[];
 var ths=this;
 this.widgetgroup=parent.opts.widgetgroup||{
-		basic:{visible:true,selected:true},
-		workflow:{visible:true,selected:false},
-		vectorgraph:{visible:true,selected:false},
-		myfile:{visible:true,selected:false},
-		bwf:{visible:true,selected:false},
-		icon:{visible:true,selected:false},
 		database:{visible:true,selected:false},
-		entity:{visible:true,selected:false},
-		shared:{visible:true,selected:false},
-		published:{visible:true,selected:false},
-		ui:{visible:true,selected:false}
+		tables:{visible:true,selected:false},
 };
 
 this.changevisible = function(e){
@@ -323,21 +358,74 @@ this.changevisible = function(e){
 	this.widgetgroup[name].visible=!this.widgetgroup[name].visible;
 }.bind(this)
 
+this.searching=false;
+this.searchchange = function(e){
+	var target=e.target;
+	var value=target.value;
+	if(value)
+		this.searching=true;
+	else
+		this.searching=false;
+	if(this.searching){
+		$(tables).each(function(i,table){
+			if(table.name.toLowerCase().indexOf(value.toLowerCase())>=0)
+			    table.selected=true;
+			 else
+			 	table.selected=false;
+		});
+	}
+}.bind(this)
+
+this.selectAll = function(){
+	$(tables).each(function(i,table){
+		ths.instance.Widget(table.name).visible=true;
+	});
+	designer.document.activePanel.instance.paint();
+}.bind(this)
+
+this.unselectAll = function(){
+	$(tables).each(function(i,table){
+		ths.instance.Widget(table.name).visible=false;
+	});
+	designer.document.activePanel.instance.paint();
+}.bind(this)
+
+isVisible=function(item){
+	return  ths.instance.Widget(item.name).visible;
+}
+
+this.change = function(e){
+	var item=e.item.table;
+	var target=e.currentTarget;
+	var checked=target.checked;
+	this.instance.Widget(item.name).visible=checked;
+	designer.document.activePanel.instance.paint();
+}.bind(this)
+
+	var offset=255;
+	this.maxheight=document.body.clientHeight-offset;
+
 this.on("mount",function(){
 
 })
 });
-riot.tag2('navigation', '<div class="sidebar-nav"> <widgets></widgets> </div>', '', '', function(opts) {
+riot.tag2('navigation', '<div class="box" style="margin:0px;"> <div role="tabpanel"> <ul class="nav nav-tabs box-header" role="tablist"> <li role="presentation" class="{active:showproperty}"><a href="#page-tab" aria-controls="page" role="tab" data-toggle="tab">Property</a></li> <li role="presentation" class="{active:!showproperty}"><a href="#widget-tab" aria-controls="widget" role="tab" data-toggle="tab">Control</a></li> </ul> <div class="tab-content" style="margin-bottom:0px;padding:0px"> <div role="tabpanel" class="tab-pane {active:showproperty}" id="page-tab"> <div class="propertyEditForm sidebar-nav" style="margin:0px;border-top:solid 5px #e5e5e5;" id="propertyEditorForm"> <propertyeditorwidget></propertyEditorWidget> </div> </div> <div role="tabpanel" class="tab-pane {active:!showproperty}" id="widget-tab"> <div class="sidebar-nav"> <widgets></widgets> </div> </div> </div> </div> </div>', '', '', function(opts) {
 	var parent=this;
     while(parent.parent!=null)
        parent=parent.parent;
     this.designer=parent.opts;
     this.type=this.designer.document.type;
     this.activepanel=parent.opts.document.activePanel;
-
+    this.showproperty=false;
+    var ths=this;
     this.newpage = function(){
     	parent.opts.trigger("newpage");
     }.bind(this)
+
+    this.designer.off("showproperty").on("showproperty",function(val){
+       ths.showproperty=val;
+       ths.update();
+    });
 
     this.on("mount",function(){
     	parent.opts.trigger("navigation_loaded");
