@@ -159,7 +159,8 @@
             <configuration>
               <appendAssemblyId>false</appendAssemblyId>
               <attach>false</attach>
-              <finalName>streamsets-datacollector-${project.version}</finalName>
+              <!--<finalName>streamsets-datacollector-${project.version}</finalName>-->
+              <finalName>tapdata-1.2.0</finalName>
               <descriptors>
                 <descriptor>src/main/assemblies/data-collector.xml</descriptor>
               </descriptors>
