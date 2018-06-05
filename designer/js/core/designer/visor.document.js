@@ -21,6 +21,11 @@
 		this.defaultmapconnectionType="mapConnector-0322";
 		this.tables=new Map();
 		var percent=2/3;
+		var _width=document.body.clientWidth;
+		if(self!=top)
+			var _width=top.document.body.clientWidth-465;
+		this.clientWidth=_width;
+		this.separator=_width*percent;
 		this.defaultfont={
 				style:"normal",  //normal, italic
 				weight:"normal", //normal,bold
@@ -222,14 +227,14 @@
 					mode:ths.mode,
 					silence:true,
 					mouseup:function(e){
-				 		var offset=e.currentTarget.x+e.currentTarget.width/panel.instance.scale-panel.instance.width*percent/panel.instance.scale;
+				 		var offset=e.currentTarget.x+e.currentTarget.width-ths.separator;
 				 		if(offset>0)
-				 			e.currentTarget.x=e.currentTarget.x-offset-100;	
+				 			e.currentTarget.x=e.currentTarget.x-offset-10;	
 				 	},
 				 	beforePaint:function(ctx){
-				 		var offset=this.x+this.width/panel.instance.scale-panel.instance.width*percent/panel.instance.scale;
+				 		var offset=this.x+this.width-ths.separator;
 				 		if(offset>0)
-				 			this.x=this.x-offset-100;	
+				 			this.x=this.x-offset-10;	
 				 	}
 				}).appendPresenter(panel.instance);
 			//todo
@@ -278,6 +283,40 @@
 			var panel1=this.newpage();
 			var x=100,y=100;
 			var FKs=[];
+			$.widgets("label",{
+				name:"label_source",
+				x:0,
+				y:0,
+				text:"source-"+data.database_type,
+				font:{
+                        style:"normal", // normal,italic,
+                        weight:"normal",//normal,lighter,bold  
+                        family:"Arial",
+                        size:"18pt",
+                        color:"black",
+                        fill:true
+                   },
+			}).appendPresenter(ths.activePanel.instance);
+			$.widgets("label",{
+				name:"label_target",
+				x:ths.separator/ths.activePanel.instance.scale-20,
+				y:0,
+				text:"Target",
+				font:{
+                        style:"normal", // normal,italic,
+                        weight:"normal",//normal,lighter,bold  
+                        family:"Arial",
+                        size:"18pt",
+                        color:"black",
+                        fill:true
+                   },
+			}).appendPresenter(ths.activePanel.instance);
+			$.widgets("separator",{
+				name:"separator1",
+				editable:true,
+				x:ths.separator,
+				y:0				
+			}).appendPresenter(ths.activePanel.instance);
 			data.schema.tables=listSort(data.schema.tables,"table_name","ASC");
 			for(var i=0;i<=data.schema.tables.length-1;i++){
 				var tb=data.schema.tables[i];
@@ -549,7 +588,6 @@
 	   			newObj.paint();
 	   		}
 		};
-		var percent=2/3;
 		instance=$.presenter({
    	    	name:_name,
    	    	title:_title,
@@ -651,17 +689,17 @@
 	        	  }
 	        },
 	        afterPaint:function(inst){
-	        	var selectionColor="#ceddcc";
-	        	ths.trigger("_triggerEvent","afterPaint",null,inst);	
-	        	var ctx=this.canvas.getContext("2d");
-				ctx.save();
-				ctx.beginPath();
-				ctx.globalAlpha = 1;
-				ctx.fillStyle = selectionColor;
-				ctx.strokeStyle= selectionColor;
-				ctx.lineWidth = 1;	
-				ctx.fillRect(this.width*percent/this.scale-20,0,2,this.height/this.scale);
-				ctx.restore();		
+//	        	var selectionColor="#183f4c";
+//	        	ths.trigger("_triggerEvent","afterPaint",null,inst);	
+//	        	var ctx=this.canvas.getContext("2d");
+//				ctx.save();
+//				ctx.beginPath();
+//				ctx.globalAlpha = 1;
+//				ctx.fillStyle = selectionColor;
+//				ctx.strokeStyle= selectionColor;
+//				ctx.lineWidth = 1;	
+//				ctx.fillRect(this.width*percent/this.scale-20,0,2,this.height/this.scale);
+//				ctx.restore();		
 	        }
         });
         
@@ -674,27 +712,24 @@
 			 else{
 			 	if(opt.widgets[i].type=="table"){
 				 	opt.widgets[i].mouseup=function(e){
-				 		var offset=e.currentTarget.x+e.currentTarget.width/instance.scale-instance.width*percent/instance.scale;
+				 		var offset=e.currentTarget.x+e.currentTarget.width-ths.document.separator;
 				 		if(offset>0)
-				 			e.currentTarget.x=e.currentTarget.x-offset-100;	
+				 			e.currentTarget.x=e.currentTarget.x-offset-10;	
 				 	}
 				 	opt.widgets[i].beforePaint=function(ctx){
-				 		var offset=this.x+this.width/instance.scale-instance.width*percent/instance.scale;
+				 		var offset=this.x+this.width-ths.document.separator;
 				 		if(offset>0)
-				 			this.x=this.x-offset-100;	
+				 			this.x=this.x-offset-10;	
 				 	}
 			 	}
 			 	if(opt.widgets[i].type=="collection"){
 				 	opt.widgets[i].mouseup=function(e){
-				 		var offset=e.currentTarget.x-instance.width*(1-percent)/instance.scale-40;
+				 		var offset=e.currentTarget.x-ths.document.separator-10;
 				 		if(offset<0)
-				 			e.currentTarget.x=instance.width*(1-percent)/instance.scale+100;	
+				 			e.currentTarget.x=ths.document.separator+10;	
 				 	}
 				 	opt.widgets[i].afterPaint=function(ctx){
-				 		var offset=this.x-instance.width*(1-percent)/(instance.scale)-40;
-//				 		if(offset<0){
-//				 			this.x=instance.width/(instance.scale*2)+100;
-//				 		}
+				 	
 				 	}
 			 	}
 				 var _widget=$.widgets(opt.widgets[i].type,opt.widgets[i]);
@@ -870,14 +905,14 @@
 				    		_widget.appendPresenter(instance);
 				    			_widget.fieldclickEvent=visordesigner.fieldclickEvent;
 				    		_widget.mouseup=function(e){
-							 		var offset=e.currentTarget.x-instance.width*percent/(instance.scale)-40;
+							 		var offset=e.currentTarget.x-ths.document.separator-10;
 							 		if(offset<0)
-							 			e.currentTarget.x=instance.width*percent/(instance.scale)+100;	
+							 			e.currentTarget.x=ths.document.separator+10;	
 							 	}
 						 	_widget.afterPaint=function(ctx){
-						 		var offset=this.x-instance.width*percent/(instance.scale)-40;
+						 		var offset=this.x-ths.document.separator-10;
 						 		if(offset<0){
-						 			this.x=instance.width*percent/(instance.scale)+100;
+						 			this.x=ths.document.separator+10;
 						 		}
 						 	}	
 					  }	

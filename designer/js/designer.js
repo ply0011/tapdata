@@ -97,8 +97,8 @@ $(document).ready(function(){
 		 mode:"simple"
 	});
  window.parent.postMessage("loaded",'*');
-// var schema={"schema":{"tables":[{"table_name":"animal","fields":[{"field_name":"id","table_name":"animal","data_type":"int","primary_key_position":1,"foreign_key_table":null,"foreign_key_column":null,"key":"PRI"},{"field_name":"name","table_name":"animal","data_type":"char","primary_key_position":0,"foreign_key_table":null,"foreign_key_column":null,"key":""}]},{"table_name":"person","fields":[{"field_name":"id","table_name":"person","data_type":"int","primary_key_position":1,"foreign_key_table":null,"foreign_key_column":null,"key":"PRI"},{"field_name":"name","table_name":"person","data_type":"char","primary_key_position":0,"foreign_key_table":null,"foreign_key_column":null,"key":""}]}]}};
-// mydesigner.init(schema); //--init with schema
+//var schema={"schema":{"tables":[{"table_name":"animal","fields":[{"field_name":"id","table_name":"animal","data_type":"int","primary_key_position":1,"foreign_key_table":null,"foreign_key_column":null,"key":"PRI"},{"field_name":"name","table_name":"animal","data_type":"char","primary_key_position":0,"foreign_key_table":null,"foreign_key_column":null,"key":""}]},{"table_name":"person","fields":[{"field_name":"id","table_name":"person","data_type":"int","primary_key_position":1,"foreign_key_table":null,"foreign_key_column":null,"key":"PRI"},{"field_name":"name","table_name":"person","data_type":"char","primary_key_position":0,"foreign_key_table":null,"foreign_key_column":null,"key":""}]}]}};
+//mydesigner.init(schema); //--init with schema
 //mydesigner.init();  --init with empty 
 //mydesigner.on("save",function(r){   //--save 
 //		sh(r);

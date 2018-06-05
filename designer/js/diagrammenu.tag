@@ -129,14 +129,14 @@ ul.dropdown-menu>li>a{
 							</div> 
 						</a> 
 					</div>
-					<div class="component widget text-center"> 
-						<label><input type="checkbox"  name="clusterclone" checked="{document.clusterclone?true:false}" onclick="{ClusterClone}"/> Cluster Clone</label>
+					<div class="component widget text-center" style="cursor:pointer"> 
+						<label style="cursor:pointer"><input style="cursor:pointer" type="checkbox"  name="clusterclone" checked="{document.clusterclone?true:false}" onclick="{ClusterClone}"/> Cluster Clone</label>
 					</div>
-					<div class="btn-group text-center" > 
-						<label><input type="checkbox"  name="showRelation" checked="{document.showRelation?true:false}" onclick="{showRelationchange}"/> Show ER Relationship</label>
+					<div class="btn-group text-center" style="cursor:pointer"> 
+						<label style="cursor:pointer"><input style="cursor:pointer" type="checkbox"  name="showRelation" checked="{document.showRelation?true:false}" onclick="{showRelationchange}"/> Show ER Relationship</label>
 					</div>
-					<div class="component widget text-center" > 
-						<label><input type="checkbox"  name="showSimple" checked="{document.mode=='simple'?true:false}" onclick="{showSimplechange}"/> Simple Mode</label>
+					<div class="component widget text-center" style="cursor:pointer"> 
+						<label style="cursor:pointer"><input style="cursor:pointer" type="checkbox"  name="showSimple" checked="{document.mode=='simple'?true:false}" onclick="{showSimplechange}"/> Simple Mode</label>
 					</div>
 				</div>
 			</div>

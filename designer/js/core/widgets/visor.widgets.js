@@ -918,6 +918,7 @@
           return this;
      };  
      
+     
      line=function(option){
           var opt={
                     name:"line",
@@ -2901,6 +2902,104 @@
 	    };
    };
    
+    separator=function(option){
+	   var opt={
+				name:"ruler",
+				width:100,
+				height:100,
+				corner:null,
+				shadow:null,
+				text:"",
+				minwidth:16,
+				minheight:16,
+				border:{
+					color:"black",
+					width:1,
+					type:"solid"
+				},
+				autosize:false,
+				ruler:{
+					type:"normal",//system,normal,custom
+					direction:"vertical",//vertical,horizonal
+					width:5
+				},
+				allowconnectionPoint:false
+		};
+		$.extend(opt,option);
+		$.extend(this,new widget(opt));
+		this.allowRotate=false;
+		this.persist=function(){
+			var r=widget.persistproperty(this);
+			if(this.ruler){
+				r.ruler={};
+				$.extend(r.ruler,this.ruler);
+			}
+			return r;
+		};
+		this.text="";
+		this.type="separator";
+		this.calculateSize=function(ctx){
+			if(this.ruler.direction==="vertical"){
+				this.y=0;
+				this.width=this.ruler.width;
+				this.height=this.root.height;
+			}
+			else{
+				this.x=0;
+				this.width=this.root.width;
+				this.height=this.ruler.width;
+			}
+			this.setResizers();
+		};
+		this.drawBorderTo=function(ctx){
+			var _widget=this;
+			if(this.ruler.direction==="vertical"){
+				this.y=0;
+			}
+			else{
+				this.x=0;
+			}
+			if(_widget.border.color==="none" && _widget.background && _widget.background.filltype==="color" &&_widget.background.color!="none")
+				_widget.border.color=_widget.background.color;
+			else if(_widget.border.color==="none" && _widget.background && _widget.background.filltype==="gradient" &&_widget.gradient.begincolor!="none")
+				_widget.border.color=_widget.gradient.begincolor;
+			if (_widget.border.color !== "none") {
+				ctx.save();
+				ctx.beginPath();
+				ctx.lineJoin="round";
+				_widget.border.width=parseInt(_widget.border.width);
+				ctx.lineWidth = _widget.border.width;
+				ctx.lineCap="round";
+				ctx.strokeStyle = _widget.border.color;
+				if(_widget.border.type!=="solid"){
+					var dashList = _widget.border.type==="dashed"?[ _widget.border.width+3, _widget.border.width+1]:[_widget.border.width+1,_widget.border.width+1]; 
+					ctx.setLineDash(dashList);
+				}
+				this.fillBackgroundTo(ctx);
+				this.drawImageTo(ctx);	
+				var l=4;
+				var h=12;
+				ctx.beginPath();
+				if(this.ruler.direction==="vertical"){	
+					var startY=0;
+					ctx.moveTo(this.ruler.width,startY);
+					ctx.lineTo(this.ruler.width,this.height);	
+				}
+				else{
+					var startX=0;
+					ctx.moveTo(startX,this.ruler.width);
+					ctx.lineTo(this.width,this.ruler.width);	
+				}
+				ctx.stroke();
+				ctx.restore();
+			}
+			else{
+				this.fillBackgroundTo(ctx);
+				this.drawImageTo(ctx);	
+			}
+			return this;
+		};
+     }
 
 //     $.register("searchBox",searchBox);
 //     $.register("keyboard",keyboard);
@@ -2908,6 +3007,7 @@
 //     $.register("footer",footer);
 //     $.register("imageButton",imageButton);
 //   $.register("button",button);
+	 $.register("separator",separator);
      $.register("box",box);
 	 $.register("label",label);
 	 $.register("note",note);

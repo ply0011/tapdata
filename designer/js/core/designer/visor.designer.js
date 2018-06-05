@@ -68,6 +68,7 @@
 				 $(ths.document.activePanel.instance.canvas).contextmenu('closemenu',e);
 				 $("#customwidgets img").contextmenu('closemenu',e);
 				 ths.document.activePanel.instance.canvas.focus();	
+				 ths.resize();
 			};
 			
 			this.document.on("fieldclickEvent",function(e,widget){
@@ -188,7 +189,58 @@
 	 			$("#document-description").val(ths.description);
 	 			ths.setActive(ths.document.activePanel.instance.name);
 	 			setTimeout(function(){
-	 				ths.resize();
+	 				var _separator=ths.document.activePanel.instance.Widget("separator1");
+	 				if(!_separator){
+	 					_separator=$.widgets("separator",{
+							name:"separator1",
+							editable:true,
+							x:ths.document.separator,
+							y:0,
+						}).appendPresenter(ths.document.activePanel.instance);
+						$.widgets("label",{
+							name:"label_source",
+							x:0,
+							y:0,
+							text:"source",
+							font:{
+			                        style:"normal", // normal,italic,
+			                        weight:"normal",//normal,lighter,bold  
+			                        family:"Arial",
+			                        size:"18pt",
+			                        color:"black",
+			                        fill:true
+			                   },
+						}).appendPresenter(ths.document.activePanel.instance);
+						$.widgets("label",{
+							name:"label_target",
+							x:ths.separator/ths.document.activePanel.instance.scale-20,
+							y:0,
+							text:"Target",
+							font:{
+			                        style:"normal", // normal,italic,
+			                        weight:"normal",//normal,lighter,bold  
+			                        family:"Arial",
+			                        size:"18pt",
+			                        color:"black",
+			                        fill:true
+			                   },
+						}).appendPresenter(ths.document.activePanel.instance);
+	 				}
+	 				if(!_separator.mouseup)
+	 				_separator.mouseup=function(e){
+	 					if(this.ruler.direction=="vertical"){
+							this.y=0;
+							for(var i=0;i<ths.document.activePanel.instance.widgets.length;i++){
+								var _widget=ths.document.activePanel.instance.widgets[i];
+								if(_widget.visible&&(_widget.x+_widget.width>this.x)&&_widget.type=='table')
+								    this.x=_widget.x+_widget.width+5;
+								if(_widget.visible&&(this.x>_widget.x)&&_widget.type=='collection')
+								    this.x=_widget.x-15;
+							}
+							ths.document.separator=this.x;
+						}
+	 				}
+	 				ths.resize(true);
 	 			},500);
 	 		});
 	 		
@@ -524,7 +576,10 @@
 		};
 		
 		this.init=function(schema,opts){
-			 ths.reset();   
+			 ths.reset();
+			 ths.setting=ths.setting||{};
+    		 $.extend(ths.setting,opts||{});
+    		 ths.setting.sourcetype=schema.database_type;
     		 ths.document.restoreSchema(schema||{});
     		 riot.mount("navigation",ths);
     		 ths.trigger("restoredocument");
@@ -536,19 +591,39 @@
     		 ths.trigger("restoredocument");
 		}
 		
-		this.resize=function(){
+		this.resize=function(init){
+				var old_width=$("#workspace").css("width");
+				var old_height=$("#workspace").css("height");
 	    		var  width=document.body.clientWidth-offsetX-10,
 					height=document.body.clientHeight-offsetY;
 				for(var i=0;i<ths.document.activePanel.instance.widgets.length;i++){
 					var _widget=ths.document.activePanel.instance.widgets[i];
-					if(_widget.visible&&(_widget.y+_widget.height>height))
-					    height=_widget.y+_widget.height+20;
+					if(_widget.visible&&(_widget.y+_widget.height>height)&&_widget.type!='separator')
+					    height=(_widget.y+_widget.height)+20;
+					if(_widget.visible&&(_widget.x+_widget.width>width))
+					    width=(_widget.x+_widget.width)+20;    
 				}
-				ths.document.activePanel.instance.Height(height);
-				ths.document.activePanel.instance.Width(width);
-				$("#workspace,.designer").css("width",width);
-				$("#workspace,.designer").css("height",height);
-				ths.document.activePanel.instance.paint();
+				if((old_width!=width+"px"||old_height!=height+'px')&&_widget.type!='separator'&&ths.document.activePanel.instance.scale==1){
+					ths.document.activePanel.instance.Height(height);
+					ths.document.activePanel.instance.Width(width);
+					$("#workspace,.designer").css("width",width);
+					$("#workspace,.designer").css("height",height);
+					ths.document.activePanel.instance.paint();	
+				}
+				var separator1=ths.document.activePanel.instance.Widget("separator1");
+				ths.document.separator=separator1.x;
+				if(init){
+					var label_source=ths.document.activePanel.instance.Widget("label_source")
+					var label_target=ths.document.activePanel.instance.Widget("label_target");
+					var separator1=ths.document.activePanel.instance.Widget("separator1");
+					ths.document.separator=separator1.x;
+					label_source.editable=false;
+					label_target.editable=false;
+					separator1.editable=true;
+					ths.document.activePanel.instance.Widget("label_target").x=separator1.x;
+					ths.document.activePanel.instance.paint();	
+				}
+				
 	    };	
 	    	
 		
@@ -653,7 +728,6 @@
 	    		window.clearInterval(this.playhandler);
 	    		this.playhandler=null;
 	    	}
-	    	
 	    };
 	    
 	    visordesigner.prototype.updatePropertyEditor=function(){
@@ -664,14 +738,11 @@
 				widget1=_widget.persist();
 	    	if(this.document.activePanel&&this.document.activePanel.instance.focuswidget)
 	    	{
-	    		/*if(this.document.activePanel.instance.focuswidget.type!="table"&&this.document.activePanel.instance.focuswidget.type!="field")
-	    			ths.trigger("openpropertypanel",0);
-	    		else
-	    			ths.trigger("openpropertypanel",1);*/
 	    		ths.trigger("openpropertypanel",0);
 	    		ShowConfirmClose(true);
 	    	}
-	    	riot.mount("propertyEditorWidget",ths);
+	    	if(_widget&&_widget.type!="separator")
+	    		riot.mount("propertyEditorWidget",ths);
 		};
 	    
 		visordesigner.createWidget=function(data){
@@ -722,20 +793,6 @@
 	    		_widget.appendPresenter(currentPanel);
 	    		if(_widget.type==="table"||_widget.type==="entity"||_widget.type==="collection")
 	    			_widget.fieldclickEvent=visordesigner.fieldclickEvent;
-	    			
-	    		if(_widget.type=="collection"){
-	    			_widget.mouseup=function(e){
-				 		var offset=e.currentTarget.x-currentPanel.width/(currentPanel.scale*2)-40;
-				 		if(offset<0)
-				 			e.currentTarget.x=currentPanel.width/(currentPanel.scale*2)+100;	
-				 	}
-				 	_widget.afterPaint=function(ctx){
-				 		var offset=this.x-currentPanel.width/(currentPanel.scale*2)-40;
-				 		if(offset<0){
-				 			this.x=currentPanel.width/(currentPanel.scale*2)+100;
-				 		}
-				 	}
-	    		}
 	    		if(currentPanel.focuswidget!=null){
 	    			currentPanel.focuswidget.focus=false;
 	    		}

@@ -332,9 +332,9 @@ $(document).ready(function(){
 			        ]
 			    }
 			};
-			iframe.mydesigner.init(schema); //--init with schema
+//			iframe.mydesigner.init(schema); //--init with schema
 //sample 2:  restore diagram from saved file						
-			/*var localfile=localStorage.getItem("visordesigner");
+			var localfile=localStorage.getItem("visordesigner");
 			if(localfile){
 				iframe.mydesigner.restore(JSON.parse(localfile));			
 		 	}
@@ -342,7 +342,7 @@ $(document).ready(function(){
 				$.getJSON("schema.json",function(e) {
 	          			var  schema=e[0];
 	          			iframe.mydesigner.init(schema);
-	       		});*/
+	       		});
 //sample 3:  save current diagram , it default saved in localstorage, if you want to save  to db, you can write code here			
 //			iframe.mydesigner.on("save",function(r){   //--save 
 //				alert(JSON.stringify(r));

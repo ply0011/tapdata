@@ -1765,6 +1765,7 @@
 				this.paint({action: "mousedown"});
 		}
 		else if(type==="mousemove"){
+			this.Cursor(this.defaultcursor);
 			if (this.activewidget != null&&this.activewidget.editable) {
 				var $mask=$(this.mask);
 				if($mask.attr("moving")){
@@ -1937,6 +1938,9 @@
 						}
 					}	
 				}
+			}
+			if(this.targetwidget){
+				this.Cursor("pointer");
 			}
 			if(_requiredPaint)
 				this.paint({action:"mousemove"});
