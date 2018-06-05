@@ -9,13 +9,19 @@ SKIP_BUILD_LIB="${SKIP_BUILD_LIB:-false}"
 SKIP_RUN_SDC="${SKIP_RUN_SDC:-false}"
 DEV_MODE="${DEV_MODE:-true}"
 
+TAP_DATA_VERSION=tapdata-1.2.1
+export TAP_DATA_VERSION
+
 make_dist_dir() {
-    if [ ! -d "${__bash_dir__}/dist" ]; then
+    if [ ! -d "${__bash_dir__}/dist/" ]; then
         mkdir "${__bash_dir__}/dist"
     fi
-    # if [ ! -d "${__bash_dir__}/dist/sdc" ]; then
-    #     mkdir "${__bash_dir__}/dist/sdc"
-    # fi
+    if [ ! -d "${__bash_dir__}/dist/target" ]; then
+        mkdir "${__bash_dir__}/dist/target"
+    fi
+    if [ ! -d "${__bash_dir__}/dist/target/${TAP_DATA_VERSION}" ]; then
+        mkdir "${__bash_dir__}/dist/target/${TAP_DATA_VERSION}"
+    fi
 }
 
 download_sdc() {
@@ -25,10 +31,10 @@ download_sdc() {
     if [ ! -f "${__bash_dir__}/dist/streamsets-datacollector-core-${SDC_VERSION}.tgz" ]; then
         curl -O http://nightly.streamsets.com.s3-us-west-2.amazonaws.com/datacollector/latest/tarball/streamsets-datacollector-core-${SDC_VERSION}.tgz
     fi
-    rm -rf "${__bash_dir__}/dist/sdc"
+    rm -rf "${__bash_dir__}/dist/target/${TAP_DATA_VERSION}"
     tar -xvf streamsets-datacollector-core-${SDC_VERSION}.tgz  &> /dev/null
-    mv streamsets-datacollector-${SDC_VERSION} sdc
-    rm  -rf sdc/sdc-static-web
+    mv streamsets-datacollector-${SDC_VERSION} "${__bash_dir__}/dist/target/${TAP_DATA_VERSION}"
+    rm  -rf "target/${TAP_DATA_VERSION}/sdc-static-web"
     cd "${__bash_dir__}"
 }
 
@@ -94,7 +100,7 @@ main () {
         watch_ui
     else 
         build_ui
-        echo 'Done: built dist html files in ./dist/sdc/sdc-static-web'
+        echo "Done: built dist html files in ./dist/target/${TAP_DATA_VERSION}"
     fi 
     
 }
