@@ -14,10 +14,16 @@
           <i class="icon-bar"></i>
         </button>
       </div>
-      <h3 class="pull-left" translate="home.title">Pipelines</h3>
+      <h3 class="pull-left"  translate="global.tapdata_dashboard">Tapdata Dashboard</h3>
     </div>
-
-    <div class="pull-right btn-group list-grid-toggle-toolbar">
+    <div class="pull-right">
+        <button type="button" class="btn btn-primary btn-sm create-pipeline-btn"
+        ng-disabled="!isAuthorized([userRoles.admin, userRoles.creator])"
+        ng-click="addPipelineConfig()" translate="global.create_new_job">
+          Create New Job
+        </button>
+    </div>
+    <!-- <div class="pull-right btn-group list-grid-toggle-toolbar">
       <label class="btn btn-default btn-sm"
              tooltip-placement="bottom"
              tooltip="{{'global.form.listView' | translate}}"
@@ -30,9 +36,9 @@
              tooltip-popup-delay="500"
              ng-model="header.pipelineGridView"
              btn-radio="true"><span class="glyphicon glyphicon-th"></span></label>
-    </div>
+    </div> -->
 
-    <div class="pull-right">
+    <!-- <div class="pull-right">
 
       <div class="btn-group" dropdown
            ng-if="isAuthorized([userRoles.admin, userRoles.creator, userRoles.manager])"
@@ -96,9 +102,9 @@
           </li>
 
         </ul>
-      </div>
+      </div> -->
 
-      <a class="btn btn-link icon-button"
+      <!-- <a class="btn btn-link icon-button"
          tooltip-placement="bottom"
          tooltip="{{'global.form.refresh' | translate}}"
          tooltip-popup-delay="500"
@@ -164,11 +170,11 @@
          tooltip-popup-delay="500"
          class="btn btn-link icon-button">
         <i class="glyphicon glyphicon-stop fa-14x"></i>
-      </a>
+      </a> -->
 
     </div>
 
-    <div class="pull-right" ng-show="header.pipelineGridView">
+    <!-- <div class="pull-right" ng-show="header.pipelineGridView">
 
       <span class="sort-by-label">Sort by:</span>
       <div class="btn-group pull-right sort-by-dropdown">
@@ -247,9 +253,9 @@
 
         </ul>
       </div>
-    </div>
+    </div> -->
 
-    <div class="pull-right">
+    <!-- <div class="pull-right">
       <div class="btn-group pipeline-search" >
         <form ng-submit="updateFilteredPipelines(0)">
           <input type="search" class="form-control" placeholder="Filter Pipelines"
@@ -263,7 +269,7 @@
     <div class="pull-right pipelines-count">
       <span ng-if="filteredPipelines.length >= totalCount">{{totalCount}} {{totalCount > 1 ? 'Pipelines' : 'Pipeline'}}</span>
       <span ng-if="filteredPipelines.length < totalCount">{{filteredPipelines.length}} of {{totalCount}} {{totalCount > 1 ? 'Pipelines' : 'Pipeline'}}</span>
-    </div>
+    </div> -->
 
   </div>
 

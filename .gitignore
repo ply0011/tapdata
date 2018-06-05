@@ -1,5 +1,8 @@
 datacollector-ui/node_modules
 datacollector-ui/target
+cache
+dist
+
 
 # Compiled class file
 *.class

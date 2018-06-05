@@ -17,6 +17,8 @@
 					imageType : "center"// repeat center fit fill
 				},
 				objectdata:{
+					originefieldname:"",
+					originedatatype:"",
 					datatype:"String",//String,Integer,object,array,Datetime
 					targetpath:'',
 					collapse:false,
@@ -27,9 +29,8 @@
 				shadow:null,
 				width:140,
 				height:44,				
-				includeChildren:false,
-				text:""
-		};		
+				includeChildren:false
+			}
 		if(option.objectdata){
 			$.extend(opt.objectdata,option.objectdata);
 			delete option.objectdata;
@@ -40,17 +41,46 @@
 		this.margin=4;
 		this.propertyEditors=["common"];
 		var ths=this;
+		var  getDataType=function(datatype){
+			switch(datatype){
+				case "String":
+				case "varchar2":
+				case "char":
+				case "varchar":
+					return "String";
+				case "Integer":
+				case "number":
+				case "int":
+					return "Integer";	
+				case "Date":
+				case "timestamp(6)":
+				case "time":
+					return Date;
+				default:
+					return "datatype"
+			}
+		}
 		var  src='images/tree/40-1-1.png';
-		if(this.objectdata.datatype=="Array")
-			src='images/tree/40-1.png';
-		else if(this.objectdata.datatype=="Object")
-			src='images/tree/json-40-1.png';
-		else if(this.objectdata.datatype=="MergedObject")
-			src="images/tree/lable.png"
-		else if(this.objectdata.datatype=="Date")
-			src='date-40-1.png';
-		else if(this.objectdata.datatype=="Integer")
-			src='number-40-1.png';
+		var  dataType=getDataType(this.objectdata.datatype);
+		switch(dataType){
+			case "String":
+				break;
+			case "Array":
+				src='images/tree/40-1.png';
+				break;
+			case "Object":
+				src='images/tree/json-40-1.png';
+				break;
+			case "MergedObject":
+				src="images/tree/lable.png";
+				break;
+			case "Date":
+				src='images/tree/date-40-1.png';
+				break;
+			case "Integer":
+				src='images/tree/number-40-1.png';
+				break;
+		}
 		this.Background({filltype:'image',image:src},function(){
 			ths.paint();
 		});
@@ -97,6 +127,7 @@
 			r.treename=this.collection().name;
 			r.objectdata={};
 			$.extend(r.objectdata,this.objectdata);
+			delete r.background;
 			return r;
 		};
 		
@@ -117,10 +148,11 @@
 			if(node.type&&node.type==="treeNode"&&this.findnode(node.name)==null){
 				node.objectdata.index=this.widgets.length+1;
 				node.objectdata.layer=this.objectdata.layer+1;
+				this.objectdata.originedatatype=this.objectdata.datatype||"Object";
 				this.objectdata.datatype=this.objectdata.datatype||"Object";
 				this.appendWidget(node);
 				node.fieldclickEvent=this.fieldclickEvent;
-				src='images/tree/3-40.png';
+				//src='images/tree/3-40.png';
 				this.Background({filltype:'image',image:src},function(){
 					ths.paint();
 				});
@@ -167,11 +199,11 @@
 			else if(this.parent.type=="treeNode")
 				this.objectdata.layer=this.parent.objectdata.layer+1;
 			var lineheight=this.fontSize()+2*this.margin;
-			var height=lineheight+Math.round(this.margin);
+			var height=lineheight+Math.round(this.margin/2);
 			if(this.widgets.length>0){
 				$(this.widgets).each(function(i,item){
 					item.y=height;
-					height=height+item.height+Math.round(this.margin);
+					height=height+item.height;
 				})
 				if(this.objectdata.targetpath){
 					var connector=this.collection().presenters[0].Widget(this.objectdata.targetpath);
@@ -180,14 +212,6 @@
 							connector.end.y=relativeY(this)+lineheight/2;
 							connector.end.offsetx=this.margin+this.objectdata.layer*(layerinst+iconwidth)+0.5;
 						}
-//						else if(connector.end.position=='top'){
-//							connector.end.offsety=relativeY(this)+0.5;
-//						}
-//						else if(connector.end.position=='bottom'){
-//							debugger;
-//							var dx=this.collection().height-relativeY(this)-this.height;
-//							connector.end.offsety=-dx;
-//						}
 					}
 				}
 			}
@@ -480,7 +504,6 @@
 		this.margin=6;
 		this.type="collection";	
 		this.allowRotate=false;
-		
 		this.click=function(e){
 			for(var i=0;i<=this.widgets.length-1;i++){
 				this.widgets[i].focus=false;
@@ -505,6 +528,7 @@
 
 		this.persist=function(){
 			var r=widget.persistproperty(this);
+			delete r.background;
 			return r;
 		};
 		
@@ -584,15 +608,18 @@
 		this.beforePaint=function(ctx){
 			var lineheight=this.parent.fontSize()+2*this.margin;
 			var height=lineheight+ths.margin;
+			this.minheight=60;
+			var  y=this.y;
 			$(this.widgets).each(function(i,item){
 				ths.minwidth=Math.max(ths.minwidth,item.minwidth);
 				item.y=height+ths.margin;
 				height+=item.height+ths.margin;
 				item.width=this.width;
 			})
-			this.minheight=height+lineheight;
-			if(this.height<this.minheight)
-				this.Height(this.minheight);
+			if(this.minheight<height){
+				this.Height(height);
+			}
+			this.y=y;
 		};
 		
 		this.drawBorderTo=function(ctx){
@@ -673,7 +700,7 @@
 			var margin=this.margin;
 			var text=this.name;
 			ctx.save();
-			if(this.font!=null&&this.text){
+			if(this.font!=null&&text){
 				if(typeof this.font==="String")
 					ctx.font=this.font;
 				else{
@@ -681,10 +708,6 @@
 				}
 				ctx.strokeStyle=this.font.color||"black";
 					ctx.fillStyle=this.font.color||"black";
-//				if(this.focus&&this.editable){
-//					ctx.strokeStyle="white";
-//					ctx.fillStyle="white";
-//				}
 				this.font.fill=this.font.fill!=null?this.font.fill:true;
 				if(this.font.fill)
 					ctx.fillText(text,margin+iconwidth,this.fontSize()+margin);
@@ -714,7 +737,6 @@
 			var attributename=this.getName();
 			var opt={
 				name:attributename,
-				font:this.font
 			};
 			$.extend(opt,option);	
 			var node1=new treeNode(opt);
@@ -805,7 +827,6 @@
 		$.extend(opt,option);		
 		$.extend(this,new brokenLineConnector(opt));
 		this.propertyEditors=["common"];
-		this.text=this.text?this.name:this.text;
 		this.border.type="solid";
 		this.begin.shape.name="none";
 		this.end.shape.name="arrow";
@@ -919,7 +940,6 @@
 			var newNode;
 			var mappingtype="MergedObject";
 			this.name=this.presenters[0].getName("Rule");
-			this.text=this.name;
 			if(target){
 				if(target.objectdata.datatype=="Object"){
 					newNode=target.newfield({
@@ -1004,7 +1024,9 @@
 				newNode.newfield({
 					name:field.name,
 					objectdata:{
-						datatype:field.datatype,
+						originefieldname:field.name,
+						originedatatype:field.data.datatype,
+						datatype:field.data.datatype,
 					}
 				});
 			}
@@ -1017,7 +1039,9 @@
 				newNode.newfield({
 					name:field.name,
 					objectdata:{
-						datatype:field.datatype,
+						originedatatype:field.data.datatype,
+						datatype:field.data.datatype,
+						originefieldname:field.name
 					}
 				});
 			}			
@@ -1037,7 +1061,6 @@
 				if(this.end.widget.findfield(field1.name)!=null){
 					field1.name=this.begin.widget.getName(this.begin.widget.name+"_"+r.name);
 					field1.data.name=field1.name;
-					field1.text=field1.name;
 				}
 				this.end.widget.addfield(field1);
 			}

@@ -5,19 +5,27 @@
 		this.name="";
 		this.description="";
 		this.activePanel=null;
-		this.width=1510;
-		this.height=1050;
-		this.pagesize="1050X1510";
+		this.width=2500;
+		this.height=1900;
+		this.pagesize="1900X2500";
 		this.pagedirection="horization";
 		this.editable=true;
 		this.showRelation=true;
 		this.dpi=8;
 		this.category=null;	
 		this.showthumbnail=false;
+		this.clusterclone=false;
 		this.defaultconnectionType="brokenLineConnector-0322";
 		this.defaulttableconnectionType="relationConnector-02120";
 		this.defaultentityconnectionType="referenceConnector-012101";
 		this.defaultmapconnectionType="mapConnector-0322";
+		this.tables=new Map();
+		var percent=2/3;
+		var _width=document.body.clientWidth;
+		if(self!=top)
+			var _width=top.document.body.clientWidth-465;
+		this.clientWidth=_width;
+		this.separator=_width*percent;
 		this.defaultfont={
 				style:"normal",  //normal, italic
 				weight:"normal", //normal,bold
@@ -121,26 +129,115 @@
 			delete this.content;
 		}
 		
-		this.restoreSchema=function(data){
-			var panel1=this.newpage();
-			var x=100,y=100;
-			var FKs=[];
-			for(var i=0;i<=data.schema.tables.length-1;i++){
-				var tb=data.schema.tables[i];
+		var listSort=function(arraylist,sortby,direction,type){	
+		    direction=direction.toUpperCase( );
+		    var obj =arraylist.slice(0); 
+			obj = obj.sort(function (a,b){
+				 var dosort=function(fields,a,b,index){
+					 var field=fields;
+					 if((typeof fields=="object")&&fields.join){
+						 if(!index)
+							 index=0;
+						 if(index<fields.length)
+						 	field=fields[index];
+						 else
+							 return false;
+					 }
+					 if(a[field]){
+							var codeA=a[field];
+							var codeB=b[field];
+						}
+						else{
+							var codeA=a.data.get(field)==null?'':a.data.get(field);
+							var codeB=b.data.get(field)==null?'':b.data.get(field);
+						}
+						typeB=type||typeof codeB;
+						typeA=type||typeof codeA;
+						if(typeA!=typeB){
+							return true;
+						}
+						var _type=typeB;
+						if(typeof codeA=="object"&&codeA.join)					
+							codeA=codeA.join(",");
+						else if(typeof codeA=="object"&&codeA.text)
+							codeA=codeA.text;
+						else if(typeof codeA=="object"&&codeA.displayName)
+							codeA=codeA.displayName;
+						type=type||typeB;
+						if(type=="object"&&codeB.join){
+							codeB=codeB.join(",");
+							_type="string";
+						}
+						else if(type=="object"&&codeB.text){
+							codeB=codeB.text;
+							_type="string";
+						}
+						else if(typeof type=="object"&&codeB.displayName){
+							codeB=codeB.displayName;
+							_type="string";
+						}
+						if(direction==="DESC"||direction==="ASC"||direction===" "){
+							if(direction==="ASC"){
+								t=codeA;codeA=codeB;codeB=t;
+							}
+							if (_type=="string"){
+								try{
+									var ret=codeB.localeCompare(codeA);
+									if(ret==0&&typeof index=='number'){
+										 return dosort(sortby,a,b,++index);
+									}
+									return ret;
+								}
+								catch(e){
+									return true;
+								}
+							}
+							else if(_type=="number"){
+								var ret= codeB-codeA;
+								if(ret==0&&typeof index=='number'){
+									 return dosort(sortby,a,b,++index);
+								}
+								return ret;
+							}
+							else if(_type=="date"){
+								var ret= Date.parse(codeB)-Date.parse(codeA);
+								if(ret==0&&typeof index=='number'){
+									 return dosort(sortby,a,b,++index);
+								}
+								return ret;
+							}
+						}
+				 }
+				 return dosort(sortby,a,b)
+		   });
+			return obj;
+		};
+		
+		this.createTable=function(tb,panel,x,y){
+				var FKs=new Map();
+				x=x||100;
+				y=y||180;
 				var table1=new table({
 					x:x,
 					y:y,
 					name:tb['table_name'],
 					text:tb['table_name'],
-					editable:true
-				}).appendPresenter(panel1.instance);
-				x=x+180;
-				y=y+30;
-				if(x>=this.activePanel.instance.width/2){
-						x=100;
-						y+=100;
-				}
-			
+					editable:true,
+					visible:tb.visible,
+					mode:ths.mode,
+					silence:true,
+					mouseup:function(e){
+				 		var offset=e.currentTarget.x+e.currentTarget.width-ths.separator;
+				 		if(offset>0)
+				 			e.currentTarget.x=e.currentTarget.x-offset-10;	
+				 	},
+				 	beforePaint:function(ctx){
+				 		var offset=this.x+this.width-ths.separator;
+				 		if(offset>0)
+				 			this.x=this.x-offset-10;	
+				 	}
+				}).appendPresenter(panel.instance);
+			//todo
 				table1.fieldclickEvent=visordesigner.fieldclickEvent;
 				for(var j=0;j<=tb['fields'].length-1;j++){
 					var field=tb['fields'][j];
@@ -151,7 +248,8 @@
 						    data:{
 							    datatype:getDataType(field['data_type']),
 							    isfk:field.foreign_key_table?true:false
-						    }
+						    },
+						    silence:true
 					    })
 					}
 					else{
@@ -161,23 +259,96 @@
 							data:{
 								datatype:getDataType(field['data_type']),
 								isfk:field.foreign_key_table?true:false
-							}
+							},							
+							silence:true,
+							visible:(table1.mode=="full")||((table1.mode=="simple")&&(field.foreign_key_table?true:false))
 						});
 					}
 					if(field.foreign_key_table){
-						var fk={target:table1.name,source:field.foreign_key_table,source_column:field.foreign_key_column,target_column:field.field_name};
-						FKs.push(fk);
+						var key=field.foreign_key_table+"_"+table1.name;
+						var fk=FKs.get(key);
+						if(!fk)
+						  fk={target:table1.name,source:field.foreign_key_table,source_column:field.foreign_key_column,target_column:field.field_name};
+						else
+						  fk.source_column=fk.source_column+","+field.foreign_key_column;
+						  fk.target_column=fk.target_column+","+field.field_name;
+						FKs.update(key,fk);
 					}
 				}
-				
+				ths.tables.update(tb["table_name"],table1);
+				return  FKs;
+		}
+		
+		this.restoreSchema=function(data){
+			var panel1=this.newpage();
+			var x=100,y=100;
+			var FKs=[];
+			$.widgets("label",{
+				name:"label_source",
+				x:0,
+				y:0,
+				text:"source-"+data.database_type,
+				font:{
+                        style:"normal", // normal,italic,
+                        weight:"normal",//normal,lighter,bold  
+                        family:"Arial",
+                        size:"18pt",
+                        color:"black",
+                        fill:true
+                   },
+			}).appendPresenter(ths.activePanel.instance);
+			$.widgets("label",{
+				name:"label_target",
+				x:ths.separator/ths.activePanel.instance.scale-20,
+				y:0,
+				text:"Target",
+				font:{
+                        style:"normal", // normal,italic,
+                        weight:"normal",//normal,lighter,bold  
+                        family:"Arial",
+                        size:"18pt",
+                        color:"black",
+                        fill:true
+                   },
+			}).appendPresenter(ths.activePanel.instance);
+			$.widgets("separator",{
+				name:"separator1",
+				editable:true,
+				x:ths.separator,
+				y:0				
+			}).appendPresenter(ths.activePanel.instance);
+			data.schema.tables=listSort(data.schema.tables,"table_name","ASC");
+			for(var i=0;i<=data.schema.tables.length-1;i++){
+				var tb=data.schema.tables[i];
+				if(i<20){	
+					tb.visible=true;
+				}
+				else{
+					tb.visible=false;
+				}
+				var fks=this.createTable(tb,panel1,x,y).values();
+				if(fks.length>0){
+					$(fks).each(function(i,fk){
+						FKs.push(fk);
+					});
+				}
+				var table1=this.activePanel.instance.Widget(tb.table_name);
+				if((table1.x+table1.width)>(this.activePanel.instance.width/3)){
+					x=100;
+					y+=100;
+				}
+				else{
+					x=x+180;
+					y=y+30;
+				}
 			}
 			for(var i=0;i<=FKs.length-1;i++){
 				var source=this.activePanel.instance.Widget(FKs[i].source);
 				var target=this.activePanel.instance.Widget(FKs[i].target);
-				addFk(source,target);
+				if(target&&source)
+					addFk(source,target);
 			}
-			console.info(FKs);
-			table1.paint();
+			panel1.instance.paint();
 		}
 		
 		var  addFk=function(source,target){		
@@ -346,6 +517,7 @@
 				};
 				$.extend(opt,option);
 			}
+			//todo
 			var _widget=$.widgets(widgetType,opt);
 			return _widget;
 		};
@@ -371,8 +543,8 @@
 		var _scale=opt.scale||1;
 		var _aligngrid=opt.aligngrid||false;
 		var _background={};
-		var offsetx=200;
-		var offsety=200;
+		var offsetx=0;
+		var offsety=0;
 		this.parent=$(parent);
 		this.document=document;
 		$.extend(_background,opt.background);
@@ -416,7 +588,6 @@
 	   			newObj.paint();
 	   		}
 		};
-		
 		instance=$.presenter({
    	    	name:_name,
    	    	title:_title,
@@ -470,7 +641,9 @@
 					 ths.document.trigger("cutwidget");
 	        	 }	
 	        	 else if(key==46&&instance.focuswidget!=null){  //Delete
-	        		 instance.deleteFocus(); 
+	        		 //instance.deleteFocus();
+	        		 instance.focuswidget.visible=false;
+	        		 riot.update();
 	        	 }
 	        	 else if(instance.selectwidgets.length>0){
 					if (key===38){
@@ -516,22 +689,56 @@
 	        	  }
 	        },
 	        afterPaint:function(inst){
-	        	ths.trigger("_triggerEvent","afterPaint",null,inst);	
+//	        	var selectionColor="#183f4c";
+//	        	ths.trigger("_triggerEvent","afterPaint",null,inst);	
+//	        	var ctx=this.canvas.getContext("2d");
+//				ctx.save();
+//				ctx.beginPath();
+//				ctx.globalAlpha = 1;
+//				ctx.fillStyle = selectionColor;
+//				ctx.strokeStyle= selectionColor;
+//				ctx.lineWidth = 1;	
+//				ctx.fillRect(this.width*percent/this.scale-20,0,2,this.height/this.scale);
+//				ctx.restore();		
 	        }
         });
+        
 		var connectors=[];
 		for(var i=0;i<opt.widgets.length;i++){
+			 opt.widgets[i].silence=true;
 			 if(opt.widgets[i].begin!=null&&opt.widgets[i].end!=null&&opt.widgets[i].type.indexOf("Connector")>0){
 					connectors.push(opt.widgets[i]);
 			 }
 			 else{
+			 	if(opt.widgets[i].type=="table"){
+				 	opt.widgets[i].mouseup=function(e){
+				 		var offset=e.currentTarget.x+e.currentTarget.width-ths.document.separator;
+				 		if(offset>0)
+				 			e.currentTarget.x=e.currentTarget.x-offset-10;	
+				 	}
+				 	opt.widgets[i].beforePaint=function(ctx){
+				 		var offset=this.x+this.width-ths.document.separator;
+				 		if(offset>0)
+				 			this.x=this.x-offset-10;	
+				 	}
+			 	}
+			 	if(opt.widgets[i].type=="collection"){
+				 	opt.widgets[i].mouseup=function(e){
+				 		var offset=e.currentTarget.x-ths.document.separator-10;
+				 		if(offset<0)
+				 			e.currentTarget.x=ths.document.separator+10;	
+				 	}
+				 	opt.widgets[i].afterPaint=function(ctx){
+				 	
+				 	}
+			 	}
 				 var _widget=$.widgets(opt.widgets[i].type,opt.widgets[i]);
 				 _widget.editable=_editable;
 				 _widget.appendPresenter(instance);
 				 if(_widget.type=="table"||_widget.type=="entity"||_widget.type=="collection"){						
 					_widget.fieldclickEvent=function(e,sender){
 						ths.trigger("_triggerEvent","fieldclickEvent",e,this);
-					}						
+					}	
 				 }
 			 }
 			
@@ -566,15 +773,6 @@
 		 };
 		 instance.animations=animations;
 		 this.instance=instance;
-		 
-		 for(var i=0;i<=this.instance.widgets.length-1;i++){
-				var _widget=this.instance.widgets[i];
-				console.info(_widget.name+"-"+_widget.height);
-				 for(var ii=0;ii<=_widget.widgets.length-1;ii++){
-						console.info(_widget.widgets[ii].name+"-"+_widget.widgets[ii].height);
-				 }
-		 }
-		 
 		 
 		 riot.observable(this);
 		
@@ -685,146 +883,105 @@
 			instance.canvas.addEventListener('keydown', function(e){
 				ths.instance._triggerEvent("keypress", e);
 			},true);
-//			$(window).unbind("keyup");
-//			$(window).bind("keyup",function(e){
-//				 var key=e.keyCode;
-//	        	 var ctrdown=e.ctrlKey;
-//	        	 e.preventDefault();
-//	        	 e.stopPropagation();	        	 
-//	        	 ths.document.activePanel.instance._triggerEvent("keyup", e);
-//			});
 		}
         setKeypress();
         
         var setcontextmenu=function(){
-        	var principal="";
+        	 var x,y;
 			 $(instance.canvas).contextmenu({
 				 'target':'#context-menu',
 				  onItem: function(context,e) {
 					  var _widget=instance.focuswidget;
 					  var command=$(e.target).attr("alt");
-					  if(command==="paste"&&ths.document.copyObj){
-						  ths.paste();
+					  if(command==="save"){
+						 ths.document.trigger("savedocument");
 					  }
-					  else if(command==="savepicture"){
-						  if(_widget){
-							  var imageData=_widget.getImageData(0,0);
-							  Downloader.save(imageData,_widget.name+".png");
-						  }
-						  else{
-							  var strData=instance.rootwidget.getImageData(0,0);
-							  Downloader.save(strData,instance.title+".png");
-						  }
+					  else if(command==="newcollection"){
+					  		 var  data="widget:collection";
+						 	 var _widget=visordesigner.createWidget(data);
+				    		_widget.x=x;
+				    		_widget.y=y;
+				    		_widget.Scale(instance.scale);
+				    		_widget.appendPresenter(instance);
+				    			_widget.fieldclickEvent=visordesigner.fieldclickEvent;
+				    		_widget.mouseup=function(e){
+							 		var offset=e.currentTarget.x-ths.document.separator-10;
+							 		if(offset<0)
+							 			e.currentTarget.x=ths.document.separator+10;	
+							 	}
+						 	_widget.afterPaint=function(ctx){
+						 		var offset=this.x-ths.document.separator-10;
+						 		if(offset<0){
+						 			this.x=ths.document.separator+10;
+						 		}
+						 	}	
+					  }	
+					  else if(command==="deletecollection"){
+					  		instance.deleteFocus();
 					  }
-					  if(_widget){
-						  if(command==="copy"){
-							  ths.copy();
-						  }
-						  if(command==="newitem"){
-							  _widget.newfield();
-						  }
-						  if(command==="cut"){
-							  ths.copy();
-							  instance.deleteFocus();
-							  ths.document.trigger("cutwidget");
-						  }
-						  else if(command==="duplicate"){
-							  ths.copy();
-							  ths.paste();
-						  }
-						  else if(command==="save"){
-							  instance.paint();
-							  ths.document.saveaswidget();
-						  }
-						  else if(command==="edit"){
-							  ths._triggerEvent("dblclick",e);
-							  this.closemenu();
-						  }
-						  else if(command==="delete"){		
-							  var focuswidget=instance.focuswidget;
-							  if(focuswidget&&focuswidget.type=="treeNode"){
-							  	focuswidget.deletefield();
-							  }
-							  else if(focuswidget&&focuswidget.parent.deletefield){
-								focuswidget.parent.deletefield(focuswidget);
-							  }				 
-							  else{
-								instance.deleteFocus();	
-							  }
-							  ths.document.trigger("deletewidget");
-						  }
-						  else if(command==="bring to front"){
-							  instance.focuswidget.topDepth();
-							  instance.paint();
-						  }
-						  else if(command==="send to back"){
-							  instance.focuswidget.downDepth();
-							  instance.paint();
-						  }
-						  else if(command==="goup one step"){
-							  instance.focuswidget.topStep();
-							  instance.paint();
-						  }
-						  else if(command==="godown one step"){
-							  instance.focuswidget.downStep();
-							  instance.paint();
-						  }
-					  }
-					  else if(instance.selectwidgets.length>0){
-						  if(command==="delete"){	
-							  instance.deleteFocus();	
-							  ths.trigger("deletewidget");
-						  }
-					  }
-						  
 				  },
 				  before: function (e, element, target) {
 				      e.preventDefault();
 				      $("#context-menu").find("a").css("color","");
-				      var _widget=instance.focuswidget;
-				      if(_widget==null||((_widget!=null)&&_widget.type!=="entity"&&_widget.type!=="table"&&_widget.type!=="collection"&&_widget.type!=="treeNode")){
-				    	  $("#context-menu").find("a[alt='newitem']").hide();
-				    	  $("#context-menu").find("a[alt='edit']").show();
+				      $("#context-menu").find("a[alt='deletecollection']").hide();
+				      $("#context-menu").find("a[alt='newcollection']").hide();
+				      var _widget=instance.focuswidget;				   
+				      x=e.offsetX;
+				      y=e.offsetY;
+				      if(x>instance.width/(2*instance.scale)){
+				      	 if(!_widget)
+				      	 	$("#context-menu").find("a[alt='newcollection']").show();
 				      }
-				      else{
-				    	  $("#context-menu").find("a[alt='newitem']").show();
-				    	  $("#context-menu").find("a[alt='edit']").hide();
+				      if(_widget&&_widget.type=="collection"){
+				      		$("#context-menu").find("a[alt='deletecollection']").show();
 				      }
-				    	  
 				      
-				      if (_widget== null) {
-				          e.preventDefault();
-				          $("#context-menu").find("a").css("color","gray");					        
-				      }
-				      else{
-				    	  if(principal!="")
-					    	  $("#context-menu").find("a[alt='save']").css("color","");
-					      else
-					    	  $("#context-menu").find("a[alt='save']").css("color","gray");
-				      }
-				      $("#context-menu").find("a[alt='savepicture']").css("color","");
-				      if(instance.selectwidgets.length>0)
-				    	  $("#context-menu").find("a[alt='delete']").css("color","");
-				      
-				      if(ths.document.copyObj)
-				    	  $("#context-menu").find("a[alt='paste']").css("color","");
-				      else
-				    	  $("#context-menu").find("a[alt='paste']").css("color","gray");				      
+				      	
 				      return true;
 				  }
 			  });
-		 };
+		};
 		setcontextmenu();
 	}
 	
+	visorpanel.prototype.Scale=function(a){
+		var ths=this;
+		if(arguments.length==1){
+			if(!this.width){
+				var width=$(this.instance.canvas).prop("width");
+				var height=$(this.instance.canvas).prop("height");
+				this.width=width;
+				this.height=height;
+			}
+			else{
+				var width=this.width;
+				var height=this.height;
+			}
+			var newwidth=width/a;
+			var newheight=height/a;
+		 	var target=ths.instance.rootwidget;
+		 	ths.instance.scale=a;
+		 	target.scale=a;
+			target.Height(newheight);
+			target.Width(newwidth);	
+			for(var i=0;i<this.instance.widgets.length;i++){
+				if(this.instance.widgets[i].type=="collection"){
+					this.instance.widgets[i].x=this.instance.widgets[i].x*this.instance.widgets[i].scale/a;
+					this.instance.widgets[i].scale=a;
+				}
+			}
+		}
+		else
+			return this.instance.scale;
+	}
 	
 	visorpanel.prototype.listTables=function(){
     	var tables=[];
     	var connections=[];
     	var widgets=[];
-    	widgets=this.selectwidgets;
+    	widgets=this.instance.selectwidgets;
     	if(widgets.length===0)
-	   		widgets=this.widgets;
+	   		widgets=this.instance.widgets;
     	    	
     	for(var i=0;i<=widgets.length-1;i++){
     		if(widgets[i].type=="table"){
@@ -883,6 +1040,8 @@
     			var connector=widgets[i];
     			var mapping={
     				from_table:connector.begin.widget.name,
+    				custom_sql:connector.begin.widget.objectdata.customsql,
+    				offset:connector.begin.widget.objectdata.offset,
     				to_table:connector.objectdata.targetpath,
     				join_condition:connector.objectdata.matchcriteria2.values,	 
     				relationship:(connector.objectdata.mappingtype=='Array'?'ManyOne':'OneOne'),
@@ -944,18 +1103,24 @@
 			r.status=this.status;
 			r.publishId=this.publishId;
 			r.template=this.template;
+			r.showRelation=this.showRelation;
+			
+			r.clusterclone=this.clusterclone;
 			var _rootwidget=this.activePanel.instance.rootwidget;
 			var _width=Math.min(300,_rootwidget.width);
 			var _height=Math.min(300,_rootwidget.height);
-			if(this.cover&&this.cover.indexOf("data:image")<0)
-				r.cover=this.cover;
-			else
-				r.cover=this.activePanel.instance.rootwidget.getImageData(0,0,null,null,_width,_height);
+//			if(this.cover&&this.cover.indexOf("data:image")<0)
+//				r.cover=this.cover;
+//			else
+//				r.cover=this.activePanel.instance.rootwidget.getImageData(0,0,null,null,_width,_height);
 			var _panels=[];
 			var mappings=[];
 			for(var i=0;i<this.panels.length;i++){
 				var panel=this.panels[i];
 				var _panel=panel.instance.persist();
+				_panel.scale=1;
+				_panel.width=panel.width||_panel.width;
+				_panel.height=panel.height||_panel.height;
 				if(panel.instance.animations!=null){		
 					var animations=new Map();
 					$(panel.instance.animations.elements).each(function(i,item){						

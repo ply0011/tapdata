@@ -89,29 +89,30 @@ angular.module('pipelineGraphDirectives', [])
       var height = svgHeight - margin.top - margin.bottom;
 
       var container = svg.append('g');
-      container.append('g')
-        .attr('class', 'x axis')
-        .selectAll('line')
-        .data(d3.range(0, width, 10))
-        .enter().append('line')
-        .attr('x1', function(d) { return d; })
-        .attr('y1', 0)
-        .attr('x2', function(d) { return d; })
-        .attr('y2', height);
+      // container.append('g')
+      //   .attr('class', 'x axis')
+      //   .selectAll('line')
+      //   .data(d3.range(0, width, 10))
+      //   .enter().append('line')
+      //   .attr('x1', function(d) { return d; })
+      //   .attr('y1', 0)
+      //   .attr('x2', function(d) { return d; })
+      //   .attr('y2', height);
 
-      container.append('g')
-        .attr('class', 'y axis')
-        .selectAll('line')
-        .data(d3.range(0, height, 10))
-        .enter().append('line')
-        .attr('x1', 0)
-        .attr('y1', function(d) { return d; })
-        .attr('x2', width)
-        .attr('y2', function(d) { return d; });
+      // container.append('g')
+      //   .attr('class', 'y axis')
+      //   .selectAll('line')
+      //   .data(d3.range(0, height, 10))
+      //   .enter().append('line')
+      //   .attr('x1', 0)
+      //   .attr('y1', function(d) { return d; })
+      //   .attr('x2', width)
+      //   .attr('y2', function(d) { return d; });
 
       thisGraph.svgG = svg.append('g')
         .classed(thisGraph.consts.graphClass, true);
-      var svgG = thisGraph.svgG;
+      var svgG = thisGraph.svgG; 
+    
 
       // displayed when dragging between nodes
       thisGraph.dragLine = svgG.append('svg:path')
@@ -171,7 +172,6 @@ angular.module('pipelineGraphDirectives', [])
         .on('zoomend', function(){
           d3.select('body').style('cursor', 'auto');
         });
-
       svg.call(thisGraph.zoom)
         .on('dblclick.zoom', null);
 
@@ -206,9 +206,10 @@ angular.module('pipelineGraphDirectives', [])
       COPY_KEY: 67,
       PASTE_KEY: 86,
       nodeRadius: 70,
-      rectWidth: 140,
-      rectHeight: 100,
-      rectRound: 14
+      rectWidth: 100,
+      rectHeight: 50,
+      rectRound: 14,
+      defaultScale: 1
     };
 
     /* PROTOTYPE FUNCTIONS */
@@ -279,7 +280,7 @@ angular.module('pipelineGraphDirectives', [])
       var el = gEl.append('text')
         .attr('text-anchor','middle')
         .attr('x', 50)
-        .attr('y', 75),
+        .attr('y', 27),
         text = el,
         words = title.split(/\s+/).reverse(),
         word,
@@ -288,7 +289,7 @@ angular.module('pipelineGraphDirectives', [])
         lineHeight = 1.1, // ems
         y = text.attr('y'),
         dy = 0,
-        tspan = text.text(null).append('tspan').attr('x', 70).attr('y', y).attr('dy', dy + 'em'),
+        tspan = text.text(null).append('tspan').attr('x', 50).attr('y', y).attr('dy', dy + 'em'),
         totalLines = 1;
 
       if (words.length === 1) {
@@ -306,7 +307,7 @@ angular.module('pipelineGraphDirectives', [])
             }
 
             line = [word];
-            tspan = text.append('tspan').attr('x', 70).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word);
+            tspan = text.append('tspan').attr('x', 50).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word);
             totalLines++;
           }
         }
@@ -796,7 +797,7 @@ angular.module('pipelineGraphDirectives', [])
         .attr('width', 48)
         .attr('height', 48)
         .attr('xlink:href', function(d) {
-          return 'rest/v1/definitions/stages/' + d.library + '/' + d.stageName + '/icon';
+          // return 'rest/v1/definitions/stages/' + d.library + '/' + d.stageName + '/icon';
         });
 
       //Add Error icons
