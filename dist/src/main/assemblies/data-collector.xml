@@ -115,15 +115,15 @@
     </fileSet>
 
     <!-- data collector static web -->
-    <fileSet>
-      <directory>${sdc.ui.dist-dir}</directory>
-      <outputDirectory>/sdc-static-web</outputDirectory>
-      <excludes>
-        <exclude>karma-conf.js</exclude>
-        <exclude>app/**</exclude>
-        <exclude>bower_components/**</exclude>
-      </excludes>
-    </fileSet>
+    <!-- <fileSet> -->
+      <!-- <directory>${sdc.ui.dist-dir}</directory> -->
+      <!-- <outputDirectory>/sdc-static-web</outputDirectory> -->
+      <!-- <excludes> -->
+        <!-- <exclude>karma-conf.js</exclude> -->
+        <!-- <exclude>app/**</exclude> -->
+        <!-- <exclude>bower_components/**</exclude> -->
+      <!-- </excludes> -->
+    <!-- </fileSet> -->
 
     <!--<fileSet>-->
       <!--<directory>${basedir}/target/edge-binaries</directory>-->
@@ -161,10 +161,10 @@
     </fileSet>
 
     <!-- basic-lib -->
-    <!--<fileSet>-->
-      <!--<directory>${basedir}/../basic-lib/target/streamsets-libs/</directory>-->
-      <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
-    <!--</fileSet>-->
+    <fileSet>
+      <directory>${basedir}/../basic-lib/target/streamsets-libs/</directory>
+      <outputDirectory>/streamsets-libs/</outputDirectory>
+    </fileSet>
 
     <!-- DataFormants libs -->
     <fileSet>
@@ -214,13 +214,13 @@
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; dev-lib &ndash;&gt;-->
+    <!-- dev-lib -->
     <fileSet>
       <directory>${basedir}/../dev-lib/target/streamsets-libs/</directory>
       <outputDirectory>/streamsets-libs/</outputDirectory>
     </fileSet>
 
-    <!--&lt;!&ndash; CDH libs &ndash;&gt;-->
+    <!-- CDH libs -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../${cdh_5_8-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
@@ -250,7 +250,7 @@
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; CDH Spark Kafka lib &ndash;&gt;-->
+    <!-- CDH Spark Kafka lib -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../${cdh_5_8-cluster-cdh_kafka_2_0-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
@@ -280,7 +280,7 @@
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; HDP Libs &ndash;&gt;-->
+    <!-- HDP Libs -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../${hdp_2_4-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
@@ -318,7 +318,7 @@
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; MapR Libs &ndash;&gt;-->
+    <!-- MapR Libs -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../${mapr_5_1-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
@@ -336,7 +336,7 @@
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; Apache Kudu libs &ndash;&gt;-->
+    <!-- Apache Kudu libs -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../${apache-kudu_1_3-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
@@ -358,7 +358,7 @@
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; Apache Kafka libs &ndash;&gt;-->
+    <!-- Apache Kafka libs -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../${apache-kafka_0_9-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
@@ -376,44 +376,44 @@
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; Cassandra libs &ndash;&gt;-->
+    <!-- Cassandra libs -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../${cassandra_3-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; AWS libs &ndash;&gt;-->
+    <!-- AWS libs -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../aws-lib/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; Azure libs &ndash;&gt;-->
+    <!-- Azure libs -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../azure-lib/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; InfluxDB &ndash;&gt;-->
+    <!-- InfluxDB -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../influxdb_0_9-lib/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; Redis &ndash;&gt;-->
+    <!-- Redis -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../redis-lib/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; Aerospike &ndash;&gt;-->
+    <!-- Aerospike -->
     <!--<fileSet>-->
         <!--<directory>${basedir}/../aerospike-lib/target/streamsets-libs/</directory>-->
         <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
 
-    <!--&lt;!&ndash; CDH5 Kafka libs &ndash;&gt;-->
+    <!-- CDH5 Kafka libs -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../${cdh_kafka_2_0-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
@@ -437,13 +437,13 @@
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; Jython libs &ndash;&gt;-->
+    <!-- Jython libs -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../${jython_2_7-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; Google Cloud Libraries &ndash;&gt;-->
+    <!-- Google Cloud Libraries -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../${google-cloud-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
@@ -454,13 +454,13 @@
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; Groovy libs &ndash;&gt;-->
+    <!-- Groovy libs -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../${groovy_2_4-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; Kinetica libs &ndash;&gt;-->
+    <!-- Kinetica libs -->
      <!--<fileSet>-->
       <!--<directory>${basedir}/../${kinetica_6_0-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
@@ -470,49 +470,49 @@
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; Elasticsearch libs &ndash;&gt;-->
+    <!-- Elasticsearch libs -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../${elasticsearch_5-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; Mongo libs &ndash;&gt;-->
+    <!-- Mongo libs -->
     <fileSet>
       <directory>${basedir}/../${mongodb_3-lib}/target/streamsets-libs/</directory>
       <outputDirectory>/streamsets-libs/</outputDirectory>
     </fileSet>
 
-    <!--&lt;!&ndash; redis-lib &ndash;&gt;-->
+    <!-- redis-lib -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../redis-lib/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; solr-lib &ndash;&gt;-->
+    <!-- solr-lib -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../apache-solr_6_1_0-lib/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; Salesforce &ndash;&gt;-->
+    <!-- Salesforce -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../salesforce-lib/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; vault-credentialstore-lib &ndash;&gt;-->
+    <!-- vault-credentialstore-lib -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../vault-credentialstore-lib/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; windows-lib&ndash;&gt;-->
+    <!-- windows-lib-->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../${windows-lib}/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
     <!--</fileSet>-->
 
-    <!--&lt;!&ndash; cyberark-credentialstore-lib &ndash;&gt;-->
+    <!-- cyberark-credentialstore-lib -->
     <!--<fileSet>-->
       <!--<directory>${basedir}/../cyberark-credentialstore-lib/target/streamsets-libs/</directory>-->
       <!--<outputDirectory>/streamsets-libs/</outputDirectory>-->
