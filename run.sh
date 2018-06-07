@@ -87,7 +87,18 @@ main () {
     
     # if [ "$SKIP_SDC_SOURCE_TEST" != "true" ]; then
     #     download_sdc
-    # fi
+    # fi   
+
+    if [ "$SKIP_BUILD_LIB" != "true" ]; then
+       install_ui_lib
+    fi
+
+    if [ "$DEV_MODE" = "true" ]; then
+        watch_ui
+    else 
+        build_ui
+        echo "Done: built dist html files in ./dist/target/${TAP_DATA_VERSION}"
+    fi 
 
     if [ "$SKIP_RUN_SDC" = "false" ]; then
         #kill $(lsof -t -i:18630)
@@ -102,18 +113,7 @@ main () {
     else
 	echo 'not starting sdc'
     fi
-    
-
-    if [ "$SKIP_BUILD_LIB" != "true" ]; then
-       install_ui_lib
-    fi
-
-    if [ "$DEV_MODE" = "true" ]; then
-        watch_ui
-    else 
-        build_ui
-        echo "Done: built dist html files in ./dist/target/${TAP_DATA_VERSION}"
-    fi 
+ 
     
 }
 main "$@"
