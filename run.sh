@@ -78,7 +78,7 @@ run_sdc() {
     export SDC_FILE_LIMIT=1024
     # dist/sdc/bin/streamsets dc
     # BUILD_ID=dontKillMe  nohup dist/sdc/bin/streamsets dc &
-    nohup ./bin/streamsets dc>log/nohup 2>&1 &
+    BUILD_ID=dontKillMe nohup ./bin/streamsets dc>log/nohup 2>&1 &
 }
 
 main () {
