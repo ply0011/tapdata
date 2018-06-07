@@ -6,11 +6,14 @@ __bash_dir__="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # SKIP_SDC_SOURCE_TEST="${SKIP_SDC_SOURCE_TEST:-false}"
 SKIP_BUILD_LIB="${SKIP_BUILD_LIB:-false}"
-SKIP_RUN_SDC="${SKIP_RUN_SDC:-false}"
+SKIP_RUN_SDC=${SKIP_RUN_SDC:-false}
 DEV_MODE="${DEV_MODE:-true}"
 
 TAP_DATA_VERSION=tapdata-1.2.1
 export TAP_DATA_VERSION
+
+PID=$(ps -ef|grep tapdata|grep -v grep|awk '{print $2}')
+echo 'TAPDATA PID:'$PID
 
 make_dist_dir() {
     if [ ! -d "${__bash_dir__}/dist/" ]; then
@@ -44,7 +47,7 @@ install_ui_lib() {
         yarn install
         yarn global add bower
         yarn global add grunt-cli
-        bower install
+        bower install --allow-root
     else
         echo 'please install yarn for build environment.'
         exit 1;
@@ -66,15 +69,16 @@ watch_ui() {
 }
 
 run_sdc() {
-    echo "start to check sdc download"
-    download_sdc
+    #echo "start to check sdc download"
+    #download_sdc
     
     echo "start to run sdc"
-    cd "${__bash_dir__}"
+    cd "${__bash_dir__}"/dist/target/"$TAP_DATA_VERSION"
     
     export SDC_FILE_LIMIT=1024
     # dist/sdc/bin/streamsets dc
-    BUILD_ID=dontKillMe  nohup dist/sdc/bin/streamsets dc &
+    # BUILD_ID=dontKillMe  nohup dist/sdc/bin/streamsets dc &
+    nohup ./bin/streamsets dc>log/nohup 2>&1 &
 }
 
 main () {
@@ -85,10 +89,18 @@ main () {
     #     download_sdc
     # fi
 
-    if [ "$SKIP_RUN_SDC" != "true" ]; then
-        kill $(lsof -t -i:18630)
+    if [ "$SKIP_RUN_SDC" = "false" ]; then
+        #kill $(lsof -t -i:18630)
+	if [ "$PID" != "" ]; then
+	  echo 'KILL TAPDATA'
+	  kill -9 $PID
+	else
+	  echo 'TAPDATA IS NOT RUNNING'
+	fi
         echo 'starting sdc'
         run_sdc
+    else
+	echo 'not starting sdc'
     fi
     
 
